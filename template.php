@@ -221,7 +221,13 @@ class KovSpace_Template
 				$sPath = $oCompression_Controller->getPath();
 			}
 
-			echo Core_File::read($this->root . $sPath);
+			$js_file = Core_File::read($this->root . $sPath);
+
+			if (substr($js_file, -3) == ';;'.PHP_EOL) {
+				echo substr($js_file, 0, -2).PHP_EOL;
+			} else {
+				echo $js_file;
+			}
 		} else {
 			echo Core_File::read($this->root . $file);
 		}
