@@ -17,7 +17,9 @@ class KovSpace_Form
 
         $config = Core::$config->get('core_mail');
 
-        if (isset($config['smtp']['username'])) {
+        if (isset($config['smtp'][CURRENT_SITE]['username'])) {
+            $email_from = $config['smtp'][CURRENT_SITE]['username'];
+        } elseif (isset($config['smtp']['username'])) {
             $email_from = $config['smtp']['username'];
         } else {
             $email_from = $email_to;
