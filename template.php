@@ -203,8 +203,14 @@ class KovSpace_Template
 		}
 	}
 
-	public function showJS($file) {
-		echo '<script>';
+	public function showJS($file, $id = NULL) {
+
+		if ($id) {
+			echo '<script id="'.$id.'">';
+		} else {
+			echo '<script>';
+		}
+
 		if (Core::moduleIsActive('compression')) {
 			$oCompression_Controller = Compression_Controller::instance('js');
 			$oCompression_Controller->clear();
