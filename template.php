@@ -6,8 +6,8 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  * Template Helpers
  *
  * @author KovSpace
- * @version 2017-05-23
- * @copyright © 2017 https://kovspace.com/
+ * @version 2018-09-11
+ * @copyright © 2018 https://kovspace.com/
  */
 class KovSpace_Template
 {
