@@ -22,7 +22,6 @@ class KovSpace_Template
 	public $objectItemId;
 	public $kovspace;
 	public $hostcms;
-	public $emailFrom;
 
 	protected $_aSection;
 
