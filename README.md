@@ -42,7 +42,8 @@ $Template
     ->objectGroupId
     ->objectItemId
     ->kovspace
-    ->hostcms;
+    ->hostcms
+    ->emailFrom;
 ```
 
 
@@ -71,4 +72,3 @@ $Template
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 ```
-

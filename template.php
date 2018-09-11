@@ -22,6 +22,7 @@ class KovSpace_Template
 	public $objectItemId;
 	public $kovspace;
 	public $hostcms;
+	public $emailFrom;
 
 	protected $_aSection;
 
@@ -279,6 +280,18 @@ class KovSpace_Template
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$id.'"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->'."\n";
+	}
+
+	public function emailFrom() {
+		$config = Core::$config->get('core_mail');
+        if (isset($config['smtp'][CURRENT_SITE]['username'])) {
+            $emailFrom = $config['smtp'][CURRENT_SITE]['username'];
+        } elseif (isset($config['smtp']['username'])) {
+            $emailFrom = $config['smtp']['username'];
+        } else {
+            $emailFrom = EMAIL_TO;
+		}
+		return $emailFrom;
 	}
 
 }
