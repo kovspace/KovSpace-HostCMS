@@ -282,6 +282,7 @@ class KovSpace_Template
       gtag("js", new Date());
       gtag("config", "'.$id.'");
     </script>'."\n";
+        return $this;
 	}
 
 	public function googleTagManager($id) {
@@ -292,7 +293,8 @@ class KovSpace_Template
 	j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
 	"https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);
 	})(window,document,"script","dataLayer","'.$id.'");</script>
-	<!-- End Google Tag Manager -->'."\n";
+    <!-- End Google Tag Manager -->'."\n";
+        return $this;
 	}
 
 	public function googleTagManagerNoScript($id) {
@@ -301,6 +303,7 @@ class KovSpace_Template
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$id.'"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->'."\n";
+        return $this;
 	}
 
 	public function emailFrom() {
