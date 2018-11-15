@@ -94,9 +94,11 @@ function cleanImages($dirname, $isDelete = 0) {
                             if ($isDelete) {
                                 unlink($pathName);
                             } else {
+                                $url = str_replace('/var/www/','https://',$pathName);
+                                $url = str_replace('/www/','/',$url);
                                 echo date ("d F Y H:i", filemtime($pathName));
                                 echo '<br>';
-                                echo $pathName;
+                                echo '<a href="'.$url.'">'.$pathName.'</a>';
                                 echo '<br><br>';
                             }
                         }
