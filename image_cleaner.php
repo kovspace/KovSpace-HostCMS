@@ -181,6 +181,9 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
+            if (!$row) {
+                echo 'not found';
+            }
         }
     }
 
@@ -211,9 +214,6 @@ function checkDatabase($pathName) {
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
         if ($row) $isFound = TRUE;
     }
-
-    echo $module;
-    echo '<br>';
 
     if (!$isFound) return TRUE;
 }
