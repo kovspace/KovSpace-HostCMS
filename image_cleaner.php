@@ -27,6 +27,78 @@ function checkDatabase($pathName) {
     $fileName = basename($pathName);
     $isFound = FALSE;
 
+    if (strstr($pathName, 'small_item_image')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_items'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_small')
+                ->from('shop_items')
+                ->where('image_small', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
+    if (strstr($pathName, 'item_image')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_items'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large')
+                ->from('shop_items')
+                ->where('image_large', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
+    if (strstr($pathName, 'small_group_')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_groups'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_small')
+                ->from('shop_groups')
+                ->where('image_small', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
+    if (strstr($pathName, 'group_')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_groups'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large')
+                ->from('shop_groups')
+                ->where('image_large', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
+    if (strstr($pathName, 'small_item_')) {
+        if (!$isFound && $module == 'information_system') {
+            // Check in table 'informationsystem_items'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_small')
+                ->from('informationsystem_items')
+                ->where('image_small', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
+    if (strstr($pathName, 'item_')) {
+        if (!$isFound && $module == 'information_system') {
+            // Check in table 'informationsystem_items'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large')
+                ->from('informationsystem_items')
+                ->where('image_large', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
     if (strstr($pathName, 'watermark')) {
         if (!$isFound && $module == 'shop') {
             // Check in table 'shops'
