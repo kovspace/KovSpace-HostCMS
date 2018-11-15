@@ -27,6 +27,10 @@ function checkDatabase($pathName) {
     $fileName = basename($pathName);
     $isFound = FALSE;
 
+    if (strstr($pathName, 'watermark')) {
+        $isFound = TRUE;
+    }
+
     // Check in table 'property_value_files'
     $oCore_QueryBuilder_Select = Core_QueryBuilder::select('file', 'file_small')
         ->from('property_value_files')
