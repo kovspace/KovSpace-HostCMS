@@ -217,12 +217,11 @@ function checkDatabase($pathName) {
     if (!$isFound) return TRUE;
 }
 
-function cleanImages($dirname, $isDelete = 0) {
+function cleanImages($dirname, $isDelete = 0, $i = 0) {
     if (is_dir($dirname) && !is_link($dirname))
     {
         if ($dh = @opendir($dirname))
         {
-            $i = 0;
             while (($file = readdir($dh)) !== FALSE)
             {
                 if ($file != '.' && $file != '..')
