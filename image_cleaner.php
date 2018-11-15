@@ -15,7 +15,12 @@ function isDirEmpty($dirname) {
     return (count(scandir($dirname)) == 2);
 }
 
-function checkDatabase($pathName) {
+function checkDatabase($pathName, $i) {
+
+    $i++;
+    if ($i == 100) {
+        exit('Limit is '.$i.' files');
+    }
 
     // Autodetect module by path
     if (strstr($pathName, 'information_system_')) {
@@ -217,7 +222,7 @@ function checkDatabase($pathName) {
     if (!$isFound) return TRUE;
 }
 
-function cleanImages($dirname, $isDelete = 0) {
+function cleanImages($dirname, $isDelete = 0, $i = 0) {
 
     if (is_dir($dirname) && !is_link($dirname))
     {
@@ -232,7 +237,7 @@ function cleanImages($dirname, $isDelete = 0) {
 
                     if (is_file($pathName))
                     {
-                        $result = checkDatabase($pathName);
+                        $result = checkDatabase($pathName, $i);
                         if ($result) {
                             if ($isDelete) {
                                 unlink($pathName);
