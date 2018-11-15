@@ -299,6 +299,12 @@ foreach ($aFiles as $file) {
             max-width: 100%;
             max-height: 40px;
         }
+        body {
+            background: #f6f6f6;
+        }
+        .container {
+            background: #fff;
+        }
         .blink{
             animation: blink 1s infinite;
         }
