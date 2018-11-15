@@ -64,6 +64,18 @@ function checkDatabase($pathName) {
         }
     }
 
+    if (strstr($pathName, 'eitems')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_item_digitals'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('filename')
+                ->from('shop_item_digitals')
+                ->where('filename', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
     if (!$isFound && $module == 'information_system') {
         // Check in table 'informationsystem_items'
         $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
