@@ -126,7 +126,7 @@ function cleanImages($dirname, $isDelete = 0) {
                                 $url = str_replace('/www/','/',$url);
                                 echo date ("d F Y H:i", filemtime($pathName));
                                 echo '<div class="mt-2 mb-4 row">';
-                                echo '  <div class="col-auto">';
+                                echo '  <div class="col-3 col-md-2">';
                                 echo '      <a target="_blank" href="'.$url.'">';
                                 if(is_array(getimagesize($pathName))){
                                     echo '<img height="30" src="'.$url.'">';
