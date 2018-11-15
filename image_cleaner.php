@@ -263,7 +263,7 @@ function cleanImages($dirname, $isDelete = 0) {
                         if(isDirEmpty($pathName)) {
                             rmdir($pathName);
                         } else {
-                            cleanImages($pathName, $isDelete, $i);
+                            cleanImages($pathName, $isDelete);
                         }
                     }
                 }
