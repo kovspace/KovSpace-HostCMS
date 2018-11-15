@@ -157,6 +157,7 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
+            if (!$row) echo 'not found small_item_';
         }
     } elseif (strstr($pathName, 'item_')) {
         if (!$isFound && $module == 'information_system') {
@@ -167,6 +168,7 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
+            if (!$row) echo 'not found item_';
         }
     } else {
         if (!$isFound && $module == 'information_system') {
@@ -181,9 +183,7 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
-            if (!$row) {
-                echo 'not found';
-            }
+            if (!$row) echo 'not found';
         }
     }
 
