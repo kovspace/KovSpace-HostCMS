@@ -161,7 +161,7 @@ function cleanImages($dirname, $isDelete = 0) {
                                 echo '<div class="mt-2 mb-3 row align-items-center">';
                                 echo '  <div class="col-1 text-center">';
                                 echo '      <a target="_blank" href="'.$url.'">';
-                                if(is_array(getimagesize($pathName))){
+                                if(is_array(@getimagesize($pathName))){
                                     echo '<img height="40" src="'.$url.'">';
                                 } else {
                                     echo '<img height="40" src="https://placehold.it/30x30">';
