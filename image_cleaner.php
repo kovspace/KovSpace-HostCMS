@@ -98,7 +98,7 @@ function cleanImages($dirname, $isDelete = 0) {
                                 $url = str_replace('/www/','/',$url);
                                 echo date ("d F Y H:i", filemtime($pathName));
                                 echo '<br>';
-                                echo '<a href="'.$url.'">'.$pathName.'</a>';
+                                echo '<a target="_blank" href="'.$url.'">'.$pathName.'</a>';
                                 echo '<br><br>';
                             }
                         }
