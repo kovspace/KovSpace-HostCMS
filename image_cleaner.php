@@ -125,17 +125,17 @@ function cleanImages($dirname, $isDelete = 0) {
                                 $url = str_replace('/var/www/','https://',$pathName);
                                 $url = str_replace('/www/','/',$url);
                                 echo date ("d F Y H:i", filemtime($pathName));
-                                echo '<div class="mt-2 mb-4 row">';
-                                echo '  <div class="col-3 col-md-2">';
+                                echo '<div class="mt-2 mb-3 row align-items-center">';
+                                echo '  <div class="col-1">';
                                 echo '      <a target="_blank" href="'.$url.'">';
                                 if(is_array(getimagesize($pathName))){
-                                    echo '<img height="30" src="'.$url.'">';
+                                    echo '<img height="40" src="'.$url.'">';
                                 } else {
-                                    echo '<img height="30" src="https://placehold.it/30x30">';
+                                    echo '<img height="40" src="https://placehold.it/30x30">';
                                 }
                                 echo '      </a>';
                                 echo '  </div>';
-                                echo '  <div class="col">'.$pathName.'</div>';
+                                echo '  <div class="col-11">'.$pathName.'</div>';
                                 echo '</div>';
                             }
                         }
