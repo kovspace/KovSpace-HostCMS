@@ -105,17 +105,8 @@ $aFiles = scandir($dir);
 $aPaths = array();
 
 foreach ($aFiles as $file) {
-
     $pathName = $dir.$file;
-
-    if ($file == strstr($file, 'shop_')) {
-        if (is_dir($pathName)) {
-            // echo $file;
-            // echo '<br>';
-        }
-    }
-
-    if ($file == strstr($file, 'information_system_')) {
+    if ($file == strstr($file, 'shop_') || $file == strstr($file, 'information_system_')) {
         if (is_dir($pathName)) {
             $aPaths[] = $pathName;
         }
