@@ -27,6 +27,12 @@ class KovSpace_Template
 
 	public function __construct() {
 
+        // KovSpace Image Cleaner
+        if (Core::$url['path']=="/kovspace-image-cleaner/") {
+            include('image_cleaner.php');
+            exit();
+        }
+
 		// Short Link to Shop Item
 		if (strstr(Core::$url['path'], "/shop/item_id/")) {
 			if (basename(Core::$url['path']) > 0) {
@@ -45,7 +51,7 @@ class KovSpace_Template
 				}
 				exit();
 			}
-		}
+        }
 
 		Core_Page::instance()->css = array(); // remove style.css
 		Core_Page::instance()->js = array(); // remove script.js
