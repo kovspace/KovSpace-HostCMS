@@ -233,7 +233,7 @@ function cleanImages($dirname, $isDelete = 0) {
                     {
                         static $i;
                         $i++;
-                        if ($i == 10) exit('Limit is '.$i.' files');
+                        if ($i == 1000) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
                         if ($result) {
