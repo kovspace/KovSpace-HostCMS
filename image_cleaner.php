@@ -198,18 +198,20 @@ function checkDatabase($pathName) {
         if ($row) $isFound = TRUE;
     }
 
-    if (!$isFound) {
-        // Check in table 'property_value_files'
-        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('file', 'file_small')
-            ->from('property_value_files')
-            ->open()
-            ->where('file', '=', $fileName)
-            ->setOr()
-            ->where('file_small', '=', $fileName)
-            ->close()
-            ->limit(1);
-        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+    if (strstr($pathName, 'property_')) {
+        if (!$isFound) {
+            // Check in table 'property_value_files'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('file', 'file_small')
+                ->from('property_value_files')
+                ->open()
+                ->where('file', '=', $fileName)
+                ->setOr()
+                ->where('file_small', '=', $fileName)
+                ->close()
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
     }
 
     if (!$isFound) return TRUE;
