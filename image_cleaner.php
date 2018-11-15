@@ -212,6 +212,9 @@ function checkDatabase($pathName) {
         if ($row) $isFound = TRUE;
     }
 
+    echo $module;
+    echo '<br>';
+
     if (!$isFound) return TRUE;
 }
 
