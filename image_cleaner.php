@@ -244,9 +244,9 @@ function cleanImages($dirname, $isDelete = 0) {
                                 echo '  <div class="col-1 text-center">';
                                 echo '      <a target="_blank" href="'.$url.'">';
                                 if(is_array(@getimagesize($pathName))){
-                                    echo '<img height="40" src="'.$url.'">';
+                                    echo '<img src="'.$url.'">';
                                 } else {
-                                    echo '<img height="40" src="https://placehold.it/30x30">';
+                                    echo '<img src="https://placehold.it/40x40">';
                                 }
                                 echo '      </a>';
                                 echo '  </div>';
@@ -294,6 +294,7 @@ foreach ($aFiles as $file) {
     <style>
         img {
             max-width: 100%;
+            max-height: 40px;
         }
         .blink{
             animation: blink 1s infinite;
