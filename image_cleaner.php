@@ -232,7 +232,7 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
                     if (is_file($pathName))
                     {
                         $i++;
-                        if ($i == 100) exit('Limit is '.$i.' files');
+                        if ($i == 10) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
                         if ($result) {
@@ -262,7 +262,7 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
                         if(isDirEmpty($pathName)) {
                             rmdir($pathName);
                         } else {
-                            //cleanImages($pathName, $isDelete, $i);
+                            cleanImages($pathName, $isDelete, $i);
                         }
                     }
                 }
