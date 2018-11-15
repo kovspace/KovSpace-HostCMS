@@ -184,7 +184,7 @@ foreach ($aFiles as $file) {
                         $('#path-'+i+' .status').html('<span class="text-success">OK</span>');
                     } else {
                         aErrors.push(aPaths[i]);
-                        $('#path-'+i).html('<span class="text-danger">'+html+'</span>');
+                        $('#path-'+i+' .status').html('<span class="text-danger">'+html+'</span>');
                     }
 
                     if (i+1 < aPaths.length) {
