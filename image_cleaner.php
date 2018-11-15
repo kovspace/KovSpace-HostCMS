@@ -217,13 +217,12 @@ function checkDatabase($pathName) {
     if (!$isFound) return TRUE;
 }
 
-function cleanImages($dirname, $isDelete = 0, $i = 0) {
+$GLOBALS['counter'] = 0;
+function cleanImages($dirname, $isDelete = 0) {
     if (is_dir($dirname) && !is_link($dirname))
     {
         if ($dh = @opendir($dirname))
         {
-            echo 'while: '.$i;
-            echo '<br>';
             while (($file = readdir($dh)) !== FALSE)
             {
                 if ($file != '.' && $file != '..')
@@ -233,11 +232,8 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
 
                     if (is_file($pathName))
                     {
-                        $i++;
-                        echo 'is_file: '.$i;
-                        echo '<br>';
-
-                        if ($i == 10) exit('Limit is '.$i.' files');
+                        $GLOBALS['counter']++;
+                        if ($GLOBALS['counter'] == 10) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
                         if ($result) {
