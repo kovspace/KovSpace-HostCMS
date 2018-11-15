@@ -222,6 +222,8 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
     {
         if ($dh = @opendir($dirname))
         {
+            echo 'while: '.$i;
+            echo '<br>';
             while (($file = readdir($dh)) !== FALSE)
             {
                 if ($file != '.' && $file != '..')
@@ -232,7 +234,9 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
                     if (is_file($pathName))
                     {
                         $i++;
-                        echo $i;
+                        echo 'is_file: '.$i;
+                        echo '<br>';
+
                         if ($i == 10) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
