@@ -28,20 +28,41 @@ function checkDatabase($pathName) {
     $isFound = FALSE;
 
     if (strstr($pathName, 'watermark')) {
-        $isFound = TRUE;
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shops'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('watermark_file')
+                ->from('shops')
+                ->where('watermark_file', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+        if (!$isFound && $module == 'information_system') {
+            // Check in table 'informationsystems'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('watermark_file')
+                ->from('informationsystems')
+                ->where('watermark_file', '=', $fileName)
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
     }
 
-    // Check in table 'property_value_files'
-    $oCore_QueryBuilder_Select = Core_QueryBuilder::select('file', 'file_small')
-        ->from('property_value_files')
-        ->open()
-        ->where('file', '=', $fileName)
-        ->setOr()
-        ->where('file_small', '=', $fileName)
-        ->close()
-        ->limit(1);
-    $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-    if ($row) $isFound = TRUE;
+    if (strstr($pathName, 'producers')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_producers'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+                ->from('shop_producers')
+                ->open()
+                ->where('image_large', '=', $fileName)
+                ->setOr()
+                ->where('image_small', '=', $fileName)
+                ->close()
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
 
     if (!$isFound && $module == 'information_system') {
         // Check in table 'informationsystem_items'
@@ -99,19 +120,17 @@ function checkDatabase($pathName) {
         if ($row) $isFound = TRUE;
     }
 
-    if (!$isFound && $module == 'shop') {
-        // Check in table 'shop_producers'
-        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
-            ->from('shop_producers')
-            ->open()
-            ->where('image_large', '=', $fileName)
-            ->setOr()
-            ->where('image_small', '=', $fileName)
-            ->close()
-            ->limit(1);
-        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
-    }
+    // Check in table 'property_value_files'
+    $oCore_QueryBuilder_Select = Core_QueryBuilder::select('file', 'file_small')
+        ->from('property_value_files')
+        ->open()
+        ->where('file', '=', $fileName)
+        ->setOr()
+        ->where('file_small', '=', $fileName)
+        ->close()
+        ->limit(1);
+    $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+    if ($row) $isFound = TRUE;
 
     if (!$isFound) return TRUE;
 }
