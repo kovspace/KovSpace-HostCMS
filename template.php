@@ -29,7 +29,7 @@ class KovSpace_Template
 
         // KovSpace Image Cleaner
         if (Core::$url['path'] == "/kovspace-image-cleaner/") {
-            include('image_cleaner.php');
+            include(dirname(__FILE__).'/image_cleaner.php');
             exit();
         }
 
