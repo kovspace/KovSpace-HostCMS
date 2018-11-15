@@ -352,6 +352,9 @@ foreach ($aFiles as $file) {
                             $('#result').prepend('<div class="d-inline-block alert alert-info">No errors found</div>');
                         }
                     }
+                },
+                error:  function(xhr, str){
+                    $('#path-'+i+' .status').html('<span class="text-danger">'+xhr.responseCode+'</span>');
                 }
             });
         }
@@ -367,6 +370,9 @@ foreach ($aFiles as $file) {
                     } else {
                         $('#result').html('<div class="d-inline-block alert alert-info">All bugs fixed</div>');
                     }
+                },
+                error:  function(xhr, str){
+                    $('#result').html('<span class="text-danger">'+xhr.responseCode+'</span>');
                 }
             });
         }
