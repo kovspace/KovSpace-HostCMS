@@ -128,7 +128,20 @@ class KovSpace_Template
 	public function structureCDN() {
 		Core_Page::instance()->structureCDN = 'https://i0.wp.com/' . Core::$url['host'];
 		return $this;
-	}
+    }
+
+    public function showDoctype() {
+        echo '<!doctype html>' . "\n\t";
+        echo '<html lang="ru">' . "\n\t";
+    }
+
+    public function showHeadOpen() {
+        echo '<head>' . "\n\t";
+    }
+
+    public function showHeadClose() {
+        echo '</head>' . "\n\t";
+    }
 
 	public function showMeta() {
 		echo '<title>'.$this->title.'</title>' . "\n\t";
