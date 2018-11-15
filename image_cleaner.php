@@ -224,6 +224,9 @@ foreach ($aFiles as $file) {
     <title>KovSpace Image Cleaner</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
     <style>
+        img {
+            max-width: 100%;
+        }
         .blink{
             animation: blink 1s infinite;
         }
