@@ -53,6 +53,20 @@ function checkDatabase($pathName) {
         if ($row) $isFound = TRUE;
     }
 
+    if (!$isFound && $module == 'shop') {
+        // Check in table 'shop_items'
+        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+            ->from('shop_items')
+            ->open()
+            ->where('image_large', '=', $fileName)
+            ->setOr()
+            ->where('image_small', '=', $fileName)
+            ->close()
+            ->limit(1);
+        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+        if ($row) $isFound = TRUE;
+    }
+
     if (!$isFound) return TRUE;
 }
 
