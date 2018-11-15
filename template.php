@@ -133,14 +133,17 @@ class KovSpace_Template
     public function showDoctype() {
         echo '<!doctype html>' . "\n\t";
         echo '<html lang="ru">' . "\n\t";
+        return $this;
     }
 
     public function showHeadOpen() {
         echo '<head>' . "\n\t";
+        return $this;
     }
 
     public function showHeadClose() {
         echo '</head>' . "\n\t";
+        return $this;
     }
 
 	public function showMeta() {
