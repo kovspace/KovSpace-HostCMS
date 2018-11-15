@@ -167,7 +167,7 @@ foreach ($aFiles as $file) {
         function check(i) {
             $('#result').prepend('<div class="my-2" id="path-'+i+'"><div class="path font-weight-bold">'+aPaths[i]+'</div><div class="status"><span class="blink">Checking...</span></div></div>');
             $.ajax({
-                url: '<?=Core::$url['path']?>?dirname='+aPaths[i],
+                url: '<?=Core::$url["path"]?>?dirname='+aPaths[i],
                 cache: false,
                 success: function(html)
                 {
@@ -193,7 +193,7 @@ foreach ($aFiles as $file) {
 
         function clean(i) {
             $.ajax({
-                url: '<?=Core::$url['path']?>?dirname='+aErrors[i]+'&delete=1',
+                url: '<?=Core::$url["path"]?>?dirname='+aErrors[i]+'&delete=1',
                 cache: false,
                 success: function(html)
                 {
