@@ -217,7 +217,7 @@ function checkDatabase($pathName) {
     if (!$isFound) return TRUE;
 }
 
-$GLOBALS['counter'] = 0;
+$counter = 0;
 function cleanImages($dirname, $isDelete = 0) {
     if (is_dir($dirname) && !is_link($dirname))
     {
@@ -232,8 +232,8 @@ function cleanImages($dirname, $isDelete = 0) {
 
                     if (is_file($pathName))
                     {
-                        $GLOBALS['counter']++;
-                        if ($GLOBALS['counter'] == 10) exit('Limit is '.$GLOBALS['counter'].' files');
+                        $i = $GLOBALS['counter']++;
+                        if ($i == 10) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
                         if ($result) {
