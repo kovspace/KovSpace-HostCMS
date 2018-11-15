@@ -28,7 +28,7 @@ class KovSpace_Template
 	public function __construct() {
 
         // KovSpace Image Cleaner
-        if (Core::$url['path']=="/kovspace-image-cleaner/") {
+        if (Core::$url['path'] == "/kovspace-image-cleaner/") {
             include('image_cleaner.php');
             exit();
         }
