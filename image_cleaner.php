@@ -148,7 +148,7 @@ function checkDatabase($pathName) {
         }
     }
 
-    if (strstr($pathName, 'small_item_')) {
+    if (strstr($pathName, 'small_item_') || strstr($pathName, 'small_information_items_')) {
         if (!$isFound && $module == 'information_system') {
             // Check in table 'informationsystem_items'
             $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_small')
@@ -157,9 +157,8 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
-            if (!$row) echo 'not found small_item_';
         }
-    } elseif (strstr($pathName, 'item_')) {
+    } elseif (strstr($pathName, 'item_') || strstr($pathName, 'information_items_')) {
         if (!$isFound && $module == 'information_system') {
             // Check in table 'informationsystem_items'
             $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large')
@@ -168,7 +167,6 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
-            if (!$row) echo 'not found item_';
         }
     } else {
         if (!$isFound && $module == 'information_system') {
@@ -183,7 +181,6 @@ function checkDatabase($pathName) {
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
-            if (!$row) echo 'not found';
         }
     }
 
