@@ -15,12 +15,7 @@ function isDirEmpty($dirname) {
     return (count(scandir($dirname)) == 2);
 }
 
-function checkDatabase($pathName, $i) {
-
-    $i++;
-    if ($i == 100) {
-        exit('Limit is '.$i.' files');
-    }
+function checkDatabase($pathName) {
 
     // Autodetect module by path
     if (strstr($pathName, 'information_system_')) {
@@ -222,12 +217,12 @@ function checkDatabase($pathName, $i) {
     if (!$isFound) return TRUE;
 }
 
-function cleanImages($dirname, $isDelete = 0, $i = 0) {
-
+function cleanImages($dirname, $isDelete = 0) {
     if (is_dir($dirname) && !is_link($dirname))
     {
         if ($dh = @opendir($dirname))
         {
+            $i = 0;
             while (($file = readdir($dh)) !== FALSE)
             {
                 if ($file != '.' && $file != '..')
@@ -237,7 +232,11 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
 
                     if (is_file($pathName))
                     {
-                        $result = checkDatabase($pathName, $i);
+                        $i++;
+                        if ($i = 100) {
+                            exit('Limit is '.$i.' files');
+                        }
+                        $result = checkDatabase($pathName);
                         if ($result) {
                             if ($isDelete) {
                                 unlink($pathName);
@@ -265,7 +264,7 @@ function cleanImages($dirname, $isDelete = 0, $i = 0) {
                         if(isDirEmpty($pathName)) {
                             rmdir($pathName);
                         } else {
-                            cleanImages($pathName, $isDelete);
+                            cleanImages($pathName, $isDelete, $i);
                         }
                     }
                 }
