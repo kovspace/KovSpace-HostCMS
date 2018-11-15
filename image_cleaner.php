@@ -302,9 +302,6 @@ foreach ($aFiles as $file) {
         body {
             background: #f6f6f6;
         }
-        .container {
-            background: #fff;
-        }
         .blink{
             animation: blink 1s infinite;
         }
@@ -317,8 +314,12 @@ foreach ($aFiles as $file) {
     </style>
 </head>
 <body>
-    <div class="my-2 py-2 container">
-        <h1>KovSpace Image Cleaner</h1>
+    <div class="my-2 py-2 bg-white">
+        <div class="container">
+            <h1>KovSpace Image Cleaner</h1>
+        </div>
+    </div>
+    <div class="my-2 py-2 container bg-white">
         <div class="my-4" id="result"></div>
     </div>
 
