@@ -224,6 +224,12 @@ function cleanImages($dirname, $isDelete = 0) {
         {
             while (($file = readdir($dh)) !== FALSE)
             {
+                static $time;
+                static $i;
+
+                if (!$time) $time = time();
+                if (time() - $time > 55)  exit('Timout. '.$i.' files were checked');
+
                 if ($file != '.' && $file != '..')
                 {
                     clearstatcache();
@@ -231,7 +237,6 @@ function cleanImages($dirname, $isDelete = 0) {
 
                     if (is_file($pathName))
                     {
-                        static $i;
                         $i++;
                         if ($i == 3000) exit('Limit is '.$i.' files');
 
