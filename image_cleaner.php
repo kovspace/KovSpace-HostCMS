@@ -228,7 +228,7 @@ function cleanImages($dirname, $isDelete = 0) {
                 static $i;
 
                 if (!$time) $time = time();
-                if (time() - $time > 55)  exit('Timout. '.$i.' files were checked');
+                if (time() - $time > 55)  exit('Timeout. '.$i.' files were checked');
 
                 if ($file != '.' && $file != '..')
                 {
@@ -238,7 +238,6 @@ function cleanImages($dirname, $isDelete = 0) {
                     if (is_file($pathName))
                     {
                         $i++;
-                        if ($i == 3000) exit('Limit is '.$i.' files');
 
                         $result = checkDatabase($pathName);
                         if ($result) {
@@ -354,7 +353,7 @@ foreach ($aFiles as $file) {
                     if (html == '') {
                         $('#path-'+i+' .status').html('<span class="text-success">OK</span>');
                     } else {
-                        if (html != 'Limit is 3000 files') {
+                        if (!html.includes('Timeout')) {
                             aErrors.push(aPaths[i]);
                         }
                         $('#path-'+i+' .status').html('<span class="text-danger">'+html+'</span>');
