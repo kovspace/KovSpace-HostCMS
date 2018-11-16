@@ -397,6 +397,7 @@ foreach ($aFiles as $file) {
         $(document).ajaxComplete(function() {
             $('.js-fix').click(
                 function () {
+                    $('#result').html('<span class="blink text-info">Fixing...</span>');
                     clean(0);
                 }
             );
