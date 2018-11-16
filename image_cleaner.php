@@ -228,7 +228,7 @@ function cleanImages($dirname, $isDelete = 0) {
                 static $i;
 
                 if (!$time) $time = time();
-                if (time() - $time > 55)  exit('Timeout. '.$i.' files were checked');
+                if (time() - $time > 5)  exit('Timeout. '.$i.' files were checked');
 
                 if ($file != '.' && $file != '..')
                 {
