@@ -1,5 +1,6 @@
 <?php
 require_once('bootstrap.php');
+if (!Core_Auth::logged()) exit('Access Denied!');
 
 if ($dirname = Core_Array::getGet('dirname')) {
     if (Core_Array::getGet('delete')) {
