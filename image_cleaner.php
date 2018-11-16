@@ -355,6 +355,7 @@ foreach ($aFiles as $file) {
                     } else {
                         if (!html.includes('Timeout')) {
                             aErrors.push(aPaths[i]);
+                            console.log(aPaths[i]);
                         }
                         $('#path-'+i+' .status').html('<span class="text-danger">'+html+'</span>');
                     }
@@ -363,7 +364,6 @@ foreach ($aFiles as $file) {
                         check(i+1);
                     } else {
                         if (aErrors.length) {
-                            console.log(aErrors);
                             $('#result').prepend('<button class="js-fix mb-2 btn btn-primary">Fix all erros</button>');
                         } else {
                             $('#result').prepend('<div class="d-inline-block alert alert-info">No errors found</div>');
