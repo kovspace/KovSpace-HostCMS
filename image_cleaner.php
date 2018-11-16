@@ -228,7 +228,7 @@ function cleanImages($dirname, $isDelete = 0) {
                 static $i;
 
                 if (!$time) $time = time();
-                if (time() - $time > 5)  exit('Timeout. '.$i.' files were checked');
+                if (time() - $time > 55)  exit('Timeout. '.$i.' files were checked');
 
                 if ($file != '.' && $file != '..')
                 {
@@ -353,7 +353,7 @@ foreach ($aFiles as $file) {
                     if (html == '') {
                         $('#path-'+i+' .status').html('<span class="text-success">OK</span>');
                     } else {
-                        if (!html.includes('Timeout')) {
+                        if (!html.includes('Timeout') || html.includes('/upload/')) {
                             aErrors.push(aPaths[i]);
                             console.log(aPaths[i]);
                         }
