@@ -318,7 +318,7 @@ foreach ($aFiles as $file) {
     </style>
 </head>
 <body>
-    <div class="py-2 bg-white">
+    <div class="py-2 bg-dark text-white">
         <div class="container">
             <h1>KovSpace Image Cleaner</h1>
         </div>
