@@ -112,7 +112,7 @@ function checkDatabase($pathName) {
         }
     }
 
-    if (strstr($pathName, 'small_group_')) {
+    if (strstr($pathName, 'small_group_') || strstr($pathName, 'small_shop_group')) {
         if (!$isFound && $module == 'shop') {
             // Check in table 'shop_groups'
             $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_small')
