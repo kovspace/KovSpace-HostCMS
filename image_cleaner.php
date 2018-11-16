@@ -96,20 +96,6 @@ function checkDatabase($pathName) {
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
         }
-    } else {
-        if (!$isFound && $module == 'shop') {
-            // Check in table 'shop_items'
-            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
-                ->from('shop_items')
-                ->open()
-                ->where('image_large', '=', $fileName)
-                ->setOr()
-                ->where('image_small', '=', $fileName)
-                ->close()
-                ->limit(1);
-            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
-        }
     }
 
     if (strstr($pathName, 'small_group_') || strstr($pathName, 'small_shop_group')) {
@@ -128,20 +114,6 @@ function checkDatabase($pathName) {
             $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large')
                 ->from('shop_groups')
                 ->where('image_large', '=', $fileName)
-                ->limit(1);
-            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
-        }
-    } else {
-        if (!$isFound && $module == 'shop') {
-            // Check in table 'shop_groups'
-            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
-                ->from('shop_groups')
-                ->open()
-                ->where('image_large', '=', $fileName)
-                ->setOr()
-                ->where('image_small', '=', $fileName)
-                ->close()
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
@@ -168,34 +140,6 @@ function checkDatabase($pathName) {
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
         }
-    } else {
-        if (!$isFound && $module == 'information_system') {
-            // Check in table 'informationsystem_items'
-            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
-                ->from('informationsystem_items')
-                ->open()
-                ->where('image_large', '=', $fileName)
-                ->setOr()
-                ->where('image_small', '=', $fileName)
-                ->close()
-                ->limit(1);
-            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
-        }
-    }
-
-    if (!$isFound && $module == 'information_system') {
-        // Check in table 'informationsystem_groups'
-        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
-            ->from('informationsystem_groups')
-            ->open()
-            ->where('image_large', '=', $fileName)
-            ->setOr()
-            ->where('image_small', '=', $fileName)
-            ->close()
-            ->limit(1);
-        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
     }
 
     if (strstr($pathName, 'property_')) {
@@ -212,6 +156,62 @@ function checkDatabase($pathName) {
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
             if ($row) $isFound = TRUE;
         }
+    }
+
+    if (!$isFound && $module == 'shop') {
+        // Check in table 'shop_items'
+        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+            ->from('shop_items')
+            ->open()
+            ->where('image_large', '=', $fileName)
+            ->setOr()
+            ->where('image_small', '=', $fileName)
+            ->close()
+            ->limit(1);
+        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+        if ($row) $isFound = TRUE;
+    }
+
+    if (!$isFound && $module == 'shop') {
+        // Check in table 'shop_groups'
+        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+            ->from('shop_groups')
+            ->open()
+            ->where('image_large', '=', $fileName)
+            ->setOr()
+            ->where('image_small', '=', $fileName)
+            ->close()
+            ->limit(1);
+        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+        if ($row) $isFound = TRUE;
+    }
+
+    if (!$isFound && $module == 'information_system') {
+        // Check in table 'informationsystem_items'
+        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+            ->from('informationsystem_items')
+            ->open()
+            ->where('image_large', '=', $fileName)
+            ->setOr()
+            ->where('image_small', '=', $fileName)
+            ->close()
+            ->limit(1);
+        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+        if ($row) $isFound = TRUE;
+    }
+
+    if (!$isFound && $module == 'information_system') {
+        // Check in table 'informationsystem_groups'
+        $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+            ->from('informationsystem_groups')
+            ->open()
+            ->where('image_large', '=', $fileName)
+            ->setOr()
+            ->where('image_small', '=', $fileName)
+            ->close()
+            ->limit(1);
+        $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+        if ($row) $isFound = TRUE;
     }
 
     if (!$isFound) return TRUE;
