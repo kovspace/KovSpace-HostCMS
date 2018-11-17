@@ -61,7 +61,7 @@ class KovSpace_Template
 		$this->keywords = htmlspecialchars(Core_Page::instance()->keywords);
 
         $this->root = rtrim(CMS_FOLDER, '/\\');
-        $this->path = Core_Page::instance()->template->id
+        $this->path = Core_Page::instance()->template->template_id
         ? '/templates/template' . Core_Page::instance()->template->template_id . '/'
         : '/templates/template' . Core_Page::instance()->template->id . '/';
 
