@@ -60,8 +60,10 @@ class KovSpace_Template
 		$this->description = htmlspecialchars(Core_Page::instance()->description);
 		$this->keywords = htmlspecialchars(Core_Page::instance()->keywords);
 
-		$this->root = rtrim(CMS_FOLDER, '/\\');
-		$this->path = '/templates/template' . Core_Page::instance()->template->template_id . '/';
+        $this->root = rtrim(CMS_FOLDER, '/\\');
+        $this->path = Core_Page::instance()->template->id
+        ? '/templates/template' . Core_Page::instance()->template->template_id . '/'
+        : '/templates/template' . Core_Page::instance()->template->id . '/';
 
 		// The current object
 		$this->object = Core_Page::instance()->object;
