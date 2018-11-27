@@ -21,7 +21,7 @@ class KovSpace_Cache
     protected static $cacheDir = CMS_FOLDER . 'hostcmsfiles/cache/';
     protected static $clearFile = CMS_FOLDER . 'hostcmsfiles/cache/_clear.txt';
 
-    // Exclusion rules
+    /* Exclusion rules */
     public static function is_cache_deny() {
         if (Core_Auth::logged()) {
             return true;
@@ -29,6 +29,7 @@ class KovSpace_Cache
         return false;
     }
 
+    /* Check file exists and start buffering */
     public static function check($filename, $lifetime) {
         if (self::is_cache_deny()) return true;
 
@@ -48,6 +49,7 @@ class KovSpace_Cache
         }
     }
 
+    /* End buffering and save file */
     public static function save($filename) {
         if (self::is_cache_deny()) return;
         $filepath = self::$cacheDir . $filename;
@@ -57,6 +59,7 @@ class KovSpace_Cache
         echo $content;
     }
 
+    /* Remove all cache files */
     public static function clear() {
         $dir = self::$cacheDir;
         if($dh = opendir($dir)){
