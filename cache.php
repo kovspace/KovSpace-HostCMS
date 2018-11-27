@@ -32,8 +32,8 @@ class KovSpace_Cache
     public static function check($filename, $lifetime) {
         if (self::is_cache_deny()) return true;
 
-        // Clear old files (once a week = 604800 sec)
-        if (!file_exists(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 604800) {
+        // Clear old files (once a day = 86400 sec)
+        if (!file_exists(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 86400) {
             self::clear();
         }
 
