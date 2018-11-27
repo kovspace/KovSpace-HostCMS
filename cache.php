@@ -21,7 +21,22 @@ class KovSpace_Cache
     protected static $cacheDir = CMS_FOLDER . 'hostcmsfiles/cache/';
     protected static $clearFile = CMS_FOLDER . 'hostcmsfiles/cache/_clear.txt';
 
+    // Exclude caching for admins and cart
+    public static function is_cache_deny() {
+        if (Core_Auth::logged()) {
+            return true;
+        }
+
+        $object = Core_Page::instance()->object;
+        if (is_object($object) && get_class($object) == 'Shop_Cart_Controller_Show') {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function check($filename, $lifetime) {
+        if (self::is_cache_deny()) return true;
 
         // Clear old files (once a week = 604800 sec)
         if (!file_exists(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 604800) {
@@ -40,6 +55,7 @@ class KovSpace_Cache
     }
 
     public static function save($filename) {
+        if (self::is_cache_deny()) return;
         $filepath = self::$cacheDir . $filename;
         $content = ob_get_contents();
         ob_end_clean();
