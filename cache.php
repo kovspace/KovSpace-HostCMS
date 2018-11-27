@@ -26,12 +26,6 @@ class KovSpace_Cache
         if (Core_Auth::logged()) {
             return true;
         }
-
-        $object = Core_Page::instance()->object;
-        if (is_object($object) && get_class($object) == 'Shop_Cart_Controller_Show') {
-            return true;
-        }
-
         return false;
     }
 
