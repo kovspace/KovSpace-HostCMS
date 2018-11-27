@@ -21,7 +21,7 @@ class KovSpace_Cache
     protected static $cacheDir = CMS_FOLDER . 'hostcmsfiles/cache/';
     protected static $clearFile = CMS_FOLDER . 'hostcmsfiles/cache/_clear.txt';
 
-    // Exclude caching for admins and cart
+    // Exclusion rules
     public static function is_cache_deny() {
         if (Core_Auth::logged()) {
             return true;
