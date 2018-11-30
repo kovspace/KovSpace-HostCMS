@@ -64,7 +64,9 @@ class KovSpace_Cache
         $dir = self::$cacheDir;
         if($dh = opendir($dir)){
             while(($file = readdir($dh))!== false){
-                if(file_exists($dir.$file)) @unlink($dir.$file);
+                if ($file != '.' && $file != '..') {
+                    if(file_exists($dir.$file)) @unlink($dir.$file);
+                }
             }
             closedir($dh);
         }
