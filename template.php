@@ -133,11 +133,11 @@ class KovSpace_Template
     }
 
     public function detectReferer() {
-        $referer = isset($_SERVER["HTTP_REFERER"])
-            ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
-            : NULL;
-        if ($referer != NULL && $referer != $_SERVER['SERVER_NAME']) {
-            if (!Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from')) {
+        if (!isset($_COOKIE['hostcms_source_type']) && !Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from')) {
+            $referer = isset($_SERVER["HTTP_REFERER"])
+                ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
+                : NULL;
+            if ($referer != NULL && $referer != $_SERVER['SERVER_NAME']) {
                 $oSource_Controller = new Source_Controller();
                 $oSource_Controller
                     ->type(2)
