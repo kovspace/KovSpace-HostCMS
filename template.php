@@ -132,6 +132,22 @@ class KovSpace_Template
 		return $this;
     }
 
+    public function detectReferer() {
+        $referer = isset($_SERVER["HTTP_REFERER"])
+            ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
+            : NULL;
+        if ($referer != NULL && $referer != $_SERVER['SERVER_NAME']) {
+            if (!Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from')) {
+                $oSource_Controller = new Source_Controller();
+                $oSource_Controller
+                    ->type(2)
+                    ->service($referer)
+                    ->apply();
+            }
+        }
+        return $this;
+    }
+
     public function showDoctype() {
         echo '<!doctype html>' . "\n";
         echo '<html lang="ru">' . "\n";
