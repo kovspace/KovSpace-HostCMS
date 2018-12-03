@@ -11,11 +11,15 @@ $Template = new KovSpace_Template();
 
 // Methods
 $Template
+    ->detectReferer()
     ->imageTimestamp()
     ->imageCDN()
     ->informationsystemCDN()
     ->shopCDN()
     ->structureCDN()
+    ->showDoctype()
+    ->showHeadOpen()
+    ->showHeadClose()
     ->showMeta()
     ->showViewport( $width = NULL )
     ->showFavicon()
