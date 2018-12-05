@@ -27,6 +27,14 @@ class KovSpace_Template
 
 	public function __construct() {
 
+        // URL fixer
+        $amp = explode('amp;', $_SERVER['REQUEST_URI']);
+        if (count($amp) > 1) {
+            $newUrl = str_replace('amp;', '', $_SERVER['REQUEST_URI']);
+            header('Location: ' . $newUrl);
+            exit();
+        }
+
         // KovSpace Image Cleaner
         if (Core::$url['path'] == "/kovspace-image-cleaner/") {
             include(dirname(__FILE__).'/image_cleaner.php');
