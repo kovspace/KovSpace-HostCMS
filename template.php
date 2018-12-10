@@ -353,7 +353,6 @@ class Image_Upload_Timestamp_Observer
 {
    static public function onBeforeGetXml($object, $args)
    {
-
    		if ($object->image_small && !stristr($object->image_small, '?')) {
    			$image_small_timestamp = @filemtime($object->getSmallFilePath());
    			$object->image_small .= '?' . $image_small_timestamp;
