@@ -336,7 +336,30 @@ class KovSpace_Template
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->'."\n";
         return $this;
-	}
+    }
+
+    public function adSense($hourStart = NULL, $hourStop = NULL) {
+        $hourNow = date('H');
+        if ($hourStart && $hourStop) {
+            // Night mode
+            if ($hourStart > $hourStop && ($hourNow < $hourStart && $hourNow >= $hourStop)) {
+                return $this;
+            }
+            // Day mode
+            if ($hourStart < $hourStop && ($hourNow < $hourStart || $hourNow >= $hourStop)) {
+                return $this;
+            }
+        }
+        echo '
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-9051464550208465",
+            enable_page_level_ads: true
+        });
+    </script>'."\n";
+        return $this;
+    }
 
 	public function emailFrom() {
 		$config = Core::$config->get('core_mail');
@@ -348,8 +371,7 @@ class KovSpace_Template
             $emailFrom = EMAIL_TO;
 		}
 		return $emailFrom;
-	}
-
+    }
 }
 
 
