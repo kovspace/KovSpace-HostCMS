@@ -340,7 +340,15 @@ class KovSpace_Template
 
     public function adSense($hourStart = NULL, $hourStop = NULL) {
         $hourNow = date('H');
-        if ($hourStart && $hourStop) {
+        if ($hourStart !== NULL && $hourStop !== NULL) {
+            // from Midnight
+            if ($hourStart === 0 && $hourNow >= $hourStop) {
+                return $this;
+            }
+            // to Midnight
+            if ($hourStop === 0 && $hourNow < $hourStart) {
+                return $this;
+            }
             // Night mode
             if ($hourStart > $hourStop && ($hourNow < $hourStart && $hourNow >= $hourStop)) {
                 return $this;
