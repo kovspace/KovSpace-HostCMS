@@ -342,7 +342,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function gad($hourStart = NULL, $hourStop = NULL) {
+    public function showGad($hourStart = NULL, $hourStop = NULL) {
         $hourNow = date('H');
         if ($hourStart !== NULL && $hourStop !== NULL) {
             // from Midnight
