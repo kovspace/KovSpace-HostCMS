@@ -338,10 +338,6 @@ class KovSpace_Template
         return $this;
     }
 
-    public function adSense($hourStart = NULL, $hourStop = NULL) {
-        return $this;
-    }
-
     public function showGad($hourStart = NULL, $hourStop = NULL) {
         $hourNow = date('H');
         if ($hourStart !== NULL && $hourStop !== NULL) {
