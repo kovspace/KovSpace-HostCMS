@@ -51,7 +51,7 @@ class KovSpace_Cache
 
     /* End buffering and save file */
     public static function save($filename) {
-        if (self::is_cache_deny()) return;
+        if (self::is_cache_deny() || !$filename) return;
         $filepath = self::$cacheDir . $filename;
         $content = ob_get_contents();
         ob_end_clean();
