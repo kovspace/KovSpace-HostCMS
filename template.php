@@ -302,6 +302,9 @@ class KovSpace_Template
 	}
 	public function showPrivacy() {
 		echo '<a href="/privacy/">Политика конфиденциальности</a>';
+    }
+	public function showOffer() {
+		echo '<a href="/offer/">Договор оферты</a>';
 	}
 
 	public function gTag($id) {
