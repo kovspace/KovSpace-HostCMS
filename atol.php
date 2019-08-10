@@ -41,9 +41,6 @@ class KovSpace_Atol
         $fields['login'] = $this->login;
         $fields['pass'] = $this->pass;
         $response = $this->post($url, $fields);
-        if (isset($response->error->text)){
-            return $response->error->text;
-        }
         if (isset($response->token)) {
             $this->token = $response->token;
         }
