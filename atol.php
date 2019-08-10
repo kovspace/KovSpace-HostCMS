@@ -40,9 +40,9 @@ class KovSpace_Atol
         $url = $this->apiUrl.'/getToken';
         $fields['login'] = $this->login;
         $fields['pass'] = $this->pass;
-        $response = $this->post($url, $fields);
-        if (isset($response->token)) {
-            $this->token = $response->token;
+        $this->post($url, $fields);
+        if (isset($this->response->token)) {
+            $this->token = $this->response->token;
         }
     }
 
