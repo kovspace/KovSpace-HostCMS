@@ -11,10 +11,9 @@ class KovSpace_Atol
     public $pass;
     public $group;
     public $token;
-    public $orderId;
     public $response;
 
-    public function __construct($login, $pass, $group, $isTest = false, $orderId = 0) {
+    public function __construct($login, $pass, $group, $isTest = false) {
         $this->login = $login;
         $this->pass = $pass;
         $this->group = $group;
@@ -55,12 +54,12 @@ class KovSpace_Atol
         $this->post($url, $this->fields);
     }
 
-    public function makeReceipt($companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress) {
+    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress) {
         $total = 0;
         $aItems = [];
         $aVats = [];
 
-        $oShop_Order = Core_Entity::factory('Shop_Order', $this->orderId);
+        $oShop_Order = Core_Entity::factory('Shop_Order', $orderId);
 
         // Проверяем на наличие заказа
         if (!$oShop_Order->shop_id) {
