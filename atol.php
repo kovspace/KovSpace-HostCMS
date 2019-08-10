@@ -2,7 +2,8 @@
 
 defined('HOSTCMS') || exit('HostCMS: access denied.');
 
-// Atol Online API v4
+/*  Atol Online API v4 */
+
 class KovSpace_Atol
 {
     public $apiUrl = 'https://online.atol.ru/possystem/v4';
