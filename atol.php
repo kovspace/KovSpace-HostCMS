@@ -48,7 +48,7 @@ class KovSpace_Atol
 
     public function sell($fields) {
         $url = $this->apiUrl.'/'.$this->group.'/sell';
-        $this->post($url, $this->fields);
+        $this->post($url, $fields);
     }
 
     public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress) {
