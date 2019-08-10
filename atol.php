@@ -49,7 +49,7 @@ class KovSpace_Atol
         }
     }
 
-    public function sell() {
+    public function sell($fields) {
         $url = $this->apiUrl.'/'.$this->group.'/sell';
         $this->post($url, $this->fields);
     }
