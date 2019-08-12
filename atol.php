@@ -52,7 +52,7 @@ class KovSpace_Atol
         $this->post($url, $fields);
     }
 
-    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress) {
+    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier) {
         $total = 0;
         $aItems = [];
         $aVats = [];
@@ -94,10 +94,11 @@ class KovSpace_Atol
         $fields['receipt']['company']['inn'] = $compnanyInn;
         $fields['receipt']['company']['payment_address'] = $companyPaymentAddress;
         $fields['receipt']['items'] = $aItems;
-        $fields['receipt']['payments'][0]['type'] = 1; // безналичный платеж
+        $fields['receipt']['payments'][0]['type'] = 2; // предварительная оплата (зачет аванса и предыдущих платежей)
         $fields['receipt']['payments'][0]['sum'] = $total;
         $fields['receipt']['vats'] = $aVats;
         $fields['receipt']['total'] = $total;
+        $fields['receipt']['cashier'] = $cashier;
         $fields['timestamp'] = date('d.m.Y H:i:s');
 
         return $fields;
