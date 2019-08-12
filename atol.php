@@ -87,7 +87,7 @@ class KovSpace_Atol
             $aItems[] = $aItem;
         }
 
-        $fields['external_id'] = $oShop_Order->id.'_'.time();
+        $fields['external_id'] = $oShop_Order->id;
         $fields['receipt']['client']['email'] = $oShop_Order->email;
         $fields['receipt']['company']['email'] = $companyEmail;
         $fields['receipt']['company']['sno'] = $compnanySno;
