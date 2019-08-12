@@ -77,9 +77,13 @@ class KovSpace_Atol
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
 
             $rate = $oShop_Order_Item->rate == 0 ? 20 : $oShop_Order_Item->rate;
-            $aVat['type'] = 'vat'.$rate;
+            $vatType = 'vat'.$rate;
+            $aVat['type'] = $vatType;
             $aVat['sum'] = $price * $rate / 100;
             $aVats[] = $aVat;
+
+
+            $aItem['vat']['type'] = $vatType;
             $aItems[] = $aItem;
         }
 
