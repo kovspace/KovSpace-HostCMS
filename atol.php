@@ -52,7 +52,7 @@ class KovSpace_Atol
         $this->post($url, $fields);
     }
 
-    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier) {
+    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $externalId = NULL) {
         $total = 0;
         $aItems = [];
         $aVats = [];
@@ -87,7 +87,7 @@ class KovSpace_Atol
             $aItems[] = $aItem;
         }
 
-        $fields['external_id'] = $oShop_Order->id;
+        $fields['external_id'] = $externalId ? $externalId : $oShop_Order->id;
         $fields['receipt']['client']['email'] = $oShop_Order->email;
         $fields['receipt']['company']['email'] = $companyEmail;
         $fields['receipt']['company']['sno'] = $compnanySno;
