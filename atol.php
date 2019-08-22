@@ -67,11 +67,12 @@ class KovSpace_Atol
         $oShop_Orders_Items = $oShop_Order->Shop_Order_Items;
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
         foreach ($aShop_Orders_Items as $oShop_Order_Item) {
-            $total += $oShop_Order_Item->price;
 
             $price = $roundPrice
                 ? round($oShop_Order_Item->price)
                 : (int)$oShop_Order_Item->price;
+
+            $total += $price;
 
             $aItem['name'] = $oShop_Order_Item->name;
             $aItem['price'] = $price;
