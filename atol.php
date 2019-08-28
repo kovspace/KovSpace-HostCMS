@@ -72,7 +72,7 @@ class KovSpace_Atol
                 ? round($oShop_Order_Item->price)
                 : (float)$oShop_Order_Item->price;
 
-            $total += $price;
+            $total += $price * $oShop_Order_Item->quantity;
 
             $aItem['name'] = $oShop_Order_Item->name;
             $aItem['price'] = $price;
