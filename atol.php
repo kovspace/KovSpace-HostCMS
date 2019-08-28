@@ -76,7 +76,7 @@ class KovSpace_Atol
 
             $name = $oShop_Order_Item->name;
             if ($expandModificationName) {
-                $oShop_Item = Core_Entity::factory('Shop_Order', $oShop_Order_Item->shop_item_id);
+                $oShop_Item = Core_Entity::factory('Shop_Item', $oShop_Order_Item->shop_item_id);
                 if ($oShop_Item->modification_id) {
                     $name =$oShop_Item->Modification->name.' :: '.$oShop_Order_Item->name;
                 }
