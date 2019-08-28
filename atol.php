@@ -75,8 +75,11 @@ class KovSpace_Atol
             $total += $price * $oShop_Order_Item->quantity;
 
             $name = $oShop_Order_Item->name;
-            if ($expandModificationName && $oShop_Order_Item->modification_id) {
-                $name =$oShop_Item->Modification->name.' :: '.$oShop_Order_Item->name;
+            if ($expandModificationName) {
+                $oShop_Item = Core_Entity::factory('Shop_Order', $oShop_Order_Item->shop_item_id);
+                if ($oShop_Item->modification_id) {
+                    $name =$oShop_Item->Modification->name.' :: '.$oShop_Order_Item->name;
+                }
             }
 
             $aItem['name'] = $name;
