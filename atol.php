@@ -52,7 +52,7 @@ class KovSpace_Atol
         $this->post($url, $fields);
     }
 
-    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $roundPrice = false, $externalId = NULL) {
+    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $roundPrice = false, $expandModificationName = false, $externalId = NULL) {
         $total = 0;
         $aItems = [];
         $aVats = [];
@@ -74,7 +74,12 @@ class KovSpace_Atol
 
             $total += $price * $oShop_Order_Item->quantity;
 
-            $aItem['name'] = $oShop_Order_Item->name;
+            $name = $oShop_Order_Item->name;
+            if ($expandModificationName && $oShop_Order_Item->modification_id) {
+                $name =$oShop_Item->Modification->name.' :: '.$oShop_Order_Item->name;
+            }
+
+            $aItem['name'] = $name;
             $aItem['price'] = $price;
             $aItem['quantity'] = (int)$oShop_Order_Item->quantity;
             $aItem['sum'] = $price * $oShop_Order_Item->quantity;
