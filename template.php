@@ -99,7 +99,7 @@ class KovSpace_Template
         $aPath = [];
         do {
             $aPath[] = $oStructure->path;
-        } while($oStructure = $oStructure->getParent());
+        } while ($oStructure = $oStructure->getParent());
         $aPath = array_reverse($aPath);
 
         $aSection = [];
