@@ -198,8 +198,8 @@ class KovSpace_Template
     }
 
     public function openGraph() {
-        echo '<meta property="og:title" content="'.Core_Page::instance()->showTitle().'"/>' . "\n\t";
-        echo '<meta property="og:description" content="'.Core_Page::instance()->showDescription().'"/>' . "\n\t";
+        echo '<meta property="og:title" content="'.Core_Page::instance()->title.'"/>' . "\n\t";
+        echo '<meta property="og:description" content="'.Core_Page::instance()->description.'"/>' . "\n\t";
         echo '<meta property="og:image" content="https://'.Core::$url['host'].$this->path .'img/open_graph.jpg">' . "\n\t";
         echo '<meta property="og:type" content="website"/>' . "\n\t";
         echo '<meta property="og:url" content= "https://'.Core::$url['host'].Core::$url['path'].'">' . "\n\t";
