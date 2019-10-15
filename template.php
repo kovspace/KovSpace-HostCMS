@@ -203,6 +203,7 @@ class KovSpace_Template
         echo '<meta property="og:image" content="https://'.Core::$url['host'].$this->path .'img/open_graph.jpg">' . "\n\t";
         echo '<meta property="og:type" content="website"/>' . "\n\t";
         echo '<meta property="og:url" content= "https://'.Core::$url['host'].Core::$url['path'].'">' . "\n\t";
+        return $this;
     }
 
     public function showViewport($width = NULL) {
