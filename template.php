@@ -339,6 +339,11 @@ class KovSpace_Template
         echo '</script>';
     }
 
+    public function showTemplateJS($file, $id = NULL) {
+            $file = $this->path.'js/'.$file;
+            $this->showJS($file);
+    }
+
     public function showKovSpace() {
         echo 'Создание сайта ' . $this->kovspace;
     }
