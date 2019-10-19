@@ -433,6 +433,24 @@ class KovSpace_Template
         }
         return $emailFrom;
     }
+
+    public function isShop() {
+        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show') {
+            return true;
+        }
+    }
+
+    public function isShopGroup() {
+        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show' && !$Template->objectItemId) {
+            return true;
+        }
+    }
+
+    public function isShopItem() {
+        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show' && $Template->objectItemId) {
+            return true;
+        }
+    }
 }
 
 
