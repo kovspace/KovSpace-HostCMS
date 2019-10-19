@@ -435,19 +435,19 @@ class KovSpace_Template
     }
 
     public function isShop() {
-        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show') {
+        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show') {
             return true;
         }
     }
 
     public function isShopGroup() {
-        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show' && !$Template->objectItemId) {
+        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && !$this->objectItemId) {
             return true;
         }
     }
 
     public function isShopItem() {
-        if (is_object($Template->object) && get_class($Template->object) == 'Shop_Controller_Show' && $Template->objectItemId) {
+        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && $this->objectItemId) {
             return true;
         }
     }
