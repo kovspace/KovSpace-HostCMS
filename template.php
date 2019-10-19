@@ -237,13 +237,38 @@ class KovSpace_Template
         }
         echo "\t";
         echo '</style>' . "\n";
+
+        // CSS: Shop
+        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show') {
+            // CSS: Shop Item
+            if ($this->objectItemId) {
+                $this->showTemplateCSS('shop.item.css');
+            }
+            // CSS: Shop Group
+            if (!$this->objectItemId) {
+                $this->showTemplateCSS('shop.group.css');
+            }
+        }
+
         return $this;
     }
 
     public function showCSS($file) {
-        echo "\n\t" .'<style>' . "\n\t";
-        echo $this->_CSS($file) . "\t";
-        echo '</style>' . "\n";
+        if (is_file($this->root.$file)) {
+            echo "\n\t" .'<style>' . "\n\t";
+            echo $this->_CSS($file) . "\t";
+            echo '</style>' . "\n";
+        }
+        return $this;
+    }
+
+    public function showTemplateCSS($file) {
+        $filepath = $this->path.'css/'.$file;
+        if (is_file($this->root.$filepath)) {
+            echo "\n\t" .'<style>' . "\n\t";
+            echo $this->_CSS($filepath) . "\t";
+            echo '</style>' . "\n";
+        }
         return $this;
     }
 
