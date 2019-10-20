@@ -34,12 +34,12 @@ class KovSpace_Cache
         if (self::is_cache_deny() || !$filename) return true;
 
         // Clear old files (once a day = 86400 sec)
-        if (!file_exists(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 86400) {
+        if (!is_file(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 86400) {
             self::clear();
         }
 
         $filepath = self::$cacheDir . $filename;
-        if (file_exists($filepath) && (time() - @filemtime($filepath)) < $lifetime) {
+        if (is_file($filepath) && (time() - @filemtime($filepath)) < $lifetime) {
             $content = file_get_contents($filepath);
             echo $content;
             return false;
@@ -65,7 +65,7 @@ class KovSpace_Cache
         if($dh = opendir($dir)){
             while(($file = readdir($dh))!== false){
                 if ($file != '.' && $file != '..') {
-                    if(file_exists($dir.$file)) @unlink($dir.$file);
+                    if(is_file($dir.$file)) @unlink($dir.$file);
                 }
             }
             closedir($dh);
