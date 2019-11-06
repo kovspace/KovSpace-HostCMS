@@ -208,7 +208,9 @@ class KovSpace_Template
 
         echo '<meta property="og:title" content="'.Core_Page::instance()->title.'"/>' . "\n\t";
         echo '<meta property="og:description" content="'.Core_Page::instance()->description.'"/>' . "\n\t";
-        echo '<meta property="og:image" content="https://'.Core::$url['host'].$this->path.$openGraphImg.'">' . "\n\t";
+        if (!empty($openGraphImg)) {
+            echo '<meta property="og:image" content="https://'.Core::$url['host'].$this->path.$openGraphImg.'">' . "\n\t";
+        }
         echo '<meta property="og:type" content="website"/>' . "\n\t";
         echo '<meta property="og:url" content= "https://'.Core::$url['host'].Core::$url['path'].'">' . "\n\t";
         return $this;
