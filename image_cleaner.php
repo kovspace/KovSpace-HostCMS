@@ -424,7 +424,7 @@ foreach ($aFiles as $file) {
 
         function check(i, offset = 0) {
             if (checking == 0) {
-                $('#path-'+i+' .status').html('<span class="text-danger">Stopped'+i+'</span>')
+                $('#path-'+i+' .status').html('<span class="text-danger">Stopped</span>')
                 return
             }
             if (!offset) {
