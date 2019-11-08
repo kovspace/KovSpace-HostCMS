@@ -2,12 +2,23 @@
 require_once('bootstrap.php');
 if (!Core_Auth::logged()) exit('Access Denied!');
 
-if ($dirname = Core_Array::getGet('dirname')) {
-    if (Core_Array::getGet('delete')) {
-        cleanImages($dirname, 1);
+$dir = CMS_FOLDER.'upload/';
+$filemapJson = CMS_FOLDER.'hostcmsfiles/cache/kic_filemap.json';
+$aFilemap = [];
+
+// AJAX-запрос
+if (Core_Array::getGet('dirname')) {
+    $dirname = $dir.Core_Array::getGet('dirname');
+    if (Core_Array::getGet('offset')) {
+        $offset = Core_Array::getGet('offset');
+        $aFilemap = json_decode(file_get_contents($filemapJson));
     } else {
-        cleanImages($dirname, 0);
+        $offset = 0;
+        filemap($dirname, $aFilemap);
+        file_put_contents($filemapJson,json_encode($aFilemap));
     }
+    $response = checkFiles($aFilemap, $offset);
+    echo json_encode($response);
     exit();
 }
 
@@ -218,6 +229,72 @@ function checkDatabase($pathName) {
     if (!$isFound) return TRUE;
 }
 
+// Создаем карту файлов
+function filemap($dirname, &$aFilemap) {
+    if (is_dir($dirname) && !is_link($dirname))
+    {
+        if ($dh = @opendir($dirname))
+        {
+            while (($file = readdir($dh)) !== FALSE)
+            {
+                if ($file != '.' && $file != '..')
+                {
+                    clearstatcache();
+                    $pathName = $dirname . DIRECTORY_SEPARATOR . $file;
+                    if (is_file($pathName)) {
+                        $aFilemap[] = $pathName;
+                    }
+                    elseif (is_dir($pathName))
+                    {
+                        if(isDirEmpty($pathName)) {
+                            rmdir($pathName);
+                        } else {
+                            filemap($pathName, $aFilemap);
+                        }
+                    }
+                }
+            }
+            closedir($dh);
+            clearstatcache();
+        }
+    }
+}
+
+// Проверяем файлы
+function checkFiles($aFiles, $offset = 0) {
+
+    static $start;
+    static $response = [];
+
+    // Стартовая позиция
+    $start = $start === NULL
+        ? $offset
+        : 0;
+
+    // Цикл закончился
+    if ($offset >= count($aFiles)) {
+        $response['result'] = 'OK';
+        return $response;
+    }
+
+    // Если кратно 100
+    if ($offset > $start && $offset % 100 == 0) {
+        $response['offset'] = $offset;
+        return $response;
+    }
+
+    if (!empty($aFiles[$offset])) {
+        $pathName = $aFiles[$offset];
+
+        $result = checkDatabase($pathName);
+        if ($result) {
+            $response['deleted'][] = $pathName;
+            unlink($pathName);
+        }
+        return checkFiles($aFiles, $offset+1);
+    }
+}
+
 function cleanImages($dirname, $isDelete = 0) {
     if (is_dir($dirname) && !is_link($dirname))
     {
@@ -236,39 +313,42 @@ function cleanImages($dirname, $isDelete = 0) {
                     clearstatcache();
                     $pathName = $dirname . DIRECTORY_SEPARATOR . $file;
 
+                    // Создаем карту файлов
                     if (is_file($pathName))
                     {
                         $i++;
 
-                        $result = checkDatabase($pathName);
-                        if ($result) {
-                            if ($isDelete) {
-                                unlink($pathName);
-                            } else {
-                                $url = str_replace('/var/www/','https://',$pathName);
-                                $url = str_replace('/www/','/',$url);
-                                echo date ("d F Y H:i", filemtime($pathName));
-                                echo '<div class="mt-2 mb-3 row align-items-center">';
-                                echo '  <div class="col-1 text-center">';
-                                echo '      <a target="_blank" href="'.$url.'">';
-                                if(is_array(@getimagesize($pathName))){
-                                    echo '<img src="'.$url.'">';
-                                } else {
-                                    echo '<img src="https://placehold.it/40x40">';
-                                }
-                                echo '      </a>';
-                                echo '  </div>';
-                                echo '  <div class="col-11">'.$pathName.'</div>';
-                                echo '</div>';
-                            }
-                        }
+                        $aFiles[] = $pathName;
+
+                        // $result = checkDatabase($pathName);
+                        // if ($result) {
+                        //     if ($isDelete) {
+                        //         unlink($pathName);
+                        //     } else {
+                        //         $url = str_replace('/var/www/','https://',$pathName);
+                        //         $url = str_replace('/www/','/',$url);
+                        //         echo date ("d F Y H:i", filemtime($pathName));
+                        //         echo '<div class="mt-2 mb-3 row align-items-center">';
+                        //         echo '  <div class="col-1 text-center">';
+                        //         echo '      <a target="_blank" href="'.$url.'">';
+                        //         if(is_array(@getimagesize($pathName))){
+                        //             echo '<img src="'.$url.'">';
+                        //         } else {
+                        //             echo '<img src="https://placehold.it/40x40">';
+                        //         }
+                        //         echo '      </a>';
+                        //         echo '  </div>';
+                        //         echo '  <div class="col-11">'.$pathName.'</div>';
+                        //         echo '</div>';
+                        //     }
+                        // }
                     }
                     elseif (is_dir($pathName))
                     {
                         if(isDirEmpty($pathName)) {
                             rmdir($pathName);
                         } else {
-                            cleanImages($pathName, $isDelete);
+                            //cleanImages($pathName, $isDelete);
                         }
                     }
                 }
@@ -280,7 +360,6 @@ function cleanImages($dirname, $isDelete = 0) {
     }
 }
 
-$dir = CMS_FOLDER.'upload/';
 $aFiles = scandir($dir);
 $aPaths = array();
 
@@ -288,7 +367,7 @@ foreach ($aFiles as $file) {
     $pathName = $dir.$file;
     if ($file == strstr($file, 'shop_') || $file == strstr($file, 'information_system_')) {
         if (is_dir($pathName)) {
-            $aPaths[] = $pathName;
+            $aPaths[] = $file;
         }
     }
 }
@@ -324,86 +403,97 @@ foreach ($aFiles as $file) {
             <h1>KovSpace Image Cleaner</h1>
         </div>
     </div>
-    <div class="my-2 py-2 container bg-white">
-        <div class="my-4" id="result"></div>
+
+    <div class="my-2 py-4 container bg-white">
+        <button id="startBtn" class="d-none btn btn-primary">Запустить проверку</button>
+        <button id="stopBtn" class="d-none btn btn-danger">Остановить проверку</button>
+        <div class="mt-4" id="result"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
 
     <script>
-        var aErrors = [];
-        var aPaths = [
+        let aErrors = []
+        let aPaths = [
             <?php foreach ($aPaths as $path): ?>
                 '<?=$path?>',
             <?php endforeach ?>
-        ];
+        ]
+
+        let checking = 0
+
+        // Запустить проверку
+        $('#startBtn').click(function() {
+                $(this).addClass('d-none')
+                $('#stopBtn').removeClass('d-none')
+                checking = 1
+                check(0)
+            }
+        )
+
+        // Остановить проверку
+        $('#stopBtn').click(function() {
+                $(this).addClass('d-none')
+                $('#startBtn').removeClass('d-none')
+                checking = 0
+                check(0)
+            }
+        )
 
         if (aPaths.length) {
-            check(0);
+            $('#startBtn').removeClass('d-none')
         } else {
-            $('#result').html('No dirs found');
+            $('#result').html('No dirs found')
         }
 
-        function check(i) {
-            $('#result').prepend('<div class="my-2" id="path-'+i+'"><div class="path font-weight-bold">'+aPaths[i]+'</div><div class="status"><span class="blink text-info">Checking...</span></div></div>');
+        function ajaxRequest(url) {
             $.ajax({
-                url: '<?=Core::$url["path"]?>?dirname='+aPaths[i],
+                url: url,
                 cache: false,
-                success: function(html)
-                {
-                    if (html == '') {
-                        $('#path-'+i+' .status').html('<span class="text-success">OK</span>');
-                    } else {
-                        if (!html.includes('Timeout') || html.includes('/upload/')) {
-                            aErrors.push(aPaths[i]);
-                            console.log(aPaths[i]);
-                        }
-                        $('#path-'+i+' .status').html('<span class="text-danger">'+html+'</span>');
-                    }
+                success: function(json) {
 
-                    if (i+1 < aPaths.length) {
-                        check(i+1);
-                    } else {
-                        if (aErrors.length) {
-                            $('#result').prepend('<button class="js-fix mb-2 btn btn-primary">Fix all erros</button>');
+                }
+            })
+        }
+
+        function check(i, offset = 0) {
+            if (checking == 0) {
+                $('#path-'+i+' .status').html('<span class="text-danger">Stopped</span>')
+                return
+            }
+            if (!offset) {
+                $('#result').prepend('<div class="my-2" id="path-'+i+'"><div class="path font-weight-bold">'+aPaths[i]+'</div><div class="status"><span class="blink text-info">Checking...</span></div></div>')
+            } else {
+                $('#path-'+i+' .status').html('<span class="blink text-info">Checking... '+offset+'</span>')
+            }
+            let url = '<?=Core::$url["path"]?>?dirname='+aPaths[i]+'&offset='+offset
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                cache: false,
+                success: function(json) {
+                    if (json.deleted) {
+                        let cmsFolder = '<?=CMS_FOLDER?>';
+                        $.each(json.deleted, function(i, item) {
+                            item = item.replace(cmsFolder, '')
+                            $('#result #path-'+i).append('<div class="text-danger">deleted: /'+item+'</div>')
+                        });
+                    }
+                    if (json.result == 'OK') {
+                        $('#path-'+i+' .status').html('<span class="text-success">OK</span>')
+                        if (i+1 < aPaths.length) {
+                            check(i+1)
                         } else {
-                            $('#result').prepend('<div class="d-inline-block alert alert-info">No errors found</div>');
+                            $('#stopBtn').addClass('d-none')
+                            $('#result').prepend('<div class="d-inline-block alert alert-info">Done!</div>')
                         }
                     }
-                },
-                error:  function(xhr, str){
-                    $('#path-'+i+' .status').html('<span class="text-danger">'+xhr.responseCode+'</span>');
-                }
-            });
-        }
-
-        function clean(i) {
-            $.ajax({
-                url: '<?=Core::$url["path"]?>?dirname='+aErrors[i]+'&delete=1',
-                cache: false,
-                success: function(html)
-                {
-                    if (i+1 < aErrors.length) {
-                        clean(i+1);
-                    } else {
-                        $('#result').html('<div class="d-inline-block alert alert-info">All bugs fixed</div>');
+                    if (json.offset) {
+                        check(i, json.offset)
                     }
-                },
-                error:  function(xhr, str){
-                    $('#result').html('<span class="text-danger">'+xhr.responseCode+'</span>');
                 }
-            });
+            })
         }
-
-        $(document).ajaxComplete(function() {
-            $('.js-fix').click(
-                function () {
-                    $('#result').html('<span class="blink text-info">Fixing...</span>');
-                    clean(0);
-                }
-            );
-        });
     </script>
-
 </body>
 </html>
