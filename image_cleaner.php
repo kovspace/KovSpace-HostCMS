@@ -390,6 +390,7 @@ foreach ($aFiles as $file) {
         // Запустить проверку
         $('#startBtn').click(function() {
                 $(this).addClass('d-none')
+                $('#result').empty()
                 $('#stopBtn').removeClass('d-none')
                 checking = 1
                 check(0)
