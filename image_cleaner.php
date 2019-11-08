@@ -485,7 +485,7 @@ foreach ($aFiles as $file) {
                             check(i+1)
                         } else {
                             $('#stopBtn').addClass('d-none')
-                            $('.content').prepend('<div class="my-2 d-inline-block alert alert-info">Done!</div>')
+                            $('.content').prepend('<div class="d-inline-block alert alert-info">Done!</div>')
                         }
                     }
                     if (json.offset) {
