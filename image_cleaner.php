@@ -88,6 +88,22 @@ function checkDatabase($pathName) {
         }
     }
 
+    if (strstr($pathName, 'sellers')) {
+        if (!$isFound && $module == 'shop') {
+            // Check in table 'shop_sellers'
+            $oCore_QueryBuilder_Select = Core_QueryBuilder::select('image_large', 'image_small')
+                ->from('shop_sellers')
+                ->open()
+                ->where('image_large', '=', $fileName)
+                ->setOr()
+                ->where('image_small', '=', $fileName)
+                ->close()
+                ->limit(1);
+            $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
+            if ($row) $isFound = TRUE;
+        }
+    }
+
     if (strstr($pathName, 'small_item_image')) {
         if (!$isFound && $module == 'shop') {
             // Check in table 'shop_items'
