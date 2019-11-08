@@ -474,7 +474,7 @@ foreach ($aFiles as $file) {
                 success: function(json) {
                     if (json.deleted) {
                         let cmsFolder = '<?=CMS_FOLDER?>';
-                        $.each(json.deleted, function(item) {
+                        $.each(json.deleted, function(pos, item) {
                             item = item.replace(cmsFolder, '')
                             $('#result #path-'+i).append('<div class="text-danger">deleted: /'+item+'</div>')
                         });
