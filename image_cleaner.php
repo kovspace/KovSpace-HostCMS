@@ -423,10 +423,7 @@ foreach ($aFiles as $file) {
         }
 
         function check(i, offset = 0) {
-            if (checking == 0) {
-                $('#path-'+i+' .status').html('<span class="text-danger">Stopped</span>')
-                return
-            }
+            if (checking == 0) return
             if (!offset) {
                 $('#result').prepend('<div class="my-2" id="path-'+i+'"><div class="path font-weight-bold">'+aPaths[i]+'</div><div class="status"><span class="blink text-info">Checking...</span></div></div>')
             } else {
@@ -438,6 +435,12 @@ foreach ($aFiles as $file) {
                 dataType: 'json',
                 cache: false,
                 success: function(json) {
+
+                    if (!checking) {
+                        $('#path-'+i+' .status').html('<span class="text-danger">Stopped</span>')
+                        return
+                    }
+
                     if (json.deleted) {
                         let cmsFolder = '<?=CMS_FOLDER?>';
                         $.each(json.deleted, function(pos, item) {
