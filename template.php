@@ -122,7 +122,7 @@ class KovSpace_Template
         }
 
         $this->_aSection = $aSection;
-        $this->section = implode($aSection, ' ');
+        $this->section = implode(' ', $aSection);
 
         // Copyrights
         $this->kovspace = '<a rel="noopener" target="_blank" href="https://kovspace.com/">KovSpace</a>';
