@@ -2,6 +2,9 @@
 
 defined('HOSTCMS') || exit('HostCMS: access denied.');
 
+// Исправляем баг с json_encode
+ini_set('serialize_precision', 10);
+
 /*  Atol Online API v4 */
 
 class KovSpace_Atol
@@ -91,14 +94,19 @@ class KovSpace_Atol
 
             $rate = $oShop_Order_Item->rate == 0 ? 20 : $oShop_Order_Item->rate;
             $vatType = 'vat'.$rate;
-            $aVat['type'] = $vatType;
-            $aVat['sum'] = $price * $rate / 100;
-            $aVats[] = $aVat;
 
+            if (!isset($aVats[$rate])) {
+                $aVats[$rate]['type'] = $vatType;
+                $aVats[$rate]['sum'] = round($price * $rate / 100, 2);
+            } else {
+                $aVats[$rate]['sum'] += round($price * $rate / 100, 2);
+            }
 
             $aItem['vat']['type'] = $vatType;
             $aItems[] = $aItem;
         }
+
+        $aVats = array_values($aVats); // сбрасываем ключи массива
 
         $fields['external_id'] = $externalId ? $externalId : $oShop_Order->id;
         $fields['receipt']['client']['email'] = $oShop_Order->email;
