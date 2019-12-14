@@ -36,19 +36,19 @@ class KovSpace_Form
             if (!$error && !Core_Array::getPost('name')) {
                 $error = 'Укажите ваше имя';
             }
-            if (!$error &&!Core_Array::getPost('phone')) {
+            if (!$error && !Core_Array::getPost('phone')) {
                 $error = 'Укажите ваш телефон';
             }
             if (!$error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'),0,2) != '+7') {
                 $error = 'Неверный телефон';
             }
-            if (!$error &&!Core_Array::getPost('email')) {
+            if (!$error && !Core_Array::getPost('email')) {
                 $error = 'Укажите ваш email';
             }
             if (!$error && Core_Array::getPost('email') && !filter_var(Core_Array::getPost('email'), FILTER_VALIDATE_EMAIL)) {
                 $error = 'Неверный email';
             }
-            if (!$error &&!Core_Array::getPost('comment')) {
+            if (!$error && !Core_Array::getPost('comment')) {
                 $error = 'Напишите ваше сообщение';
             }
             if (!$error && Core_Array::getPost('url')) {
