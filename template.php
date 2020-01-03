@@ -458,6 +458,12 @@ class KovSpace_Template
         return $emailFrom;
     }
 
+    public function isShopCart() {
+        if (is_object($this->object) && get_class($this->object) == 'Shop_Cart_Controller_Show') {
+            return true;
+        }
+    }
+
     public function isShop() {
         if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show') {
             return true;
