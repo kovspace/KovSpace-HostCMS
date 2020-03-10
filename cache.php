@@ -62,13 +62,13 @@ class KovSpace_Cache
     /* Remove all cache files */
     public static function clear() {
         $dir = self::$cacheDir;
-        $files = glob($dir);
+        $files = glob($dir.'*');
         foreach($files as $file){
             if (is_file($file)) {
                 unlink($file);
             }
         }
-        $content = date("Y-m-d H:i:s");
+        $content = date('Y-m-d H:i:s');
         file_put_contents(self::$clearFile, $content);
     }
 }
