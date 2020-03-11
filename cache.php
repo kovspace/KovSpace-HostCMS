@@ -19,7 +19,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_Cache
 {
     public static $cacheDir = CMS_FOLDER.'hostcmsfiles/cache/';
-    public static $clearFile = CMS_FOLDER.'hostcmsfiles/cache/.clear';
+    public static $clear = CMS_FOLDER.'hostcmsfiles/cache/.clear';
     public static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
 
     /* Exclusion rules */
@@ -35,7 +35,7 @@ class KovSpace_Cache
         if (self::is_cache_deny() || !$filename) return true;
 
         // Clear old files (once a day = 86400 sec)
-        if (!is_file(self::$clearFile) || (time() - @filemtime(self::$clearFile)) > 86400) {
+        if (!is_file(self::$clear) || (time() - @filemtime(self::$clear)) > 86400) {
             self::clear();
         }
 
@@ -63,7 +63,7 @@ class KovSpace_Cache
     /* Remove all cache files */
     public static function clear() {
         $lock = self::$lock;
-        if (is_file($lock) && (time() - @filemtime(self::$clearFile)) > 10000) {
+        if (is_file($lock) && (time() - @filemtime(self::$clear)) > 10000) {
             unlink($lock);
         }
         if (!is_file($lock)) {
@@ -76,7 +76,7 @@ class KovSpace_Cache
                 }
             }
             $content = date('Y-m-d H:i:s');
-            file_put_contents(self::$clearFile, $content);
+            file_put_contents(self::$clear, $content);
             unlink($lock);
         }
     }
