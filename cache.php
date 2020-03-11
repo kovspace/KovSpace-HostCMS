@@ -18,9 +18,9 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Cache
 {
-    protected static $cacheDir = CMS_FOLDER.'hostcmsfiles/cache/';
-    protected static $clearFile = CMS_FOLDER.'hostcmsfiles/cache/.clear';
-    protected static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
+    public static $cacheDir = CMS_FOLDER.'hostcmsfiles/cache/';
+    public static $clearFile = CMS_FOLDER.'hostcmsfiles/cache/.clear';
+    public static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
 
     /* Exclusion rules */
     public static function is_cache_deny() {
