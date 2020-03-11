@@ -18,7 +18,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Cache
 {
-    public static $cacheDir = CMS_FOLDER.'hostcmsfiles/cache/';
+    public static $dir = CMS_FOLDER.'hostcmsfiles/cache/';
     public static $clear = CMS_FOLDER.'hostcmsfiles/cache/.clear';
     public static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
 
@@ -39,7 +39,7 @@ class KovSpace_Cache
             self::clear();
         }
 
-        $filepath = self::$cacheDir . $filename;
+        $filepath = self::$dir . $filename;
         if (is_file($filepath) && (time() - @filemtime($filepath)) < $lifetime) {
             $content = file_get_contents($filepath);
             echo $content;
@@ -53,7 +53,7 @@ class KovSpace_Cache
     /* End buffering and save file */
     public static function save($filename) {
         if (self::is_cache_deny() || !$filename) return;
-        $filepath = self::$cacheDir . $filename;
+        $filepath = self::$dir.$filename;
         $content = ob_get_contents();
         ob_end_clean();
         file_put_contents($filepath, $content);
@@ -68,7 +68,7 @@ class KovSpace_Cache
         }
         if (!is_file($lock)) {
             fopen($lock, 'w');
-            $dir = self::$cacheDir;
+            $dir = self::$dir;
             $files = glob($dir.'*');
             foreach($files as $file){
                 if (is_file($file)) {
