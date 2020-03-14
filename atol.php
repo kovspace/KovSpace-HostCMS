@@ -22,7 +22,7 @@ class KovSpace_Atol
         $this->pass = $pass;
         $this->group = $group;
         if ($isTest) {
-            $this->apiUrl =$this->apiUrlTest;
+            $this->apiUrl = $this->apiUrlTest;
         }
         $this->getToken();
     }
