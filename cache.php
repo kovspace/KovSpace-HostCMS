@@ -23,8 +23,8 @@ class KovSpace_Cache
     public static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
 
     /* Exclusion rules */
-    public static function is_cache_deny() {
-        if (Core_Auth::logged()) {
+    public static function is_cache_deny($force) {
+        if (!$force && Core_Auth::logged()) {
             return true;
         }
         return false;
@@ -32,9 +32,7 @@ class KovSpace_Cache
 
     /* Check file exists and start buffering */
     public static function check($filename, $lifetime = 3600, $force = FALSE) {
-        if (!$force) { // caching for admin
-            if (self::is_cache_deny() || !$filename) return true;
-        }
+        if (self::is_cache_deny($force) || !$filename) return true;
 
         // Clear old files (once a day = 86400 sec)
         if (!is_file(self::$clear) || (time() - @filemtime(self::$clear)) > 86400) {
