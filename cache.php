@@ -31,8 +31,10 @@ class KovSpace_Cache
     }
 
     /* Check file exists and start buffering */
-    public static function check($filename, $lifetime = 3600) {
-        if (self::is_cache_deny() || !$filename) return true;
+    public static function check($filename, $lifetime = 3600, $force = FALSE) {
+        if (!$force) { // caching for admin
+            if (self::is_cache_deny() || !$filename) return true;
+        }
 
         // Clear old files (once a day = 86400 sec)
         if (!is_file(self::$clear) || (time() - @filemtime(self::$clear)) > 86400) {
