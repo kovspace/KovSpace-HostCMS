@@ -25,10 +25,11 @@ class KovSpace_Template
 
     protected $_aSection;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         // Remove old sessions
-        if (!rand(0,10)) { // if rand show zero
+        if (!rand(0, 10)) { // if rand show zero
             // Empty sessions
             Core_QueryBuilder::delete('sessions')
                 ->where('time + maxlifetime', '<', time())
@@ -57,7 +58,7 @@ class KovSpace_Template
 
         // KovSpace Image Cleaner
         if (Core::$url['path'] == "/kovspace-image-cleaner/") {
-            include(dirname(__FILE__).'/image_cleaner.php');
+            include(dirname(__FILE__) . '/image_cleaner.php');
             exit();
         }
 
@@ -133,15 +134,16 @@ class KovSpace_Template
             $oShop_Item = Core_Entity::factory('Shop_Item', $this->objectItemId);
             if ($oShop_Item->modification_id) {
                 $oShop = $oShop_Item->Modification->Shop;
-                $path = $oShop->Structure->getPath().$oShop_Item->Modification->getPath();
-                header('Location: '.$path);
+                $path = $oShop->Structure->getPath() . $oShop_Item->Modification->getPath();
+                header('Location: ' . $path);
                 exit();
             }
         }
     }
 
     // Image Upload Timestamp
-    public function imageTimestamp() {
+    public function imageTimestamp()
+    {
         Core_Event::attach('shop_item.onBeforeGetXml', array('Image_Upload_Timestamp_Observer', 'onBeforeGetXml'));
         Core_Event::attach('shop_group.onBeforeGetXml', array('Image_Upload_Timestamp_Observer', 'onBeforeGetXml'));
         Core_Event::attach('informationsystem_item.onBeforeGetXml', array('Image_Upload_Timestamp_Observer', 'onBeforeGetXml'));
@@ -149,29 +151,34 @@ class KovSpace_Template
         return $this;
     }
 
-    public function imageCDN() {
+    public function imageCDN()
+    {
         Core_Page::instance()->informationsystemCDN = 'https://i0.wp.com/' . Core::$url['host'];
         Core_Page::instance()->shopCDN = 'https://i0.wp.com/' . Core::$url['host'];
         Core_Page::instance()->structureCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function informationsystemCDN() {
+    public function informationsystemCDN()
+    {
         Core_Page::instance()->informationsystemCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function shopCDN() {
+    public function shopCDN()
+    {
         Core_Page::instance()->shopCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function structureCDN() {
+    public function structureCDN()
+    {
         Core_Page::instance()->structureCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function detectReferer() {
+    public function detectReferer()
+    {
         if (!isset($_COOKIE['hostcms_source_type']) && !Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from') && !Core_Array::getGet('gclid')) {
             $referer = isset($_SERVER["HTTP_REFERER"])
                 ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
@@ -187,50 +194,55 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showDoctype() {
+    public function showDoctype()
+    {
         echo '<!doctype html>' . "\n";
         echo '<html lang="ru">' . "\n";
         return $this;
     }
 
-    public function showHeadOpen() {
+    public function showHeadOpen()
+    {
         echo '<head>' . "\n\t";
         return $this;
     }
 
-    public function showHeadClose() {
+    public function showHeadClose()
+    {
         echo '</head>' . "\n";
         return $this;
     }
 
-    public function showMeta() {
-        echo '<title>'.$this->title.'</title>' . "\n\t";
+    public function showMeta()
+    {
+        echo '<title>' . $this->title . '</title>' . "\n\t";
         echo '<meta charset="utf-8">' . "\n\t";
-        echo '<meta name="description" content="'.$this->description.'"/>' . "\n\t";
-        echo '<meta name="keywords" content="'.$this->keywords.'"/>' . "\n\t";
+        echo '<meta name="description" content="' . $this->description . '"/>' . "\n\t";
+        echo '<meta name="keywords" content="' . $this->keywords . '"/>' . "\n\t";
         return $this;
     }
 
-    public function openGraph() {
+    public function openGraph()
+    {
 
-        if (is_file($this->root.$this->path.'img/open_graph.png')) {
+        if (is_file($this->root . $this->path . 'img/open_graph.png')) {
             $openGraphImg = 'img/open_graph.png';
-        }
-        elseif (is_file($this->root.$this->path.'img/open_graph.jpg')) {
+        } elseif (is_file($this->root . $this->path . 'img/open_graph.jpg')) {
             $openGraphImg = 'img/open_graph.jpg';
         }
 
-        echo '<meta property="og:title" content="'.Core_Page::instance()->title.'"/>' . "\n\t";
-        echo '<meta property="og:description" content="'.Core_Page::instance()->description.'"/>' . "\n\t";
+        echo '<meta property="og:title" content="' . Core_Page::instance()->title . '"/>' . "\n\t";
+        echo '<meta property="og:description" content="' . Core_Page::instance()->description . '"/>' . "\n\t";
         if (!empty($openGraphImg)) {
-            echo '<meta property="og:image" content="https://'.Core::$url['host'].$this->path.$openGraphImg.'">' . "\n\t";
+            echo '<meta property="og:image" content="https://' . Core::$url['host'] . $this->path . $openGraphImg . '">' . "\n\t";
         }
         echo '<meta property="og:type" content="website"/>' . "\n\t";
-        echo '<meta property="og:url" content= "https://'.Core::$url['host'].Core::$url['path'].'">' . "\n\t";
+        echo '<meta property="og:url" content= "https://' . Core::$url['host'] . Core::$url['path'] . '">' . "\n\t";
         return $this;
     }
 
-    public function showViewport($width = NULL) {
+    public function showViewport($width = NULL)
+    {
         if ($width) {
             echo '<meta name="viewport" content="width=' . $width . '">' . "\n\t";
         } else {
@@ -240,19 +252,22 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showFavicon() {
+    public function showFavicon()
+    {
         if (is_file(CMS_FOLDER . $this->path . 'img/favicon.png')) {
             echo '<link rel="icon" type="image/png" href="' . $this->path . 'img/favicon.png">' . "\n\t";
             echo '<link rel="apple-touch-icon" href="' . $this->path . 'img/favicon.png">' . "\n\t";
         }
         return $this;
     }
-    public function showVendorCSS($url) {
+    public function showVendorCSS($url)
+    {
         echo '<link rel="stylesheet" href="' . $url . '">' . "\n\t";
         return $this;
     }
 
-    public function showSectionCSS() {
+    public function showSectionCSS()
+    {
         echo "\n\t";
         echo '<style>' . "\n\t";
         echo $this->_CSS($this->path . 'css/base.css');
@@ -277,26 +292,29 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showCSS($file) {
-        if (is_file($this->root.$file)) {
-            echo "\n\t" .'<style>' . "\n\t";
+    public function showCSS($file)
+    {
+        if (is_file($this->root . $file)) {
+            echo "\n\t" . '<style>' . "\n\t";
             echo $this->_CSS($file) . "\t";
             echo '</style>' . "\n";
         }
         return $this;
     }
 
-    public function showTemplateCSS($file) {
-        $filepath = $this->path.'css/'.$file;
-        if (is_file($this->root.$filepath)) {
-            echo "\n\t" .'<style>' . "\n\t";
+    public function showTemplateCSS($file)
+    {
+        $filepath = $this->path . 'css/' . $file;
+        if (is_file($this->root . $filepath)) {
+            echo "\n\t" . '<style>' . "\n\t";
             echo $this->_CSS($filepath) . "\t";
             echo '</style>' . "\n";
         }
         return $this;
     }
 
-    protected function _CSS($file) {
+    protected function _CSS($file)
+    {
         if (is_file($this->root . $file)) {
             if (Core::moduleIsActive('compression')) {
                 $oCompression_Controller = Compression_Controller::instance('css');
@@ -326,10 +344,11 @@ class KovSpace_Template
         }
     }
 
-    public function showJS($file, $id = NULL) {
+    public function showJS($file, $id = NULL)
+    {
 
         if ($id) {
-            echo '<script id="'.$id.'">';
+            echo '<script id="' . $id . '">';
         } else {
             echo '<script>';
         }
@@ -352,8 +371,8 @@ class KovSpace_Template
 
             $js_file = Core_File::read($this->root . $sPath);
 
-            if (substr($js_file, -3) == ';;'.PHP_EOL) {
-                echo substr($js_file, 0, -2).PHP_EOL;
+            if (substr($js_file, -3) == ';;' . PHP_EOL) {
+                echo substr($js_file, 0, -2) . PHP_EOL;
             } else {
                 echo $js_file;
             }
@@ -363,59 +382,68 @@ class KovSpace_Template
         echo '</script>';
     }
 
-    public function showTemplateJS($file, $id = NULL) {
-            $file = $this->path.'js/'.$file;
-            $this->showJS($file);
+    public function showTemplateJS($file, $id = NULL)
+    {
+        $file = $this->path . 'js/' . $file;
+        $this->showJS($file);
     }
 
-    public function showKovSpace() {
+    public function showKovSpace()
+    {
         echo 'Создание сайта ' . $this->kovspace;
     }
-    public function showHostCMS() {
+    public function showHostCMS()
+    {
         echo 'Работает на ' . $this->hostcms;
     }
-    public function showPrivacy() {
+    public function showPrivacy()
+    {
         echo '<a href="/privacy/">Политика конфиденциальности</a>';
     }
-    public function showOffer() {
+    public function showOffer()
+    {
         echo '<a href="/offer/">Договор оферты</a>';
     }
 
-    public function gTag($id) {
+    public function gTag($id)
+    {
         echo '
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id='.$id.'"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=' . $id . '"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag("js", new Date());
-      gtag("config", "'.$id.'");
-    </script>'."\n";
+      gtag("config", "' . $id . '");
+    </script>' . "\n";
         return $this;
     }
 
-    public function googleTagManager($id) {
+    public function googleTagManager($id)
+    {
         echo '
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":
     new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
     "https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,"script","dataLayer","'.$id.'");</script>
-    <!-- End Google Tag Manager -->'."\n";
+    })(window,document,"script","dataLayer","' . $id . '");</script>
+    <!-- End Google Tag Manager -->' . "\n";
         return $this;
     }
 
-    public function googleTagManagerNoScript($id) {
+    public function googleTagManagerNoScript($id)
+    {
         echo '
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$id.'"
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->'."\n";
+    <!-- End Google Tag Manager (noscript) -->' . "\n";
         return $this;
     }
 
-    public function showGad($hourStart = NULL, $hourStop = NULL) {
+    public function showGad($hourStart = NULL, $hourStop = NULL)
+    {
         $hourNow = date('H');
         if ($hourStart !== NULL && $hourStop !== NULL) {
             // from Midnight
@@ -442,11 +470,12 @@ class KovSpace_Template
             google_ad_client: "ca-pub-9051464550208465",
             enable_page_level_ads: true
         });
-    </script>'."\n";
+    </script>' . "\n";
         return $this;
     }
 
-    public function emailFrom() {
+    public function emailFrom()
+    {
         $config = Core::$config->get('core_mail');
         if (isset($config['smtp'][CURRENT_SITE]['username'])) {
             $emailFrom = $config['smtp'][CURRENT_SITE]['username'];
@@ -458,27 +487,47 @@ class KovSpace_Template
         return $emailFrom;
     }
 
-    public function isShopCart() {
+    public function isShopCart()
+    {
         if (is_object($this->object) && get_class($this->object) == 'Shop_Cart_Controller_Show') {
             return true;
         }
     }
 
-    public function isShop() {
+    public function isShop()
+    {
         if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show') {
             return true;
         }
     }
 
-    public function isShopGroup() {
+    public function isShopGroup()
+    {
         if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && !$this->objectItemId) {
             return true;
         }
     }
 
-    public function isShopItem() {
+    public function isShopItem()
+    {
         if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && $this->objectItemId) {
             return true;
+        }
+    }
+
+    // Change GET params
+    public function urlParam($param, $value)
+    {
+        $url_parts = parse_url($_SERVER['REQUEST_URI']);
+        if (isset($url_parts['query'])) {
+            parse_str($url_parts['query'], $params);
+        }
+        $params[$param] = $value;
+        $url_parts['query'] = http_build_query($params);
+        if ($url_parts['query']) {
+            return $url_parts['path'] . '?' . $url_parts['query'];
+        } else {
+            return $url_parts['path'];
         }
     }
 }
@@ -488,16 +537,16 @@ class KovSpace_Template
 
 class Image_Upload_Timestamp_Observer
 {
-   static public function onBeforeGetXml($object, $args)
-   {
-           if ($object->image_small && !stristr($object->image_small, '?')) {
-               $image_small_timestamp = @filemtime($object->getSmallFilePath());
-               $object->image_small .= '?' . $image_small_timestamp;
-           }
+    static public function onBeforeGetXml($object, $args)
+    {
+        if ($object->image_small && !stristr($object->image_small, '?')) {
+            $image_small_timestamp = @filemtime($object->getSmallFilePath());
+            $object->image_small .= '?' . $image_small_timestamp;
+        }
 
-           if ($object->image_large && !stristr($object->image_large, '?')) {
-               $image_large_timestamp = @filemtime($object->getLargeFilePath());
-               $object->image_large .= '?' . $image_large_timestamp;
-           }
-   }
+        if ($object->image_large && !stristr($object->image_large, '?')) {
+            $image_large_timestamp = @filemtime($object->getLargeFilePath());
+            $object->image_large .= '?' . $image_large_timestamp;
+        }
+    }
 }
