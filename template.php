@@ -530,6 +530,13 @@ class KovSpace_Template
             return $url_parts['path'];
         }
     }
+
+    // Redirect
+    function redirect($url)
+    {
+        header('Location:' . $url);
+        die();
+    }
 }
 
 
