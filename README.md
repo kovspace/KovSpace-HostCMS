@@ -76,3 +76,45 @@ $Template
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 ```
+
+## HostCMS Pagination
+
+```php
+<?php
+$page = 1;
+$offset = 0;
+$limit = Core_Array::getGet('limit') ?? 10;
+
+if (Core_Array::getGet('page')) {
+    $page = Core_Array::getGet('page');
+    if ($page > 1) {
+        $offset = ($page - 1) * $limit;
+    } else {
+        KovSpace_Function::urlParamRedirect('page', NULL);
+    }
+}
+
+$oShop_Orders = Core_Entity::factory('Shop_Order');
+$oShop_Orders->queryBuilder()
+    ->sqlCalcFoundRows()
+    ->orderBy('id', 'DESC')
+    ->offset($offset)
+    ->limit($limit);
+
+// Count Pages
+$row = Core_QueryBuilder::select(array('FOUND_ROWS()', 'count'))->execute()->asAssoc()->current();
+$count = $row['count'];
+$pages = ceil($count / $limit);
+?>
+```
+
+```html
+<div>content</div>
+```
+
+```php
+<?php
+$Pagination = new KovSpace_Pagination($pages, $page);
+$Pagination->show();
+?>
+```
