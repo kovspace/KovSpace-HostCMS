@@ -514,29 +514,6 @@ class KovSpace_Template
             return true;
         }
     }
-
-    // Change GET params
-    public function urlParam($param, $value)
-    {
-        $url_parts = parse_url($_SERVER['REQUEST_URI']);
-        if (isset($url_parts['query'])) {
-            parse_str($url_parts['query'], $params);
-        }
-        $params[$param] = $value;
-        $url_parts['query'] = http_build_query($params);
-        if ($url_parts['query']) {
-            return $url_parts['path'] . '?' . $url_parts['query'];
-        } else {
-            return $url_parts['path'];
-        }
-    }
-
-    // Redirect
-    function redirect($url)
-    {
-        header('Location:' . $url);
-        die();
-    }
 }
 
 
