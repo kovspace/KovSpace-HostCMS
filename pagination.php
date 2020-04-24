@@ -11,16 +11,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Pagination
 {
-    public $total;
-    public $page;
-
-    public function __construct($total, $page)
-    {
-        $this->total = $total;
-        $this->page = $page;
-    }
-
-    public function showPaginationLi($value, $link = '', $class = '')
+    public static function showPaginationLi($value, $link = '', $class = '')
     {
         echo '<li class="page-item ' . $class . '">';
         if ($link) {
@@ -31,28 +22,25 @@ class KovSpace_Pagination
         echo '</li>';
     }
 
-    public function show()
+    public static function show($total, $page)
     {
-        if ($this->total <= 1) return;
-
-        $page = $this->page;
-        $total = $this->total;
+        if ($total <= 1) return;
 
         echo '<nav class="overflow-auto">';
         echo '<ul class="pagination justify-content-lg-center" style="min-width:300px">';
 
         // Previous page link
         if ($page == 1) {
-            $this->showPaginationLi('&lsaquo;', '', 'disabled');
+            self::showPaginationLi('&lsaquo;', '', 'disabled');
         } else {
-            $this->showPaginationLi('&lsaquo;', KovSpace_Function::urlParam('page', $page - 1), '');
+            self::showPaginationLi('&lsaquo;', KovSpace_Function::urlParam('page', $page - 1), '');
         }
 
         // Less than 10 pages
         if ($total < 10) {
             for ($i = 1; $i <= $total; $i++) {
                 $class = $i == $page ? 'active' : '';
-                $this->showPaginationLi($i, KovSpace_Function::urlParam('page', $i), $class);
+                self::showPaginationLi($i, KovSpace_Function::urlParam('page', $i), $class);
             }
         }
 
@@ -64,9 +52,9 @@ class KovSpace_Pagination
 
             // First & second pages
             if ($page > $x) {
-                $this->showPaginationLi(1, KovSpace_Function::urlParam('page', 1), '');
-                $this->showPaginationLi(2, KovSpace_Function::urlParam('page', 2), '');
-                $this->showPaginationLi('...', '', 'disabled');
+                self::showPaginationLi(1, KovSpace_Function::urlParam('page', 1), '');
+                self::showPaginationLi(2, KovSpace_Function::urlParam('page', 2), '');
+                self::showPaginationLi('...', '', 'disabled');
             }
 
             $start = $page - $y;
@@ -84,22 +72,22 @@ class KovSpace_Pagination
 
             for ($i = $start; $i <= $finish; $i++) {
                 $class = $i == $page ? 'active' : '';
-                $this->showPaginationLi($i, KovSpace_Function::urlParam('page', $i), $class);
+                self::showPaginationLi($i, KovSpace_Function::urlParam('page', $i), $class);
             }
 
             // 2 last pages
             if ($page < $total + 1 - $x) {
-                $this->showPaginationLi('...', '', 'disabled');
-                $this->showPaginationLi($total - 1, KovSpace_Function::urlParam('page', $total - 1), '');
-                $this->showPaginationLi($total, KovSpace_Function::urlParam('page', $total), '');
+                self::showPaginationLi('...', '', 'disabled');
+                self::showPaginationLi($total - 1, KovSpace_Function::urlParam('page', $total - 1), '');
+                self::showPaginationLi($total, KovSpace_Function::urlParam('page', $total), '');
             }
         }
 
         // Next page link
         if ($total == $page) {
-            $this->showPaginationLi('&rsaquo;', '', 'disabled');
+            self::showPaginationLi('&rsaquo;', '', 'disabled');
         } else {
-            $this->showPaginationLi('&rsaquo;', KovSpace_Function::urlParam('page', $page + 1), '');
+            self::showPaginationLi('&rsaquo;', KovSpace_Function::urlParam('page', $page + 1), '');
         }
 
         echo '</ul>';

@@ -108,13 +108,6 @@ $pages = ceil($count / $limit);
 ?>
 ```
 
-```html
-<div>content</div>
-```
-
 ```php
-<?php
-$Pagination = new KovSpace_Pagination($pages, $page);
-$Pagination->show();
-?>
+<?php KovSpace_Pagination::show($pages, $page); ?>
 ```
