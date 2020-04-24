@@ -11,7 +11,8 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Form
 {
-    public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = NULL) {
+    public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = NULL)
+    {
 
         $ip = Core_Array::get($_SERVER, 'REMOTE_ADDR');
 
@@ -39,7 +40,7 @@ class KovSpace_Form
             if (!$error && !Core_Array::getPost('phone')) {
                 $error = 'Укажите ваш телефон';
             }
-            if (!$error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'),0,2) != '+7') {
+            if (!$error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'), 0, 2) != '+7') {
                 $error = 'Неверный телефон';
             }
             if (!$error && !Core_Array::getPost('email')) {
@@ -68,22 +69,22 @@ class KovSpace_Form
                 $oLastItem = $aLastItems[0];
                 if (time() < Core_Date::sql2timestamp($oLastItem->datetime) + ADD_COMMENT_DELAY) {
                     $timeDiff = Core_Date::sql2timestamp($oLastItem->datetime) + ADD_COMMENT_DELAY - time();
-                    $error = 'Слишком частая отправка сообщений. Попробуйте через '.$timeDiff.' секунд';
+                    $error = 'Слишком частая отправка сообщений. Попробуйте через ' . $timeDiff . ' секунд';
                 }
             }
 
             if ($error) {
-                echo '<div class="alert alert-danger">'.$error.'</div>';
+                echo '<div class="alert alert-danger">' . $error . '</div>';
             } else {
                 echo '<div class="alert alert-success">Форма успешно отправлена!</div>';
 
-                $message = '<div>Имя: '.Core_Array::getPost('name').'</div>';
-                $message .= '<div>Телефон: '.Core_Array::getPost('phone').'</div>';
-                $message .= '<div>Email: '.Core_Array::getPost('email').'</div>';
-                $message .= '<div>Сообщение: '.Core_Array::getPost('comment').'</div>';
+                $message = '<div>Имя: ' . Core_Array::getPost('name') . '</div>';
+                $message .= '<div>Телефон: ' . Core_Array::getPost('phone') . '</div>';
+                $message .= '<div>Email: ' . Core_Array::getPost('email') . '</div>';
+                $message .= '<div>Сообщение: ' . Core_Array::getPost('comment') . '</div>';
                 $message .= '<div>---</div>';
-                $message .= '<div>IP: <a href="http://ipgeobase.ru/cgi-bin/Search.cgi?address='.$ip.'">'.$ip.'</a></div>';
-                $message .= '<div>Сайт: '.Core::$url['host'].'</div>';
+                $message .= '<div>IP: <a href="http://ipgeobase.ru/cgi-bin/Search.cgi?address=' . $ip . '">' . $ip . '</a></div>';
+                $message .= '<div>Сайт: ' . Core::$url['host'] . '</div>';
 
                 $oInformationsystem_Item = Core_Entity::factory('Informationsystem_Item');
                 $oInformationsystem_Item->informationsystem_id = $informationsystem_id;
@@ -102,5 +103,4 @@ class KovSpace_Form
             }
         }
     }
-
 }

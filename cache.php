@@ -18,12 +18,13 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Cache
 {
-    public static $dir = CMS_FOLDER.'hostcmsfiles/cache/';
-    public static $clear = CMS_FOLDER.'hostcmsfiles/cache/.clear';
-    public static $lock = CMS_FOLDER.'hostcmsfiles/cache/.lock';
+    public static $dir = CMS_FOLDER . 'hostcmsfiles/cache/';
+    public static $clear = CMS_FOLDER . 'hostcmsfiles/cache/.clear';
+    public static $lock = CMS_FOLDER . 'hostcmsfiles/cache/.lock';
 
     /* Exclusion rules */
-    public static function is_cache_deny() {
+    public static function is_cache_deny()
+    {
         if (Core_Auth::logged()) {
             return true;
         }
@@ -31,7 +32,8 @@ class KovSpace_Cache
     }
 
     /* Check file exists and start buffering */
-    public static function check($filename, $lifetime = 3600) {
+    public static function check($filename, $lifetime = 3600)
+    {
         if (self::is_cache_deny() || !$filename) return true;
 
         // Clear old files (once a day = 86400 sec)
@@ -51,9 +53,10 @@ class KovSpace_Cache
     }
 
     /* End buffering and save file */
-    public static function save($filename) {
+    public static function save($filename)
+    {
         if (self::is_cache_deny() || !$filename) return;
-        $filepath = self::$dir.$filename;
+        $filepath = self::$dir . $filename;
         $content = ob_get_contents();
         ob_end_clean();
         file_put_contents($filepath, $content);
@@ -61,7 +64,8 @@ class KovSpace_Cache
     }
 
     /* Remove all cache files */
-    public static function clear() {
+    public static function clear()
+    {
         $lock = self::$lock;
         if (is_file($lock) && (time() - @filemtime(self::$clear)) > 10000) {
             unlink($lock);
@@ -69,8 +73,8 @@ class KovSpace_Cache
         if (!is_file($lock)) {
             fopen($lock, 'w');
             $dir = self::$dir;
-            $files = glob($dir.'*');
-            foreach($files as $file){
+            $files = glob($dir . '*');
+            foreach ($files as $file) {
                 if (is_file($file)) {
                     unlink($file);
                 }

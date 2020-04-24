@@ -2,32 +2,34 @@
 require_once('bootstrap.php');
 if (!Core_Auth::logged()) exit('Access Denied!');
 
-$dir = CMS_FOLDER.'upload/';
-$filemapJson = CMS_FOLDER.'hostcmsfiles/cache/kic_filemap.json';
+$dir = CMS_FOLDER . 'upload/';
+$filemapJson = CMS_FOLDER . 'hostcmsfiles/cache/kic_filemap.json';
 $aFilemap = [];
 
 // AJAX-запрос
 if (Core_Array::getGet('dirname')) {
-    $dirname = $dir.Core_Array::getGet('dirname');
+    $dirname = $dir . Core_Array::getGet('dirname');
     if (Core_Array::getGet('offset')) {
         $offset = Core_Array::getGet('offset');
         $aFilemap = json_decode(file_get_contents($filemapJson));
     } else {
         $offset = 0;
         filemap($dirname, $aFilemap);
-        file_put_contents($filemapJson,json_encode($aFilemap));
+        file_put_contents($filemapJson, json_encode($aFilemap));
     }
     $response = checkFiles($aFilemap, $offset);
     echo json_encode($response);
     exit();
 }
 
-function isDirEmpty($dirname) {
+function isDirEmpty($dirname)
+{
     if (!is_readable($dirname)) return NULL;
     return (count(scandir($dirname)) == 2);
 }
 
-function checkDatabase($pathName) {
+function checkDatabase($pathName)
+{
 
     // Autodetect module by path
     if (strstr($pathName, 'information_system_')) {
@@ -260,23 +262,18 @@ function checkDatabase($pathName) {
 }
 
 // Создаем карту файлов
-function filemap($dirname, &$aFilemap) {
-    if (is_dir($dirname) && !is_link($dirname))
-    {
-        if ($dh = @opendir($dirname))
-        {
-            while (($file = readdir($dh)) !== FALSE)
-            {
-                if ($file != '.' && $file != '..')
-                {
+function filemap($dirname, &$aFilemap)
+{
+    if (is_dir($dirname) && !is_link($dirname)) {
+        if ($dh = @opendir($dirname)) {
+            while (($file = readdir($dh)) !== FALSE) {
+                if ($file != '.' && $file != '..') {
                     clearstatcache();
                     $pathName = $dirname . DIRECTORY_SEPARATOR . $file;
                     if (is_file($pathName)) {
                         $aFilemap[] = $pathName;
-                    }
-                    elseif (is_dir($pathName))
-                    {
-                        if(isDirEmpty($pathName)) {
+                    } elseif (is_dir($pathName)) {
+                        if (isDirEmpty($pathName)) {
                             rmdir($pathName);
                         } else {
                             filemap($pathName, $aFilemap);
@@ -291,7 +288,8 @@ function filemap($dirname, &$aFilemap) {
 }
 
 // Проверяем файлы
-function checkFiles($aFiles, $offset = 0) {
+function checkFiles($aFiles, $offset = 0)
+{
 
     static $start;
     static $response = [];
@@ -321,7 +319,7 @@ function checkFiles($aFiles, $offset = 0) {
             $response['deleted'][] = $pathName;
             unlink($pathName);
         }
-        return checkFiles($aFiles, $offset+1);
+        return checkFiles($aFiles, $offset + 1);
     }
 }
 
@@ -329,15 +327,17 @@ $aFiles = scandir($dir);
 $aPaths = array();
 
 foreach ($aFiles as $file) {
-    $pathName = $dir.$file;
+    $pathName = $dir . $file;
     if ($file == strstr($file, 'shop_') || $file == strstr($file, 'information_system_')) {
         if (is_dir($pathName)) {
             $aPaths[] = $file;
         }
     }
 }
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -348,20 +348,35 @@ foreach ($aFiles as $file) {
             max-width: 100%;
             max-height: 40px;
         }
+
         body {
             background: #f6f6f6;
         }
-        .blink{
+
+        .blink {
             animation: blink 1s infinite;
         }
-        @keyframes blink{
-            0%{opacity: 1;}
-            75%{opacity: 1;}
-            76%{ opacity: 0;}
-            100%{opacity: 0;}
-	    }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            75% {
+                opacity: 1;
+            }
+
+            76% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="py-2 bg-dark text-white">
         <div class="container">
@@ -380,8 +395,7 @@ foreach ($aFiles as $file) {
     <script>
         let aErrors = []
         let aPaths = [
-            <?php foreach ($aPaths as $path): ?>
-                '<?=$path?>',
+            <?php foreach ($aPaths as $path) : ?> '<?= $path ?>',
             <?php endforeach ?>
         ]
 
@@ -389,22 +403,20 @@ foreach ($aFiles as $file) {
 
         // Запустить проверку
         $('#startBtn').click(function() {
-                $(this).addClass('d-none')
-                $('#result').empty()
-                $('#stopBtn').removeClass('d-none')
-                checking = 1
-                check(0)
-            }
-        )
+            $(this).addClass('d-none')
+            $('#result').empty()
+            $('#stopBtn').removeClass('d-none')
+            checking = 1
+            check(0)
+        })
 
         // Остановить проверку
         $('#stopBtn').click(function() {
-                $(this).addClass('d-none')
-                $('#startBtn').removeClass('d-none')
-                checking = 0
-                check(0)
-            }
-        )
+            $(this).addClass('d-none')
+            $('#startBtn').removeClass('d-none')
+            checking = 0
+            check(0)
+        })
 
         if (aPaths.length) {
             $('#startBtn').removeClass('d-none')
@@ -425,11 +437,11 @@ foreach ($aFiles as $file) {
         function check(i, offset = 0) {
             if (checking == 0) return
             if (!offset) {
-                $('#result').prepend('<div class="my-2" id="path-'+i+'"><div class="path font-weight-bold">'+aPaths[i]+'</div><div class="status"><span class="blink text-info">Checking...</span></div></div>')
+                $('#result').prepend('<div class="my-2" id="path-' + i + '"><div class="path font-weight-bold">' + aPaths[i] + '</div><div class="status"><span class="blink text-info">Checking...</span></div></div>')
             } else {
-                $('#path-'+i+' .status').html('<span class="blink text-info">Checking... '+offset+'</span>')
+                $('#path-' + i + ' .status').html('<span class="blink text-info">Checking... ' + offset + '</span>')
             }
-            let url = '<?=Core::$url["path"]?>?dirname='+aPaths[i]+'&offset='+offset
+            let url = '<?= Core::$url["path"] ?>?dirname=' + aPaths[i] + '&offset=' + offset
             $.ajax({
                 url: url,
                 dataType: 'json',
@@ -437,21 +449,21 @@ foreach ($aFiles as $file) {
                 success: function(json) {
 
                     if (!checking) {
-                        $('#path-'+i+' .status').html('<span class="text-danger">Stopped</span>')
+                        $('#path-' + i + ' .status').html('<span class="text-danger">Stopped</span>')
                         return
                     }
 
                     if (json.deleted) {
-                        let cmsFolder = '<?=CMS_FOLDER?>';
+                        let cmsFolder = '<?= CMS_FOLDER ?>';
                         $.each(json.deleted, function(pos, item) {
                             item = item.replace(cmsFolder, '')
-                            $('#result #path-'+i).append('<div class="text-danger">deleted: /'+item+'</div>')
+                            $('#result #path-' + i).append('<div class="text-danger">deleted: /' + item + '</div>')
                         });
                     }
                     if (json.result == 'OK') {
-                        $('#path-'+i+' .status').html('<span class="text-success">OK</span>')
-                        if (i+1 < aPaths.length) {
-                            check(i+1)
+                        $('#path-' + i + ' .status').html('<span class="text-success">OK</span>')
+                        if (i + 1 < aPaths.length) {
+                            check(i + 1)
                         } else {
                             $('#stopBtn').addClass('d-none')
                             $('.content').prepend('<div class="d-inline-block alert alert-info">Done!</div>')
@@ -465,4 +477,5 @@ foreach ($aFiles as $file) {
         }
     </script>
 </body>
+
 </html>

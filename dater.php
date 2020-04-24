@@ -15,7 +15,7 @@ class KovSpace_Dater
         }
 
         if ($n1 == 1) {
-        return $form1;
+            return $form1;
         }
 
         return $form3;
