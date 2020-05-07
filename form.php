@@ -11,6 +11,8 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Form
 {
+    public $result;
+
     public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = NULL)
     {
 
@@ -75,6 +77,7 @@ class KovSpace_Form
 
             if ($error) {
                 echo '<div class="alert alert-danger">' . $error . '</div>';
+                $this->result = 'error';
             } else {
                 echo '<div class="alert alert-success">Форма успешно отправлена!</div>';
 
@@ -100,6 +103,8 @@ class KovSpace_Form
                     ->senderName(Core_Array::getPost('name'))
                     ->contentType('text/html')
                     ->send();
+
+                $this->result = 'success';
             }
         }
     }
