@@ -54,9 +54,26 @@ $Template
 ## HostCMS Form Handler
 
 ```php
-<?php $formId = 9 // Information System ID ?>
-<h2 id="form<?=$formId?>">Форма обратной связи</h2>
-<?php $oForm = new KovSpace_Form(9); // Feedback Form ?>
+<?php
+$formId = 9; // Information System ID
+$oForm = new KovSpace_Form($formId);
+?>
+
+<br><h2 id="form<?=$formId?>">Форма обратной связи</h2>
+
+<?php if ($oForm->error): ?>
+    <div class="alert alert-danger"><?=$oForm->error?></div>
+<?php elseif ($oForm->success): ?>
+    <div class="alert alert-success"><?=$oForm->success?></div>
+<?php endif ?>
+
+<!-- Prevent Page Refresh -->
+<script>
+if (window.history.replaceState) {
+    window.history.replaceState( null, null, window.location.href );
+}
+</script>
+
 <form method="post" action="#form<?=$formId?>">
     <input type="hidden" name="form" value="<?=$formId?>">
     <input type="hidden" name="url" value="">
@@ -72,7 +89,7 @@ $Template
     <div class="form-group">
         <textarea class="form-control" rows="3" name="comment" placeholder="Ваш комментарий"><?= Core_Array::getPost('comment') ?></textarea>
     </div>
-    <?php if ($oForm->result != 'success'): ?>
+    <?php if (!$oForm->success): ?>
         <button type="submit" class="btn btn-primary">Отправить</button>
     <?php endif ?>
 </form>
