@@ -89,7 +89,7 @@ class KovSpace_Form
                 $oInformationsystem_Item = Core_Entity::factory('Informationsystem_Item');
                 $oInformationsystem_Item->informationsystem_id = $informationsystem_id;
                 $oInformationsystem_Item->name = Core_Array::getPost('name');
-                $oInformationsystem_Item->description = $message;
+                $oInformationsystem_Item->text = $message;
                 $oInformationsystem_Item->save();
 
                 $oCore_Mail_Driver = Core_Mail::instance()
