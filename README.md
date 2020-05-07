@@ -54,26 +54,27 @@ $Template
 ## HostCMS Form Handler
 
 ```php
-<?php new KovSpace_Form(1); // InformationSystem ID ?>
-```
-
-```html
-<form method="post">
-    <input type="hidden" name="form" value="1">
+<?php $formId = 9 // Information System ID ?>
+<h2 id="form<?=$formId?>">Форма обратной связи</h2>
+<?php $oForm = new KovSpace_Form(9); // Feedback Form ?>
+<form method="post" action="#form<?=$formId?>">
+    <input type="hidden" name="form" value="<?=$formId?>">
     <input type="hidden" name="url" value="">
     <div class="form-group">
-        <input class="form-control" type="text" name="name" placeholder="Name:" value="<?= Core_Array::getPost('name') ?>">
+        <input class="form-control" type="text" name="name" placeholder="Ваше имя" value="<?= Core_Array::getPost('name') ?>">
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="phone" placeholder="Phone:" value="<?= Core_Array::getPost('phone') ?>">
+        <input class="form-control" type="text" name="phone" placeholder="Ваш телефон" value="<?= Core_Array::getPost('phone') ?>">
     </div>
     <div class="form-group">
-        <input class="form-control" type="text" name="email" placeholder="Email:" value="<?= Core_Array::getPost('email') ?>">
+        <input class="form-control" type="text" name="email" placeholder="Ваш email" value="<?= Core_Array::getPost('email') ?>">
     </div>
     <div class="form-group">
-        <textarea class="form-control" rows="3" name="comment" placeholder="Comment:"><?= Core_Array::getPost('comment') ?></textarea>
+        <textarea class="form-control" rows="3" name="comment" placeholder="Ваш комментарий"><?= Core_Array::getPost('comment') ?></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <?php if ($oForm->result != 'success'): ?>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    <?php endif ?>
 </form>
 ```
 
