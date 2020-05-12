@@ -29,7 +29,7 @@ class KovSpace_Template
     {
 
         // Remove old sessions
-        if (!rand(0, 10)) { // if rand show zero
+        if (!rand(0, 100)) { // if rand show zero
             // Empty sessions
             Core_QueryBuilder::delete('sessions')
                 ->where('time + maxlifetime', '<', time())
