@@ -27,21 +27,6 @@ class KovSpace_Template
 
     public function __construct()
     {
-
-        // // Remove old sessions
-        // if (!rand(0, 100)) { // if rand show zero
-        //     // Empty sessions
-        //     Core_QueryBuilder::delete('sessions')
-        //         ->where('time + maxlifetime', '<', time())
-        //         ->where('value', '=', '')
-        //         ->execute();
-
-        //     // Older than 1 year
-        //     Core_QueryBuilder::delete('sessions')
-        //         ->where('time', '<', time() - 31556926)
-        //         ->execute();
-        // }
-
         // URL fixer
         $badUrl = explode('amp;', $_SERVER['REQUEST_URI']);
         if (count($badUrl) > 1) {
@@ -49,6 +34,7 @@ class KovSpace_Template
             header('Location: ' . $newUrl);
             exit();
         }
+
         $badUrl = explode('%255B%255D', $_SERVER['REQUEST_URI']);
         if (count($badUrl) > 1) {
             $newUrl = str_replace('%255B%255D', '[]', $_SERVER['REQUEST_URI']);

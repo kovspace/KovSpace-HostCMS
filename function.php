@@ -4,7 +4,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Function
 {
-    // Получение значения доп. свойства элемента
+    // Item Property Value
     public static function getItemPropertyValue($oItem, $propertyId)
     {
         $aProperties = $oItem->getPropertyValues(false, array($propertyId));
@@ -42,5 +42,20 @@ class KovSpace_Function
     {
         $url = self::urlParam($param, $value);
         self::redirect($url);
+    }
+
+    // Remove old sessions
+    public static function removeOldSessions()
+    {
+        // Empty sessions
+        Core_QueryBuilder::delete('sessions')
+            ->where('time + maxlifetime', '<', time())
+            ->where('value', '=', '')
+            ->execute();
+
+        // Older than 1 year
+        Core_QueryBuilder::delete('sessions')
+            ->where('time', '<', time() - 31556926)
+            ->execute();
     }
 }
