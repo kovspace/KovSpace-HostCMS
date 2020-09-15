@@ -77,6 +77,8 @@ class KovSpace_Atol
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
         foreach ($aShop_Orders_Items as $oShop_Order_Item) {
 
+            $aItem = [];
+
             $price = $roundPrice
                 ? round($oShop_Order_Item->price)
                 : (float) $oShop_Order_Item->price;
@@ -113,8 +115,7 @@ class KovSpace_Atol
             // Маркировка
             $oShop_Order_Item_Code = Core_Entity::factory('Shop_Order_Item_Code')->getByShop_Order_Item_Id($oShop_Order_Item->id);
             if ($oShop_Order_Item_Code) {
-                $decoder = new KovSpace_MarkingDecoder($oShop_Order_Item_Code->code);
-                $aItem['nomenclature_code'] = $decoder->productCode;
+                $aItem['nomenclature_code'] = $oShop_Order_Item_Code->code;
             }
 
             $aItems[] = $aItem;
