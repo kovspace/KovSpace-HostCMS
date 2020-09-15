@@ -6,6 +6,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 ini_set('serialize_precision', 10);
 
 /*  Atol Online API v4 */
+// https://online.atol.ru/files/API_FFD_1-0-5.pdf
 
 class KovSpace_Atol
 {
@@ -108,6 +109,14 @@ class KovSpace_Atol
             }
 
             $aItem['vat']['type'] = $vatType;
+
+            // Маркировка
+            $oShop_Order_Item_Code = Core_Entity::factory('Shop_Order_Item_Code')->getByShop_Order_Item_Id($oShop_Order_Item->id);
+            if ($oShop_Order_Item_Code) {
+                $decoder = new KovSpace_MarkingDecoder($oShop_Order_Item_Code->code);
+                $aItem['nomenclature_code'] = $decoder->productCode;
+            }
+
             $aItems[] = $aItem;
         }
 
