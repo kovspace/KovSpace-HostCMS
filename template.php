@@ -246,6 +246,17 @@ class KovSpace_Template
         }
         return $this;
     }
+
+    public function showOg()
+    {
+        if (is_file(CMS_FOLDER . $this->path . 'img/ogimage.jpg')) {
+            echo '<meta property="og:title" content="'. Core_Page::instance()->title . '"/>' . "\n\t";
+            echo '<meta property="og:description" content="'. Core_Page::instance()->description . '"/>' . "\n\t";
+            echo '<meta property="og:image" content="'. $this->path . 'img/ogimage.jpg' . '"/>' . "\n\t";
+        }
+        return $this;
+    }
+
     public function showVendorCSS($url)
     {
         echo '<link rel="stylesheet" href="' . $url . '">' . "\n\t";
