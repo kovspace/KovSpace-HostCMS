@@ -46,6 +46,8 @@ function webp($oItem, $image, $size) {
 
                         $oItem->save();
                         unlink($path);
+                    } else {
+                        echo 'Error: ' . $path . PHP_EOL;
                     }
                 }
             }
