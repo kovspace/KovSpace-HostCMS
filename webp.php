@@ -28,10 +28,6 @@ function webp($oItem, $image, $size) {
                 if ($ext == '.png') {
                     $im = @imagecreatefrompng($path);
                     if ($im) {
-                        // // PNG convert
-                        // imagepalettetotruecolor($im);
-                        // imagealphablending($im, true);
-                        // imagesavealpha($im, true);
 
                         imagewebp($im, $newpath);
                         imagedestroy($im);
@@ -60,4 +56,11 @@ $aShop_Items = $oShop_Items->findAll();
 
 foreach ($aShop_Items as $oShop_Item) {
     convert($oShop_Item);
+}
+
+$oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
+$aInformationsystem_Items = $oInformationsystem_Items->findAll();
+
+foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
+    convert($oInformationsystem_Item);
 }
