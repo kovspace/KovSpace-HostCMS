@@ -41,8 +41,11 @@ function webp($oItem, $image, $size) {
                             $oItem->image_small = $newname;
                         }
 
-                        $oItem->save();
-                        unlink($path);
+                        if (file_exists($newpath)) {
+                            $oItem->save();
+                            unlink($path);
+                        }
+
                     } else {
                         echo 'Error: ' . $path . PHP_EOL;
                     }
