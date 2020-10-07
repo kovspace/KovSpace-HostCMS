@@ -1,6 +1,7 @@
 <?php
 
-/* Shop's PNG to WEBP */
+/* PNG to WEBP */
+/* Shop and Information System main images */
 
 require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 
