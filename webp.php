@@ -28,10 +28,10 @@ function webp($oItem, $image, $size) {
                 if ($ext == '.png') {
                     $im = @imagecreatefrompng($path);
                     if ($im) {
-                        // PNG convert
-                        imagepalettetotruecolor($im);
-                        imagealphablending($im, true);
-                        imagesavealpha($im, true);
+                        // // PNG convert
+                        // imagepalettetotruecolor($im);
+                        // imagealphablending($im, true);
+                        // imagesavealpha($im, true);
 
                         imagewebp($im, $newpath);
                         imagedestroy($im);
