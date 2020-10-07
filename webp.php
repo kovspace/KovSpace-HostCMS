@@ -30,6 +30,7 @@ function webp($oItem, $image, $size) {
                     $im = @imagecreatefrompng($path);
                     if ($im) {
 
+                        imagepalettetotruecolor($im); // for png
                         imagewebp($im, $newpath);
                         imagedestroy($im);
 
