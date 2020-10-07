@@ -26,26 +26,27 @@ function webp($oItem, $image, $size) {
                 $newpath = $oItem->getItemPath() . $newname;
 
                 if ($ext == '.png') {
-                    $im = imagecreatefrompng($path);
+                    $im = @imagecreatefrompng($path);
+                    if ($im) {
+                        // PNG convert
+                        imagepalettetotruecolor($im);
+                        imagealphablending($im, true);
+                        imagesavealpha($im, true);
 
-                    // PNG convert
-                    imagepalettetotruecolor($im);
-                    imagealphablending($im, true);
-                    imagesavealpha($im, true);
+                        imagewebp($im, $newpath);
+                        imagedestroy($im);
 
-                    imagewebp($im, $newpath);
-                    imagedestroy($im);
+                        if ($size == 'large') {
+                            $oItem->image_large = $newname;
+                        }
 
-                    if ($size == 'large') {
-                        $oItem->image_large = $newname;
+                        if ($size == 'small') {
+                            $oItem->image_small = $newname;
+                        }
+
+                        $oItem->save();
+                        unlink($path);
                     }
-
-                    if ($size == 'small') {
-                        $oItem->image_small = $newname;
-                    }
-
-                    $oItem->save();
-                    unlink($path);
                 }
             }
         }
