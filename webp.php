@@ -2,7 +2,7 @@
 
 /* Shop's PNG to WEBP */
 
-require_once(dirname(__FILE__) . '/../' . 'bootstrap.php');
+require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 
 function convert($oItem) {
     $image = $oItem->image_large;
