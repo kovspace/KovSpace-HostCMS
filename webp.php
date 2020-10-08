@@ -69,3 +69,14 @@ foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
     convert($oShop_Item, $dir, 'image_large');
     convert($oShop_Item, $dir, 'image_small');
 }
+
+/* Informationsystem Groups */
+
+$oInformationsystem_Groups = Core_Entity::factory('Informationsystem_Group');
+$aInformationsystem_Groups = $oInformationsystem_Groups->findAll();
+
+foreach ($aInformationsystem_Groups as $oInformationsystem_Group) {
+    $dir = $oShop_Group->getGroupPath();
+    convert($oShop_Group, $dir, 'image_large');
+    convert($oShop_Group, $dir, 'image_small');
+}
