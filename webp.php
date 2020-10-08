@@ -51,7 +51,7 @@ foreach ($aShop_Items as $oShop_Item) {
 /* Shop Groups */
 
 $oShop_Groups = Core_Entity::factory('Shop_Group');
-$aShop_Groups = $oShop_Items->findAll();
+$aShop_Groups = $oShop_Groups->findAll();
 
 foreach ($aShop_Groups as $oShop_Group) {
     $dir = $oShop_Group->getGroupPath();
