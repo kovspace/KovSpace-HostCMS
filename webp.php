@@ -11,7 +11,7 @@ function convert($object, $dir, $property) {
     if (!$image) return;
 
     $path = $dir . $image;
-    if (!$path || !file_exists($path)) return;
+    if (!file_exists($path)) return;
 
     $dotpos = strrpos($image, '.');
     $name = substr($image, 0, $dotpos);
