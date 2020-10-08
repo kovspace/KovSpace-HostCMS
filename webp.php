@@ -37,46 +37,49 @@ function convert($object, $dir, $property) {
     }
 }
 
+
 /* Shop Items */
 
-$oShop_Items = Core_Entity::factory('Shop_Item');
-$aShop_Items = $oShop_Items->findAll();
+$oObjects = Core_Entity::factory('Shop_Item');
+$aObjects = $oObjects->findAll();
 
-foreach ($aShop_Items as $oShop_Item) {
-    $dir = $oShop_Item->getItemPath();
-    convert($oShop_Item, $dir, 'image_large');
-    convert($oShop_Item, $dir, 'image_small');
+foreach ($aObjects as $oObject) {
+    $dir = $oObject->getItemPath();
+    convert($oObject, $dir, 'image_large');
+    convert($oObject, $dir, 'image_small');
 }
+
 
 /* Shop Groups */
 
-$oShop_Groups = Core_Entity::factory('Shop_Group');
-$aShop_Groups = $oShop_Groups->findAll();
+$oObjects = Core_Entity::factory('Shop_Group');
+$aObjects = $oObjects->findAll();
 
-foreach ($aShop_Groups as $oShop_Group) {
-    $dir = $oShop_Group->getGroupPath();
-    convert($oShop_Group, $dir, 'image_large');
-    convert($oShop_Group, $dir, 'image_small');
+foreach ($aObjects as $oObject) {
+    $dir = $oObject->getItemPath();
+    convert($oObject, $dir, 'image_large');
+    convert($oObject, $dir, 'image_small');
 }
+
 
 /* Informationsystem Items */
 
-$oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
-$aInformationsystem_Items = $oInformationsystem_Items->findAll();
+$oObjects = Core_Entity::factory('Informationsystem_Item');
+$aObjects = $oObjects->findAll();
 
-foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
-    $dir = $oShop_Item->getItemPath();
-    convert($oShop_Item, $dir, 'image_large');
-    convert($oShop_Item, $dir, 'image_small');
+foreach ($aObjects as $oObject) {
+    $dir = $oObject->getItemPath();
+    convert($oObject, $dir, 'image_large');
+    convert($oObject, $dir, 'image_small');
 }
 
 /* Informationsystem Groups */
 
-$oInformationsystem_Groups = Core_Entity::factory('Informationsystem_Group');
-$aInformationsystem_Groups = $oInformationsystem_Groups->findAll();
+$oObjects = Core_Entity::factory('Informationsystem_Group');
+$aObjects = $oObjects->findAll();
 
-foreach ($aInformationsystem_Groups as $oInformationsystem_Group) {
-    $dir = $oShop_Group->getGroupPath();
-    convert($oShop_Group, $dir, 'image_large');
-    convert($oShop_Group, $dir, 'image_small');
+foreach ($aObjects as $oObject) {
+    $dir = $oObject->getItemPath();
+    convert($oObject, $dir, 'image_large');
+    convert($oObject, $dir, 'image_small');
 }
