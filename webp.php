@@ -45,15 +45,17 @@ $aShop_Items = $oShop_Items->findAll();
 foreach ($aShop_Items as $oShop_Item) {
     $dir = $oShop_Item->getItemPath();
     convert($oShop_Item, $dir, 'image_large');
-    // convert($oShop_Item, $method, 'image_small);
+    convert($oShop_Item, $method, 'image_small');
 }
 
 
 /* Informationsystem Items */
 
-// $oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
-// $aInformationsystem_Items = $oInformationsystem_Items->findAll();
+$oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
+$aInformationsystem_Items = $oInformationsystem_Items->findAll();
 
-// foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
-//     convert($oInformationsystem_Item);
-// }
+foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
+    $dir = $oShop_Item->getItemPath();
+    convert($oShop_Item, $dir, 'image_large');
+    convert($oShop_Item, $method, 'image_small');
+}
