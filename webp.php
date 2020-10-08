@@ -47,7 +47,7 @@ function convertProperties($entity_id, $dir) {
     $aProperty_Value_Files = $oProperty_Value_Files->findAll();
     foreach ($aProperty_Value_Files as $oProperty_Value_File) {
         convert($oProperty_Value_File, $dir, 'file');
-        convert($oObject, $dir, 'file_small');
+        convert($oProperty_Value_File, $dir, 'file_small');
     }
 }
 
