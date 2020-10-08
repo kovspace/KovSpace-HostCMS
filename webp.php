@@ -56,7 +56,7 @@ $oObjects = Core_Entity::factory('Shop_Group');
 $aObjects = $oObjects->findAll();
 
 foreach ($aObjects as $oObject) {
-    $dir = $oObject->getItemPath();
+    $dir = $oObject->getGroupPath();
     convert($oObject, $dir, 'image_large');
     convert($oObject, $dir, 'image_small');
 }
@@ -73,13 +73,14 @@ foreach ($aObjects as $oObject) {
     convert($oObject, $dir, 'image_small');
 }
 
+
 /* Informationsystem Groups */
 
 $oObjects = Core_Entity::factory('Informationsystem_Group');
 $aObjects = $oObjects->findAll();
 
 foreach ($aObjects as $oObject) {
-    $dir = $oObject->getItemPath();
+    $dir = $oObject->getGroupPath();
     convert($oObject, $dir, 'image_large');
     convert($oObject, $dir, 'image_small');
 }
