@@ -5,70 +5,55 @@
 
 require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 
-function convert($oItem) {
-    $image = $oItem->image_large;
-    $size = 'large';
-    $dir = $oItem->getItemPath();
-    webp($dir, $image, $size);
+function convert($object, $dir, $property) {
 
-    $image = $oItem->image_small;
-    $size = 'small';
-    $dir = $oItem->getItemPath();
-    webp($dir, $image, $size);
-}
+    if (!$dir) return;
+    $image = $object->$property;
+    if (!$image) return;
 
-function webp($dir, $image, $size) {
-    if ($image) {
-        $path = $dir . $image;
-        {
-            if (file_exists($path)) {
-                $dotpos = strrpos($image, '.');
-                $name = substr($image, 0, $dotpos);
-                $ext = substr($image, $dotpos);
-                $newname = $name . '.webp';
-                $newpath = $dir . $newname;
+    $path = $dir . $image;
+    if (!$path || !file_exists($path)) return;
 
-                if ($ext == '.png') {
-                    echo $path . PHP_EOL;
-                    $im = @imagecreatefrompng($path);
-                    if ($im) {
+    $dotpos = strrpos($image, '.');
+    $name = substr($image, 0, $dotpos);
+    $ext = substr($image, $dotpos);
+    $new_image = $name . '.webp';
+    $new_path = $dir . $new_image;
 
-                        imagepalettetotruecolor($im); // for png
-                        imagewebp($im, $newpath);
-                        imagedestroy($im);
+    if ($ext == '.png') {
+        echo $path . PHP_EOL;
+        $im = @imagecreatefrompng($path);
+        if (!$im) echo 'Error: ' . $path . PHP_EOL;
 
-                        if ($size == 'large') {
-                            $oItem->image_large = $newname;
-                        }
+        imagepalettetotruecolor($im); // for png
+        imagewebp($im, $new_path);
+        imagedestroy($im);
 
-                        if ($size == 'small') {
-                            $oItem->image_small = $newname;
-                        }
-
-                        if (file_exists($newpath)) {
-                            $oItem->save();
-                            unlink($path);
-                        }
-
-                    } else {
-                        echo 'Error: ' . $path . PHP_EOL;
-                    }
-                }
-            }
+        if (file_exists($new_path)) {
+            $object->$property = $new_image;
+            $object->save();
+            unlink($path);
         }
     }
 }
+
+/* Shop Items */
 
 $oShop_Items = Core_Entity::factory('Shop_Item');
 $aShop_Items = $oShop_Items->findAll();
 
 foreach ($aShop_Items as $oShop_Item) {
-    convert($oShop_Item);
+    $dir = $oShop_Item->getItemPath();
+    convert($oShop_Item, $dir, 'image_large');
+    // convert($oShop_Item, $method, 'image_small);
 }
 
-$oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
-$aInformationsystem_Items = $oInformationsystem_Items->findAll();
 
-foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
-    convert($oInformationsystem_Item);
-}
+/* Informationsystem Items */
+
+// $oInformationsystem_Items = Core_Entity::factory('Informationsystem_Item');
+// $aInformationsystem_Items = $oInformationsystem_Items->findAll();
+
+// foreach ($aInformationsystem_Items as $oInformationsystem_Item) {
+//     convert($oInformationsystem_Item);
+// }
