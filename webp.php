@@ -48,6 +48,16 @@ foreach ($aShop_Items as $oShop_Item) {
     convert($oShop_Item, $dir, 'image_small');
 }
 
+/* Shop Groups */
+
+$oShop_Groups = Core_Entity::factory('Shop_Group');
+$aShop_Groups = $oShop_Items->findAll();
+
+foreach ($aShop_Groups as $oGroup) {
+    $dir = $oShop_Group->getGroupPath();
+    convert($oShop_Group, $dir, 'image_large');
+    convert($oShop_Group, $dir, 'image_small');
+}
 
 /* Informationsystem Items */
 
