@@ -52,7 +52,7 @@ function convertProperties($entity_id, $dir) {
 }
 
 function start($model, $method) {
-    $oObjects = Core_Entity::factory('Shop_Item');
+    $oObjects = Core_Entity::factory($model);
     $aObjects = $oObjects->findAll();
     foreach ($aObjects as $oObject) {
         $dir = $oObject->$method();
