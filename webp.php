@@ -27,6 +27,7 @@ function webp($oItem, $image, $size) {
                 $newpath = $oItem->getItemPath() . $newname;
 
                 if ($ext == '.png') {
+                    echo $path . PHP_EOL;
                     $im = @imagecreatefrompng($path);
                     if ($im) {
 
