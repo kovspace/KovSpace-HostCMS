@@ -53,7 +53,7 @@ foreach ($aShop_Items as $oShop_Item) {
 $oShop_Groups = Core_Entity::factory('Shop_Group');
 $aShop_Groups = $oShop_Items->findAll();
 
-foreach ($aShop_Groups as $oGroup) {
+foreach ($aShop_Groups as $oShop_Group) {
     $dir = $oShop_Group->getGroupPath();
     convert($oShop_Group, $dir, 'image_large');
     convert($oShop_Group, $dir, 'image_small');
