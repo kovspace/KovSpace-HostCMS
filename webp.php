@@ -1,12 +1,11 @@
 <?php
 
 /* PNG to WEBP */
-/* Shop and Information System main images */
+/* Shops and Information Systems */
 
 require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 
 function convert($object, $dir, $property) {
-
     if (!$dir) return;
     $image = $object->$property;
     if (!$image) return;
@@ -37,6 +36,21 @@ function convert($object, $dir, $property) {
     }
 }
 
+function convertProperties($entity_id, $dir) {
+    $oProperty_Value_Files = Core_Entity::factory('Property_Value_File');
+    $oProperty_Value_Files->queryBuilder()
+        ->where('entity_id', '=', $entity_id)
+        ->where('file', '!=', '')
+        ->setOr()
+        ->where('entity_id', '=', $entity_id)
+        ->where('file_small', '!=', '');
+    $aProperty_Value_Files = $oProperty_Value_Files->findAll();
+    foreach ($aProperty_Value_Files as $oProperty_Value_File) {
+        convert($oProperty_Value_File, $dir, 'file_large');
+        convert($oObject, $dir, 'file_small');
+    }
+}
+
 
 /* Shop Items */
 
@@ -47,8 +61,8 @@ foreach ($aObjects as $oObject) {
     $dir = $oObject->getItemPath();
     convert($oObject, $dir, 'image_large');
     convert($oObject, $dir, 'image_small');
+    convertProperties($oObject->id, $dir);
 }
-
 
 /* Shop Groups */
 
@@ -61,7 +75,6 @@ foreach ($aObjects as $oObject) {
     convert($oObject, $dir, 'image_small');
 }
 
-
 /* Informationsystem Items */
 
 $oObjects = Core_Entity::factory('Informationsystem_Item');
@@ -72,7 +85,6 @@ foreach ($aObjects as $oObject) {
     convert($oObject, $dir, 'image_large');
     convert($oObject, $dir, 'image_small');
 }
-
 
 /* Informationsystem Groups */
 
