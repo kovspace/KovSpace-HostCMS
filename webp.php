@@ -8,23 +8,25 @@ require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 function convert($oItem) {
     $image = $oItem->image_large;
     $size = 'large';
-    webp($oItem, $image, $size);
+    $dir = $oItem->getItemPath();
+    webp($dir, $image, $size);
 
     $image = $oItem->image_small;
     $size = 'small';
-    webp($oItem, $image, $size);
+    $dir = $oItem->getItemPath();
+    webp($dir, $image, $size);
 }
 
-function webp($oItem, $image, $size) {
+function webp($dir, $image, $size) {
     if ($image) {
-        $path = $oItem->getItemPath() . $image;
+        $path = $dir . $image;
         {
             if (file_exists($path)) {
                 $dotpos = strrpos($image, '.');
                 $name = substr($image, 0, $dotpos);
                 $ext = substr($image, $dotpos);
                 $newname = $name . '.webp';
-                $newpath = $oItem->getItemPath() . $newname;
+                $newpath = $dir . $newname;
 
                 if ($ext == '.png') {
                     echo $path . PHP_EOL;
