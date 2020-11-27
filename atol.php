@@ -115,7 +115,10 @@ class KovSpace_Atol
             // Маркировка
             $oShop_Order_Item_Code = Core_Entity::factory('Shop_Order_Item_Code')->getByShop_Order_Item_Id($oShop_Order_Item->id);
             if ($oShop_Order_Item_Code) {
-                $aItem['nomenclature_code'] = $oShop_Order_Item_Code->code;
+                $decoder = new KovSpace_MarkingDecoder($oShop_Order_Item_Code->code);
+                if (!$decoder->error) {
+                    $aItem['nomenclature_code'] = $decoder->productCode;
+                }
             }
 
             $aItems[] = $aItem;
