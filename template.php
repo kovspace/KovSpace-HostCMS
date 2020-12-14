@@ -163,9 +163,10 @@ class KovSpace_Template
         return $this;
     }
 
+    // Saving Last Source
     public function detectReferer()
     {
-        if (!isset($_COOKIE['hostcms_source_type']) && !Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from') && !Core_Array::getGet('gclid')) {
+        if (!Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from') && !Core_Array::getGet('gclid')) {
             $referer = isset($_SERVER["HTTP_REFERER"])
                 ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
                 : NULL;
