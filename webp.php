@@ -22,9 +22,15 @@ function convert($object, $dir, $property) {
     if ($ext == '.png') {
         echo $path . PHP_EOL;
         $im = @imagecreatefrompng($path);
-        if (!$im) echo 'Error: ' . $path . PHP_EOL;
+        if (!$im) {
+            echo 'Error: ' . $path . PHP_EOL;
+            // Возможно это JPEG
+            $im = @imagecreatefromjpeg($path);
+        } else {
+            // PNG
+            imagepalettetotruecolor($im);
+        }
 
-        imagepalettetotruecolor($im); // for png
         imagewebp($im, $new_path);
         imagedestroy($im);
 
