@@ -23,7 +23,7 @@ function convert($object, $dir, $property) {
         echo $path . PHP_EOL;
         $im = @imagecreatefrompng($path);
         if (!$im) {
-            echo 'Error: ' . $path . PHP_EOL;
+            echo 'Error: incorrect format';
             // Возможно это JPEG
             $im = @imagecreatefromjpeg($path);
         } else {
