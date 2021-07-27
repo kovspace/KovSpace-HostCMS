@@ -206,6 +206,11 @@ class KovSpace_Template
         echo '<meta charset="utf-8">' . "\n\t";
         echo '<meta name="description" content="' . $this->description . '"/>' . "\n\t";
         echo '<meta name="keywords" content="' . $this->keywords . '"/>' . "\n\t";
+
+        if (!Core_Page::instance()->structure->indexing) {
+            echo '<meta name="robots" content="noindex, nofollow">' . "\n\t";
+        }
+
         return $this;
     }
 
