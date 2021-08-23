@@ -4,6 +4,31 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Function
 {
+    // Shop Item Property Values by Tag Name
+    public static function getShopItemPropertyValuesByTagName($oShop_Item, $tagname): array
+    {
+		$linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
+		$oProperties = $linkedObject->Properties;
+		$oProperties->queryBuilder()
+			->where('tag_name', '=', $tagname);
+		$aProperties = $oProperties->findAll();
+
+		if ($aProperties) {
+			$oProperty = $aProperties[0];
+            foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
+                $aValues[] = $oValue->value;
+            }
+		}
+
+        return $aValues ?? [];
+    }
+
+    // Shop Item Property Value by Tag Name
+    public static function getShopItemPropertyValueByTagName($oShop_Item, $tagname)
+    {
+        return self::getShopItemPropertyValuesByTagName($oShop_Item, $tagname)[0] ?? null;
+    }
+
     // Item Property Value
     public static function getItemPropertyValue($oItem, $propertyId)
     {
