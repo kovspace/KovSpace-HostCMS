@@ -244,6 +244,13 @@ class KovSpace_Template
         return $this;
     }
 
+    public function showCanonical() {
+        if ($this->isShopItem()) {
+            echo '<link rel="canonical" href="' . Core::$url['path'] . '">' . "\n\t";
+        }
+        return $this;
+    }
+
     public function showFavicon()
     {
         if (is_file(CMS_FOLDER . $this->path . 'img/favicon.png')) {
