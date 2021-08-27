@@ -14,9 +14,10 @@ class KovSpace_Function
 		$aProperties = $oProperties->findAll();
 
 		if ($aProperties) {
-			$oProperty = $aProperties[0];
-            foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-                $aValues[] = $oValue->value;
+            foreach ($aProperties as $oProperty) {
+                foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
+                    $aValues[] = $oValue->value;
+                }
             }
 		}
 
