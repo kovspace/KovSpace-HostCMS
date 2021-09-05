@@ -84,4 +84,14 @@ class KovSpace_Function
             ->where('time', '<', time() - 31556926)
             ->execute();
     }
+
+    // Get Active and Sorted Items
+    public static function getSortedItems($object, $sortField = 'sorting', $sortDirection = 'asc'): array
+    {
+        $object->queryBuilder()
+            ->where('active', '=', 1)
+            ->orderBy($sortField, $sortDirection);
+
+        return $object->findAll();
+    }
 }
