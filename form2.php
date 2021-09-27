@@ -57,7 +57,7 @@ class KovSpace_Form2
                         $oForm_Fill_Field->form_field_id = $oForm_Field->id;
                         $oForm_Fill_Field->value = $value;
                         $oForm_Fill_Field->save();
-                        $message .= $oForm_Field->caption . ': ' . $value;
+                        $message .= '<div>' . $oForm_Field->caption . ': ' . $value . '</div>';
                     }
                 }
 
