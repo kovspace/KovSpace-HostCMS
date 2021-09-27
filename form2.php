@@ -87,7 +87,9 @@ class KovSpace_Form2
             <div class="row">
                 <?php foreach ($this->aForm_Fields as $oForm_Field): ?>
                     <div class="mb-3 col-lg-6">
-                        <label for="<?= $oForm_Field->name ?>" class="form-label"><?= $oForm_Field->caption ?></label>
+                        <label for="<?= $oForm_Field->name ?>" class="form-label">
+                            <?= $oForm_Field->caption ?><?php if ($oForm_Field->obligatory): ?><sup>*</sup><?php endif ?>
+                        </label>
                         <input id="<?= $oForm_Field->name ?>" type="text" name="<?= $oForm_Field->name ?>" class="form-control" <?php if ($oForm_Field->obligatory) echo 'required' ?> value="<?= Core_Array::getPost($oForm_Field->name) ?>">
                         <div class="small text-muted"><?= $oForm_Field->description ?></div>
                     </div>
