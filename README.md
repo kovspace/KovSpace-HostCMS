@@ -95,6 +95,14 @@ if (window.history.replaceState) {
 </form>
 ```
 
+## HostCMS Form2 for paid Edition
+
+```php
+<?php $form = new KovSpace_Form2(21); ?>
+<div>some content here</div>
+<?php $form->show() ?>
+```
+
 ## HostCMS Pagination
 
 ```php
