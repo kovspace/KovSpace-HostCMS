@@ -96,8 +96,8 @@ class KovSpace_Form2
                 <?php endforeach ?>
             </div>
 
-            <?php if (isset($error)): ?>
-                <div class="my-3 text-danger"><?= $error ?></div>
+            <?php if ($this->error): ?>
+                <div class="my-3 text-danger"><?= $this->error ?></div>
             <?php endif ?>
 
             <button type="submit" class="btn btn-primary"><?= $this->oForm->button_value ?></button>
