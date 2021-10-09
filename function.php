@@ -16,7 +16,14 @@ class KovSpace_Function
 		if ($aProperties) {
             foreach ($aProperties as $oProperty) {
                 foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-                    $aValues[] = $oValue->value;
+                    if (get_class($oValue) == 'Property_Value_File_Model') {
+                        $aValues[] = [
+                            'file' => $oValue->file,
+                            'file_small' => $oValue->file_small,
+                        ];
+                    } else {
+                        $aValues[] = $oValue->value;
+                    }
                 }
             }
 		}
