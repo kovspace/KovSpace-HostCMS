@@ -5,7 +5,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_Function
 {
 
-    // All Shop Item Property Values with Tagnames
+    // All Shop Item Property Values with Dirs and Tagnames
     public static function getShopItemPropertyValues($oShop_Item)
     {
         $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
@@ -15,20 +15,22 @@ class KovSpace_Function
             foreach ($aProperties as $oProperty) {
                 foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
                     if (get_class($oValue) == 'Property_Value_File_Model') {
-                        $aValues[$oProperty->tag_name][] = [
+                        $aValues[$oProperty->Property_Dir->name][$oProperty->tag_name][] = [
                             'file' => $oShop_Item->getItemHref() . $oValue->file,
                             'file_small' => $oShop_Item->getItemHref() . $oValue->file_small,
                         ];
                     } else {
-                        $aValues[$oProperty->tag_name][] = $oValue->value;
+                        $aValues[$oProperty->Property_Dir->name][$oProperty->tag_name][] = $oValue->value;
                     }
                 }
             }
 		}
 
-        foreach ($aValues as $tag_name => $aValue) {
-            if (count($aValue) == 1) {
-                $aValues[$tag_name] = $aValue[0];
+        foreach ($aValues as $dirname => $aTagnames) {
+            foreach ($aTagnames as $tagname => $aValue) {
+                if (count($aValue) == 1) {
+                    $aValues[$dirname][$tagname] = $aValue[0];
+                }
             }
         }
 
