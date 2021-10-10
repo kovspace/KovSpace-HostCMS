@@ -13,32 +13,45 @@ class KovSpace_ShopItem
         if ($aProperties) {
             foreach ($aProperties as $oProperty) {
                 foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
+
                     if ($oProperty->type == 2) {
-                        $aValues[] = [
-                            'tag_name' => $oProperty->tag_name,
-                            'dir_id' => $oProperty->property_dir_id,
-                            'dir_name' => $oProperty->Property_Dir->name,
-                            'type' => $oProperty->type,
-                            'sorting' => $oProperty->sorting,
+                        $aValue = [
                             'file' => $oValue->file ? $oShop_Item->getItemHref() . $oValue->file : null,
                             'file_small' => $oValue->file_small ? $oShop_Item->getItemHref() . $oValue->file_small : null,
                         ];
                     } else {
-                        $aValues[] = [
-                            'tag_name' => $oProperty->tag_name,
-                            'dir_id' => $oProperty->property_dir_id,
-                            'dir_name' => $oProperty->Property_Dir->name,
-                            'type' => $oProperty->type,
-                            'sorting' => $oProperty->sorting,
+                        $aValue = [
                             'value'   => $oValue->value,
                         ];
                     }
+
+                    $aValues[] = [
+                        'tag_name' => $oProperty->tag_name,
+                        'name'  => $oProperty->name,
+                        'dir_id' => $oProperty->property_dir_id,
+                        'dir_name' => $oProperty->Property_Dir->name,
+                        'type' => $oProperty->type,
+                        'sorting' => $oProperty->sorting
+                    ] + $aValue;
+
                 }
             }
         }
 
         return $aValues ?? [];
     }
+
+    // Фильтруем коллекцию по полю и значению
+    public static function filterCollection($aProperties, $field, $value): array
+    {
+        foreach ($aProperties as $oProperty) {
+            if (isset($oProperty[$field]) && $oProperty[$field] == $value) {
+                $array[] = $oProperty;
+            }
+        }
+        return $array ?? [];
+    }
+
 
     // Получем массив свойств из коллекции по тегу
     public static function collectionValuesByTag($aProperties, $tagname)
