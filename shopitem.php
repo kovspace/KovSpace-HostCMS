@@ -13,18 +13,24 @@ class KovSpace_ShopItem
         if ($aProperties) {
             foreach ($aProperties as $oProperty) {
                 foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-
                     if ($oProperty->type == 2) {
+                        $file = $oValue->file ? $oShop_Item->getItemHref() . $oValue->file : null;
+                        $file_small = $oValue->file_small ? $oShop_Item->getItemHref() . $oValue->file_small : null;
+                        if (!$file && !$file_small) {
+                            continue;
+                        }
                         $aValue = [
-                            'file' => $oValue->file ? $oShop_Item->getItemHref() . $oValue->file : null,
-                            'file_small' => $oValue->file_small ? $oShop_Item->getItemHref() . $oValue->file_small : null,
+                            'file' => $file,
+                            'file_small' => $file_small,
                         ];
                     } else {
+                        if (!$value = $oValue->value) {
+                            continue;
+                        }
                         $aValue = [
-                            'value'   => $oValue->value,
+                            'value'   => $value,
                         ];
                     }
-
                     $aValues[] = [
                         'tag_name' => $oProperty->tag_name,
                         'name'  => $oProperty->name,
