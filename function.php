@@ -4,85 +4,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Function
 {
-
-    // All Shop Item Property Values with Dirs and Tagnames
-    public static function getShopItemPropertyValues($oShop_Item)
-    {
-        $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
-        $aProperties = $linkedObject->Properties->findAll();
-
-		if ($aProperties) {
-            foreach ($aProperties as $oProperty) {
-                foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-                    if ($oProperty->type == 2) {
-                        $aValues[] = [
-                            'tag_name' => $oProperty->tag_name,
-                            'dir_id' => $oProperty->property_dir_id,
-                            'dir_name' => $oProperty->Property_Dir->name,
-                            'type' => $oProperty->type,
-                            'sorting' => $oProperty->sorting,
-                            'file' => $oValue->file ? $oShop_Item->getItemHref() . $oValue->file : null,
-                            'file_small' => $oValue->file_small ? $oShop_Item->getItemHref() . $oValue->file_small : null,
-                        ];
-                    } else {
-                        $aValues[] = [
-                            'tag_name' => $oProperty->tag_name,
-                            'dir_id' => $oProperty->property_dir_id,
-                            'dir_name' => $oProperty->Property_Dir->name,
-                            'type' => $oProperty->type,
-                            'sorting' => $oProperty->sorting,
-                            'value'   => $oValue->value,
-                        ];
-                    }
-                }
-            }
-		}
-
-        // foreach ($aValues as $dirname => $aTagnames) {
-        //     foreach ($aTagnames as $tagname => $aValue) {
-        //         if (count($aValue) == 1) {
-        //             $aValues[$dirname][$tagname] = $aValue[0];
-        //         }
-        //     }
-        // }
-
-        return $aValues ?? [];
-    }
-
-    // Shop Item Property Values by Tag Name
-    public static function getShopItemPropertyValuesByTagName($oShop_Item, $tagname): array
-    {
-		$linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
-		$oProperties = $linkedObject->Properties;
-		$oProperties->queryBuilder()
-			->where('tag_name', '=', $tagname);
-		$aProperties = $oProperties->findAll();
-
-		if ($aProperties) {
-            foreach ($aProperties as $oProperty) {
-                foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-                    if (get_class($oValue) == 'Property_Value_File_Model') {
-                        $aValues[] = [
-                            'file' => $oShop_Item->getItemHref() . $oValue->file,
-                            'file_small' => $oShop_Item->getItemHref() . $oValue->file_small,
-                        ];
-                    } else {
-                        $aValues[] = $oValue->value;
-                    }
-                }
-            }
-		}
-
-        return $aValues ?? [];
-    }
-
-    // Shop Item Property Value by Tag Name
-    public static function getShopItemPropertyValueByTagName($oShop_Item, $tagname)
-    {
-        return self::getShopItemPropertyValuesByTagName($oShop_Item, $tagname)[0] ?? null;
-    }
-
-    // Item Property Value
+    // Получить значение свойства по ID
     public static function getItemPropertyValue($oItem, $propertyId)
     {
         $aProperties = $oItem->getPropertyValues(false, array($propertyId));
@@ -92,7 +14,7 @@ class KovSpace_Function
         }
     }
 
-    // Change GET params
+    // Поменять GET-параметр
     public static function urlParam($param, $value)
     {
         $url_parts = parse_url($_SERVER['REQUEST_URI']);
@@ -108,7 +30,7 @@ class KovSpace_Function
         }
     }
 
-    // Redirect
+    // Редирект
     public static function redirect($url)
     {
         header('Location:' . $url);
@@ -122,7 +44,7 @@ class KovSpace_Function
         self::redirect($url);
     }
 
-    // Remove old sessions
+    // Удаление устаревших сессий из базы
     public static function removeOldSessions()
     {
         // Empty sessions
@@ -137,7 +59,7 @@ class KovSpace_Function
             ->execute();
     }
 
-    // Get Active and Sorted Items
+    // Получить отсортированные элементы
     public static function getSortedItems($object, $sortField = 'sorting', $sortDirection = 'asc'): array
     {
         $object->queryBuilder()
@@ -145,15 +67,5 @@ class KovSpace_Function
             ->orderBy($sortField, $sortDirection);
 
         return $object->findAll();
-    }
-
-    public static function getShopGroups($oShop): array
-    {
-        $oShop_Groups = $oShop->Shop_Groups;
-        $oShop_Groups->queryBuilder()
-            ->where('active', '=', 1)
-            ->where('parent_id', '=', 0)
-            ->orderBy('sorting', 'asc');
-        return $oShop_Groups->findAll();
     }
 }
