@@ -40,12 +40,25 @@ class KovSpace_ShopItem
         return $aValues ?? [];
     }
 
-    // Получем значение свойства из коллекции по тегу
-    public static function propertyCollectionByTag($aProperties, $tagname)
+    // Получем массив свойств из коллекции по тегу
+    public static function collectionValuesByTag($aProperties, $tagname)
     {
         foreach ($aProperties as $aProperty) {
-
+            if ($aProperty['tag_name'] == $tagname) {
+                if ($aProperty['type'] == 2) {
+                    $aValues[] = $aProperty['file'];
+                } else {
+                    $aValues[] = $aProperty['value'];
+                }
+            }
         }
+        return $aValues ?? [];
+    }
+
+    // Получаем значение свойства из коллекции по тегу
+    public static function collectionValueByTag($aProperties, $tagname)
+    {
+        return self::collectionValuesByTag($aProperties, $tagname)[0] ?? null;
     }
 
     // Получить массив свойств по тегу
