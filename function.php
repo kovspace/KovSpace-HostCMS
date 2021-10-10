@@ -14,25 +14,37 @@ class KovSpace_Function
 		if ($aProperties) {
             foreach ($aProperties as $oProperty) {
                 foreach ($oProperty->getValues($oShop_Item->id) as $oValue) {
-                    if (get_class($oValue) == 'Property_Value_File_Model') {
-                        $aValues[$oProperty->Property_Dir->name][$oProperty->tag_name][] = [
-                            'file' => $oShop_Item->getItemHref() . $oValue->file,
-                            'file_small' => $oShop_Item->getItemHref() . $oValue->file_small,
+                    if ($oProperty->type == 2) {
+                        $aValues[] = [
+                            'tag_name' => $oProperty->tag_name,
+                            'dir_id' => $oProperty->property_dir_id,
+                            'dir_name' => $oProperty->Property_Dir->name,
+                            'type' => $oProperty->type,
+                            'sorting' => $oProperty->sorting,
+                            'file' => $oValue->file ? $oShop_Item->getItemHref() . $oValue->file : null,
+                            'file_small' => $oValue->file_small ? $oShop_Item->getItemHref() . $oValue->file_small : null,
                         ];
                     } else {
-                        $aValues[$oProperty->Property_Dir->name][$oProperty->tag_name][] = $oValue->value;
+                        $aValues[] = [
+                            'tag_name' => $oProperty->tag_name,
+                            'dir_id' => $oProperty->property_dir_id,
+                            'dir_name' => $oProperty->Property_Dir->name,
+                            'type' => $oProperty->type,
+                            'sorting' => $oProperty->sorting,
+                            'value'   => $oValue->value,
+                        ];
                     }
                 }
             }
 		}
 
-        foreach ($aValues as $dirname => $aTagnames) {
-            foreach ($aTagnames as $tagname => $aValue) {
-                if (count($aValue) == 1) {
-                    $aValues[$dirname][$tagname] = $aValue[0];
-                }
-            }
-        }
+        // foreach ($aValues as $dirname => $aTagnames) {
+        //     foreach ($aTagnames as $tagname => $aValue) {
+        //         if (count($aValue) == 1) {
+        //             $aValues[$dirname][$tagname] = $aValue[0];
+        //         }
+        //     }
+        // }
 
         return $aValues ?? [];
     }
