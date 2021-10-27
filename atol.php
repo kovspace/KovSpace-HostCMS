@@ -100,8 +100,8 @@ class KovSpace_Atol
             $aItem['payment_method'] = 'full_payment';
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
 
-            $rate = $oShop_Order_Item->rate == 0 ? 20 : $oShop_Order_Item->rate;
-            $vatType = 'vat' . $rate;
+            $rate = $oShop_Order_Item->rate;
+            $vatType = $rate ? 'vat' . $rate : 'none';
 
             if (!isset($aVats[$rate])) {
                 $aVats[$rate]['type'] = $vatType;
