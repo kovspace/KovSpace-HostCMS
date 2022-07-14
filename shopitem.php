@@ -124,4 +124,41 @@ class KovSpace_ShopItem
     {
         return self::propertiesByTag($oShop_Item, $tagname)[0] ?? null;
     }
+
+    // Записать значение свойства
+    public static function setPropertyValue($oShop_Item, $oProperty, $value): void
+    {
+        $Property_Controller_Value = Property_Controller_Value::factory($oProperty->type);
+        $modelName = $Property_Controller_Value->getModelName();
+
+        $oProperty_Values = Core_Entity::factory($modelName);
+        $oProperty_Values->queryBuilder()
+            ->where('property_id', '=', $oProperty->id)
+            ->where('entity_id', '=', $oShop_Item->id);
+
+        $aProperty_Values = $oProperty_Values->findAll();
+        $oProperty_Value = $aProperty_Values[0] ?? null;
+
+        if ($oProperty_Value && !$value) {
+            $oProperty_Value->delete();
+            return;
+        }
+
+        if (!$oProperty_Value) {
+            $oProperty_Value = Core_Entity::factory($modelName);
+            $oProperty_Value->property_id = $oProperty->id;
+            $oProperty_Value->entity_id = $oShop_Item->id;
+        }
+
+        $oProperty_Value->value = $value;
+        $oProperty_Value->save();
+    }
+
+    // Записать значение свойства по тегу
+    public static function setPropertyValueByTag($oShop_Item, $tagname, $value): void
+    {
+        if ($oProperty = self::getPropertyByTag($oShop_Item, $tagname)) {
+            self:self::setPropertyValue($oShop_Item, $oProperty, $value);
+        }
+    }
 }
