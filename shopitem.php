@@ -81,13 +81,19 @@ class KovSpace_ShopItem
     }
 
     // Получить массив свойств по тегу
+    public static function getPropertiesByTag($oShop_Item, $tagname): array
+    {
+        $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
+        $oProperties = $linkedObject->Properties;
+        $oProperties->queryBuilder()
+            ->where('tag_name', '=', $tagname);
+        return $oProperties->findAll();
+    }
+
+    // Получить массив значений свойств по тегу
     public static function propertiesByTag($oShop_Item, $tagname): array
     {
-		$linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
-		$oProperties = $linkedObject->Properties;
-		$oProperties->queryBuilder()
-			->where('tag_name', '=', $tagname);
-		$aProperties = $oProperties->findAll();
+		$aProperties = self::getPropertiesByTag($oShop_Item, $tagname);
 
 		if ($aProperties) {
             foreach ($aProperties as $oProperty) {
@@ -105,6 +111,12 @@ class KovSpace_ShopItem
 		}
 
         return $aValues ?? [];
+    }
+
+    // Получить объект свойства по тегу
+    public static function getPropertyByTag($oShop_Item, $tagname)
+    {
+        return self::getPropertiesByTag($oShop_Item, $tagname)[0] ?? null;
     }
 
     // Получить значение свойства по тегу
