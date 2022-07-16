@@ -1,6 +1,8 @@
 <?php
 require_once('bootstrap.php');
-if (!Core_Auth::logged()) exit('Access Denied!');
+if (!Core_Auth::logged()) {
+    exit('Access Denied!');
+}
 
 $dir = CMS_FOLDER . 'upload/';
 $filemapJson = CMS_FOLDER . 'hostcmsfiles/cache/kic_filemap.json';
@@ -24,7 +26,9 @@ if (Core_Array::getGet('dirname')) {
 
 function isDirEmpty($dirname)
 {
-    if (!is_readable($dirname)) return NULL;
+    if (!is_readable($dirname)) {
+        return null;
+    }
     return (count(scandir($dirname)) == 2);
 }
 
@@ -39,7 +43,7 @@ function checkDatabase($pathName)
     }
 
     $fileName = basename($pathName);
-    $isFound = FALSE;
+    $isFound = false;
 
     if (strstr($pathName, 'watermark')) {
         if (!$isFound && $module == 'shop') {
@@ -49,7 +53,9 @@ function checkDatabase($pathName)
                 ->where('watermark_file', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
         if (!$isFound && $module == 'information_system') {
             // Check in table 'informationsystems'
@@ -58,7 +64,9 @@ function checkDatabase($pathName)
                 ->where('watermark_file', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -74,7 +82,9 @@ function checkDatabase($pathName)
                 ->close()
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -86,7 +96,9 @@ function checkDatabase($pathName)
                 ->where('filename', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -102,7 +114,9 @@ function checkDatabase($pathName)
                 ->close()
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -114,7 +128,9 @@ function checkDatabase($pathName)
                 ->where('image_small', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     } elseif (strstr($pathName, 'item_image')) {
         if (!$isFound && $module == 'shop') {
@@ -124,7 +140,9 @@ function checkDatabase($pathName)
                 ->where('image_large', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -136,7 +154,9 @@ function checkDatabase($pathName)
                 ->where('image_small', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     } elseif (strstr($pathName, 'group_')) {
         if (!$isFound && $module == 'shop') {
@@ -146,7 +166,9 @@ function checkDatabase($pathName)
                 ->where('image_large', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -158,7 +180,9 @@ function checkDatabase($pathName)
                 ->where('image_small', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     } elseif (strstr($pathName, 'item_') || strstr($pathName, 'information_items_')) {
         if (!$isFound && $module == 'information_system') {
@@ -168,7 +192,9 @@ function checkDatabase($pathName)
                 ->where('image_large', '=', $fileName)
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -184,7 +210,9 @@ function checkDatabase($pathName)
                 ->close()
                 ->limit(1);
             $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-            if ($row) $isFound = TRUE;
+            if ($row) {
+                $isFound = true;
+            }
         }
     }
 
@@ -199,7 +227,9 @@ function checkDatabase($pathName)
             ->close()
             ->limit(1);
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+        if ($row) {
+            $isFound = true;
+        }
     }
 
     if (!$isFound && $module == 'shop') {
@@ -213,7 +243,9 @@ function checkDatabase($pathName)
             ->close()
             ->limit(1);
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+        if ($row) {
+            $isFound = true;
+        }
     }
 
     if (!$isFound && $module == 'shop') {
@@ -227,7 +259,9 @@ function checkDatabase($pathName)
             ->close()
             ->limit(1);
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+        if ($row) {
+            $isFound = true;
+        }
     }
 
     if (!$isFound && $module == 'information_system') {
@@ -241,7 +275,9 @@ function checkDatabase($pathName)
             ->close()
             ->limit(1);
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+        if ($row) {
+            $isFound = true;
+        }
     }
 
     if (!$isFound && $module == 'information_system') {
@@ -255,10 +291,14 @@ function checkDatabase($pathName)
             ->close()
             ->limit(1);
         $row = $oCore_QueryBuilder_Select->execute()->asAssoc()->current();
-        if ($row) $isFound = TRUE;
+        if ($row) {
+            $isFound = true;
+        }
     }
 
-    if (!$isFound) return TRUE;
+    if (!$isFound) {
+        return true;
+    }
 }
 
 // Создаем карту файлов
@@ -266,7 +306,7 @@ function filemap($dirname, &$aFilemap)
 {
     if (is_dir($dirname) && !is_link($dirname)) {
         if ($dh = @opendir($dirname)) {
-            while (($file = readdir($dh)) !== FALSE) {
+            while (($file = readdir($dh)) !== false) {
                 if ($file != '.' && $file != '..') {
                     clearstatcache();
                     $pathName = $dirname . DIRECTORY_SEPARATOR . $file;
@@ -290,12 +330,11 @@ function filemap($dirname, &$aFilemap)
 // Проверяем файлы
 function checkFiles($aFiles, $offset = 0)
 {
-
     static $start;
     static $response = [];
 
     // Стартовая позиция
-    $start = $start === NULL
+    $start = $start === null
         ? $offset
         : 0;
 

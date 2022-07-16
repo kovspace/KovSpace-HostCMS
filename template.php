@@ -169,8 +169,8 @@ class KovSpace_Template
         if (!isset($_COOKIE['hostcms_source_type']) && !Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from') && !Core_Array::getGet('gclid')) {
             $referer = isset($_SERVER["HTTP_REFERER"])
                 ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)
-                : NULL;
-            if ($referer != NULL && $referer != $_SERVER['SERVER_NAME']) {
+                : null;
+            if ($referer != null && $referer != $_SERVER['SERVER_NAME']) {
                 $oSource_Controller = new Source_Controller();
                 $oSource_Controller
                     ->type(2)
@@ -216,7 +216,6 @@ class KovSpace_Template
 
     public function openGraph()
     {
-
         if (is_file($this->root . $this->path . 'img/open_graph.png')) {
             $openGraphImg = 'img/open_graph.png';
         } elseif (is_file($this->root . $this->path . 'img/open_graph.jpg')) {
@@ -233,7 +232,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showViewport($width = NULL)
+    public function showViewport($width = null)
     {
         if ($width) {
             echo '<meta name="viewport" content="width=' . $width . '">' . "\n\t";
@@ -244,7 +243,8 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showCanonical() {
+    public function showCanonical()
+    {
         if ($this->isShopItem()) {
             echo '<link rel="canonical" href="' . Core::$url['path'] . '">' . "\n\t";
         }
@@ -354,9 +354,8 @@ class KovSpace_Template
         }
     }
 
-    public function showJS($file, $id = NULL)
+    public function showJS($file, $id = null)
     {
-
         if ($id) {
             echo '<script id="' . $id . '">';
         } else {
@@ -370,7 +369,8 @@ class KovSpace_Template
             $sPath = $oCompression_Controller->getPath();
 
             $js_source_time = filemtime($this->root . $file);
-            $js_compress_time = filemtime($this->root . $sPath);;
+            $js_compress_time = filemtime($this->root . $sPath);
+            ;
 
             if ($js_compress_time < $js_source_time) {
                 Core_File::delete($this->root . $sPath);
@@ -392,7 +392,7 @@ class KovSpace_Template
         echo '</script>';
     }
 
-    public function showTemplateJS($file, $id = NULL)
+    public function showTemplateJS($file, $id = null)
     {
         $file = $this->path . 'js/' . $file;
         $this->showJS($file);
@@ -452,10 +452,10 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showGad($hourStart = NULL, $hourStop = NULL)
+    public function showGad($hourStart = null, $hourStop = null)
     {
         $hourNow = date('H');
-        if ($hourStart !== NULL && $hourStop !== NULL) {
+        if ($hourStart !== null && $hourStop !== null) {
             // from Midnight
             if ($hourStart === 0 && $hourNow >= $hourStop) {
                 return $this;
@@ -531,7 +531,7 @@ class KovSpace_Template
 
 class Image_Upload_Timestamp_Observer
 {
-    static public function onBeforeGetXml($object, $args)
+    public static function onBeforeGetXml($object, $args)
     {
         if ($object->image_small && !stristr($object->image_small, '?')) {
             $image_small_timestamp = @filemtime($object->getSmallFilePath());

@@ -1,4 +1,5 @@
 <?php
+
 class KovSpace_Dater
 {
     public static function plural($n, $form1, $form2, $form3)

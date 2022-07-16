@@ -24,7 +24,9 @@ class KovSpace_Pagination
 
     public static function show($total, $page)
     {
-        if ($total <= 1) return;
+        if ($total <= 1) {
+            return;
+        }
 
         echo '<nav class="overflow-auto">';
         echo '<ul class="pagination justify-content-lg-center" style="min-width:300px">';
@@ -46,7 +48,6 @@ class KovSpace_Pagination
 
         // 10 pages and more
         if ($total >= 10) {
-
             $x = 5; // visible pages in a row
             $y = 2; // offset one side
 

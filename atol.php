@@ -60,7 +60,7 @@ class KovSpace_Atol
         $this->post($url, $fields);
     }
 
-    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $roundPrice = false, $expandModificationName = false, $externalId = NULL)
+    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $roundPrice = false, $expandModificationName = false, $externalId = null)
     {
         $total = 0;
         $aItems = [];
@@ -76,7 +76,6 @@ class KovSpace_Atol
         $oShop_Orders_Items = $oShop_Order->Shop_Order_Items;
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
         foreach ($aShop_Orders_Items as $oShop_Order_Item) {
-
             $aItem = [];
 
             $price = $roundPrice

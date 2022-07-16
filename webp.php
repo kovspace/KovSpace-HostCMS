@@ -5,13 +5,20 @@
 
 require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
 
-function convert($object, $dir, $property) {
-    if (!$dir) return;
+function convert($object, $dir, $property)
+{
+    if (!$dir) {
+        return;
+    }
     $image = $object->$property;
-    if (!$image) return;
+    if (!$image) {
+        return;
+    }
 
     $path = $dir . $image;
-    if (!file_exists($path)) return;
+    if (!file_exists($path)) {
+        return;
+    }
 
     $dotpos = strrpos($image, '.');
     $name = substr($image, 0, $dotpos);
@@ -42,7 +49,8 @@ function convert($object, $dir, $property) {
     }
 }
 
-function convertProperties($entity_id, $dir) {
+function convertProperties($entity_id, $dir)
+{
     $oProperty_Value_Files = Core_Entity::factory('Property_Value_File');
     $oProperty_Value_Files->queryBuilder()
         ->where('entity_id', '=', $entity_id)
@@ -57,7 +65,8 @@ function convertProperties($entity_id, $dir) {
     }
 }
 
-function start($model, $method) {
+function start($model, $method)
+{
     $oObjects = Core_Entity::factory($model);
     $aObjects = $oObjects->findAll();
     foreach ($aObjects as $oObject) {

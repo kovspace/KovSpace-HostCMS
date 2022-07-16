@@ -18,13 +18,16 @@ class KovSpace_MarkingDecoder
 
     public function __construct($source)
     {
-
-        if (strlen($source) < 31) $this->error = 'Код маркировки короче 31 символа';
+        if (strlen($source) < 31) {
+            $this->error = 'Код маркировки короче 31 символа';
+        }
 
         $this->gtinPrefix = substr($source, 0, 2);
         $this->gtin = substr($source, 2, 14);
 
-        if (!is_numeric($this->gtin)) $this->error = 'GTIN не является числом';
+        if (!is_numeric($this->gtin)) {
+            $this->error = 'GTIN не является числом';
+        }
 
         $this->serialPrefix = substr($source, 16, 2);
         $this->serial = substr($source, 18, 13);
@@ -44,11 +47,11 @@ class KovSpace_MarkingDecoder
         $this->imlApi = str_replace('"', '\"', $this->iml);
     }
 
-    public function hexFormat($hex) {
+    public function hexFormat($hex)
+    {
         $hex = chunk_split($hex, 2, ' ');
         $hex = strtoupper($hex);
         $hex = trim($hex);
         return $hex;
     }
-
 }

@@ -31,7 +31,7 @@ class KovSpace_Form2
                 $this->error = 'Обнаружен спам';
             }
 
-            if (!$this->error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'),0,2) != '+7') {
+            if (!$this->error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'), 0, 2) != '+7') {
                 $this->error = 'Неверный телефон';
             }
 
@@ -40,7 +40,6 @@ class KovSpace_Form2
             }
 
             if (!$this->error) {
-
                 $oForm_Fill = Core_Entity::factory('Form_Fill');
                 $oForm_Fill->form_id = $this->oForm->id;
                 $oForm_Fill->ip = Core_Array::get($_SERVER, 'REMOTE_ADDR');
@@ -49,8 +48,7 @@ class KovSpace_Form2
 
                 $message = '';
 
-                foreach ($this->aForm_Fields as $oForm_Field)
-                {
+                foreach ($this->aForm_Fields as $oForm_Field) {
                     if ($value = Core_Array::getPost($oForm_Field->name)) {
                         $oForm_Fill_Field = Core_Entity::factory('Form_Fill_Field');
                         $oForm_Fill_Field->form_fill_id = $oForm_Fill->id;
@@ -90,7 +88,9 @@ class KovSpace_Form2
                         <label for="<?= $oForm_Field->name ?>" class="form-label">
                             <?= $oForm_Field->caption ?><?php if ($oForm_Field->obligatory): ?><sup>*</sup><?php endif ?>
                         </label>
-                        <input id="<?= $oForm_Field->name ?>" type="text" name="<?= $oForm_Field->name ?>" class="form-control" <?php if ($oForm_Field->obligatory) echo 'required' ?> value="<?= Core_Array::getPost($oForm_Field->name) ?>">
+                        <input id="<?= $oForm_Field->name ?>" type="text" name="<?= $oForm_Field->name ?>" class="form-control" <?php if ($oForm_Field->obligatory) {
+                            echo 'required';
+                        } ?> value="<?= Core_Array::getPost($oForm_Field->name) ?>">
                         <div class="small text-muted"><?= $oForm_Field->description ?></div>
                     </div>
                 <?php endforeach ?>
@@ -105,4 +105,4 @@ class KovSpace_Form2
      <?php endif ?>
 
     <?php }
-}
+    }

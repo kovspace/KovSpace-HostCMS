@@ -14,9 +14,8 @@ class KovSpace_Form
     public $error;
     public $success;
 
-    public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = NULL)
+    public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = null)
     {
-
         $ip = Core_Array::get($_SERVER, 'REMOTE_ADDR');
 
         $config = Core::$config->get('core_mail');
@@ -29,12 +28,11 @@ class KovSpace_Form
             $email_from = $email_to;
         }
 
-        if ($subject === NULL) {
+        if ($subject === null) {
             $subject = Core_Entity::factory('Informationsystem', $informationsystem_id)->name;
         }
 
         if ($subject && Core_Array::getPost('form')) {
-
             $error = '';
 
             if (!$error && !Core_Array::getPost('name')) {

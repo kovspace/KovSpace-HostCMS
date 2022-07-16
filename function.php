@@ -68,4 +68,10 @@ class KovSpace_Function
 
         return $object->findAll();
     }
+
+    // Форматирование чисел
+    public static function format($num): string
+    {
+        return number_format($num, 0, '', ' ');
+    }
 }
