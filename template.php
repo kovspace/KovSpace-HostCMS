@@ -345,6 +345,7 @@ class KovSpace_Template
                 return Core_File::read($this->root . $sPath);
             } else {
                 $css = Core_File::read($this->root . $file);
+                $css = trim($css);
                 $css = preg_replace('#/\*[^*]*\*+([^/][^*]*\*+)*/#', '', $css);
                 $css = str_replace([': '], ':', $css);
                 $css = str_replace(['    '], '', $css);
