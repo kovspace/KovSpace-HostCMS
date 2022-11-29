@@ -284,7 +284,7 @@ class KovSpace_Template
         foreach ($this->_aSection as $section) {
             echo $this->_CSS($this->path . 'css/' . $section . '.css');
         }
-        echo "\t";
+        echo "\n\t";
         echo '</style>' . "\n";
 
         // CSS: Shop
