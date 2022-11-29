@@ -349,6 +349,7 @@ class KovSpace_Template
                 $css = str_replace([': '], ':', $css);
                 $css = str_replace(['    '], '', $css);
                 $css = str_replace(["\r\n", "\r", "\n", "\t"], '', $css);
+                $css = str_replace([';}'], '}', $css);
                 return $css;
             }
         }
