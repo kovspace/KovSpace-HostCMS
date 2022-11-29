@@ -11,19 +11,19 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Template
 {
-    public $title;
-    public $description;
-    public $keywords;
-    public $root;
-    public $path;
-    public $section;
-    public $object;
-    public $objectGroupId;
-    public $objectItemId;
-    public $kovspace;
-    public $hostcms;
+    public string $title;
+    public string $description;
+    public string $keywords;
+    public string $root;
+    public string $path;
+    public string $section;
+    public ?object $object;
+    public int $objectGroupId;
+    public int $objectItemId;
+    public string $kovspace;
+    public string $hostcms;
 
-    protected $_aSection;
+    protected array $_aSection;
 
     public function __construct()
     {
@@ -49,7 +49,7 @@ class KovSpace_Template
         }
 
         // Short Link to Shop Item
-        if (strstr(Core::$url['path'], "/shop/item_id/")) {
+        if (str_contains(Core::$url['path'], "/shop/item_id/")) {
             if (basename(Core::$url['path']) > 0) {
                 $shopItemId = basename(Core::$url['path']);
                 $oShopItem = Core_Entity::factory('Shop_Item', $shopItemId);
@@ -113,7 +113,7 @@ class KovSpace_Template
 
         // Copyrights
         $this->kovspace = '<a rel="noopener" target="_blank" href="https://kovspace.com/">KovSpace</a>';
-        $this->hostcms = '<a rel="noopener" target="_blank" href="http://www.hostcms.ru/">HostCMS</a>';
+        $this->hostcms = '<a rel="noopener" target="_blank" href="https://www.hostcms.ru/">HostCMS</a>';
 
         // Modifications: Redirect Link
         if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && $this->objectItemId) {
@@ -145,26 +145,26 @@ class KovSpace_Template
         return $this;
     }
 
-    public function informationsystemCDN()
+    public function informationsystemCDN(): static
     {
         Core_Page::instance()->informationsystemCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function shopCDN()
+    public function shopCDN(): static
     {
         Core_Page::instance()->shopCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
-    public function structureCDN()
+    public function structureCDN(): static
     {
         Core_Page::instance()->structureCDN = 'https://i0.wp.com/' . Core::$url['host'];
         return $this;
     }
 
     // Saving Last Source
-    public function detectReferer()
+    public function detectReferer(): static
     {
         if (!isset($_COOKIE['hostcms_source_type']) && !Core_Array::getGet('_openstat') && !Core_Array::getGet('utm_source') && !Core_Array::getGet('from') && !Core_Array::getGet('gclid')) {
             $referer = isset($_SERVER["HTTP_REFERER"])
@@ -181,26 +181,26 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showDoctype()
+    public function showDoctype(): static
     {
         echo '<!doctype html>' . "\n";
         echo '<html lang="ru">' . "\n";
         return $this;
     }
 
-    public function showHeadOpen()
+    public function showHeadOpen(): static
     {
         echo '<head>' . "\n\t";
         return $this;
     }
 
-    public function showHeadClose()
+    public function showHeadClose(): static
     {
         echo '</head>' . "\n";
         return $this;
     }
 
-    public function showMeta()
+    public function showMeta(): static
     {
         echo '<title>' . $this->title . '</title>' . "\n\t";
         echo '<meta charset="utf-8">' . "\n\t";
@@ -214,7 +214,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function openGraph()
+    public function openGraph(): static
     {
         if (is_file($this->root . $this->path . 'img/open_graph.png')) {
             $openGraphImg = 'img/open_graph.png';
@@ -232,7 +232,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showViewport($width = null)
+    public function showViewport($width = null): static
     {
         if ($width) {
             echo '<meta name="viewport" content="width=' . $width . '">' . "\n\t";
@@ -243,7 +243,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showCanonical()
+    public function showCanonical(): static
     {
         if ($this->isShopItem()) {
             echo '<link rel="canonical" href="' . Core::$url['path'] . '">' . "\n\t";
@@ -251,7 +251,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showFavicon()
+    public function showFavicon(): static
     {
         if (is_file(CMS_FOLDER . $this->path . 'img/favicon.png')) {
             echo '<link rel="icon" type="image/png" href="' . $this->path . 'img/favicon.png">' . "\n\t";
@@ -260,7 +260,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showOg()
+    public function showOg(): static
     {
         if (is_file(CMS_FOLDER . $this->path . 'img/ogimage.jpg')) {
             echo '<meta property="og:title" content="'. Core_Page::instance()->title . '"/>' . "\n\t";
@@ -270,13 +270,13 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showVendorCSS($url)
+    public function showVendorCSS($url): static
     {
         echo '<link rel="stylesheet" href="' . $url . '">' . "\n\t";
         return $this;
     }
 
-    public function showSectionCSS()
+    public function showSectionCSS(): static
     {
         echo "\n\t";
         echo '<style>' . "\n\t";
@@ -302,29 +302,30 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showCSS($file)
+    public function showCSS($file): static
     {
         if (is_file($this->root . $file)) {
             echo "\n\t" . '<style>' . "\n\t";
-            echo $this->_CSS($file) . "\t";
+            echo $this->_CSS($file) . "\n\t";
             echo '</style>' . "\n";
         }
         return $this;
     }
 
-    public function showTemplateCSS($file)
+    public function showTemplateCSS($file): static
     {
         $filepath = $this->path . 'css/' . $file;
         if (is_file($this->root . $filepath)) {
             echo "\n\t" . '<style>' . "\n\t";
-            echo $this->_CSS($filepath) . "\t";
+            echo $this->_CSS($filepath) . "\n\t";
             echo '</style>' . "\n";
         }
         return $this;
     }
 
-    protected function _CSS($file)
+    protected function _CSS($file): string
     {
+        $css = '';
         if (is_file($this->root . $file)) {
             if (Core::moduleIsActive('compression')) {
                 $oCompression_Controller = Compression_Controller::instance('css');
@@ -342,7 +343,7 @@ class KovSpace_Template
                     $sPath = $oCompression_Controller->getPath();
                 }
 
-                return Core_File::read($this->root . $sPath);
+                $css = trim(Core_File::read($this->root . $sPath));
             } else {
                 $css = Core_File::read($this->root . $file);
                 $css = trim($css);
@@ -351,12 +352,13 @@ class KovSpace_Template
                 $css = str_replace(['    '], '', $css);
                 $css = str_replace(["\r\n", "\r", "\n", "\t"], '', $css);
                 $css = str_replace([';}'], '}', $css);
-                return $css;
+                $css = str_replace([' {'], '{', $css);
             }
         }
+        return $css;
     }
 
-    public function showJS($file, $id = null)
+    public function showJS($file, $id = null): void
     {
         if ($id) {
             echo '<script id="' . $id . '">';
@@ -394,30 +396,30 @@ class KovSpace_Template
         echo '</script>';
     }
 
-    public function showTemplateJS($file, $id = null)
+    public function showTemplateJS($file, $id = null): void
     {
         $file = $this->path . 'js/' . $file;
         $this->showJS($file);
     }
 
-    public function showKovSpace()
+    public function showKovSpace(): void
     {
         echo 'Создание сайта ' . $this->kovspace;
     }
-    public function showHostCMS()
+    public function showHostCMS(): void
     {
         echo 'Работает на ' . $this->hostcms;
     }
-    public function showPrivacy()
+    public function showPrivacy(): void
     {
         echo '<a href="/privacy/">Политика конфиденциальности</a>';
     }
-    public function showOffer()
+    public function showOffer(): void
     {
         echo '<a href="/offer/">Договор оферты</a>';
     }
 
-    public function gTag($id)
+    public function gTag($id): static
     {
         echo '
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -431,7 +433,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function googleTagManager($id)
+    public function googleTagManager($id): static
     {
         echo '
     <!-- Google Tag Manager -->
@@ -444,7 +446,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function googleTagManagerNoScript($id)
+    public function googleTagManagerNoScript($id): static
     {
         echo '
     <!-- Google Tag Manager (noscript) -->
@@ -454,7 +456,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showGad($hourStart = null, $hourStop = null)
+    public function showGad($hourStart = null, $hourStop = null): static
     {
         $hourNow = date('H');
         if ($hourStart !== null && $hourStop !== null) {
@@ -486,7 +488,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function emailFrom()
+    public function emailFrom(): string
     {
         $config = Core::$config->get('core_mail');
         if (isset($config['smtp'][CURRENT_SITE]['username'])) {
@@ -499,32 +501,24 @@ class KovSpace_Template
         return $emailFrom;
     }
 
-    public function isShopCart()
+    public function isShopCart(): bool
     {
-        if (is_object($this->object) && get_class($this->object) == 'Shop_Cart_Controller_Show') {
-            return true;
-        }
+        return is_object($this->object) && get_class($this->object) == 'Shop_Cart_Controller_Show';
     }
 
-    public function isShop()
+    public function isShop(): bool
     {
-        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show') {
-            return true;
-        }
+        return is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show';
     }
 
-    public function isShopGroup()
+    public function isShopGroup(): bool
     {
-        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && !$this->objectItemId) {
-            return true;
-        }
+        return is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && !$this->objectItemId;
     }
 
-    public function isShopItem()
+    public function isShopItem(): bool
     {
-        if (is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && $this->objectItemId) {
-            return true;
-        }
+        return is_object($this->object) && get_class($this->object) == 'Shop_Controller_Show' && $this->objectItemId;
     }
 }
 
@@ -533,7 +527,7 @@ class KovSpace_Template
 
 class Image_Upload_Timestamp_Observer
 {
-    public static function onBeforeGetXml($object, $args)
+    public static function onBeforeGetXml($object): void
     {
         if ($object->image_small && !stristr($object->image_small, '?')) {
             $image_small_timestamp = @filemtime($object->getSmallFilePath());
