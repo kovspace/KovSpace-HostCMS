@@ -3,9 +3,9 @@
 /* PNG to WEBP */
 /* Shops and Information Systems */
 
-require_once(dirname(__FILE__) . '/../../' . 'bootstrap.php');
+require_once(dirname(__FILE__, 3) . '/bootstrap.php');
 
-function convert($object, $dir, $property)
+function convert(object $object, string $dir, string $property): void
 {
     if (!$dir) {
         return;
@@ -49,7 +49,7 @@ function convert($object, $dir, $property)
     }
 }
 
-function convertProperties($entity_id, $dir)
+function convertProperties(int $entity_id, string $dir): void
 {
     $oProperty_Value_Files = Core_Entity::factory('Property_Value_File');
     $oProperty_Value_Files->queryBuilder()
@@ -65,7 +65,7 @@ function convertProperties($entity_id, $dir)
     }
 }
 
-function start($model, $method)
+function start(string $model, string $method): void
 {
     $oObjects = Core_Entity::factory($model);
     $aObjects = $oObjects->findAll();
@@ -77,7 +77,12 @@ function start($model, $method)
     }
 }
 
-start('Shop_Item', 'getItemPath');
-start('Shop_Group', 'getGroupPath');
-start('Informationsystem_Item', 'getItemPath');
-start('Informationsystem_Group', 'getGroupPath');
+if (Core::moduleIsActive('shop')) {
+    start('Shop_Item', 'getItemPath');
+    start('Shop_Group', 'getGroupPath');
+}
+
+if (Core::moduleIsActive('informationsystem')) {
+    start('Informationsystem_Item', 'getItemPath');
+    start('Informationsystem_Group', 'getGroupPath');
+}
