@@ -22,11 +22,11 @@ function convert(object $object, string $dir, string $property): void
 
     $dotpos = strrpos($image, '.');
     $name = substr($image, 0, $dotpos);
-    $ext = substr($image, $dotpos);
+    $ext = substr($image, $dotpos + 1);
     $new_image = $name . '.webp';
     $new_path = $dir . $new_image;
 
-    if ($ext == '.png') {
+    if ($ext == 'png') {
         echo $path . PHP_EOL;
         $im = @imagecreatefrompng($path);
         if (!$im) {
