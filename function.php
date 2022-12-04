@@ -31,7 +31,7 @@ class KovSpace_Function
     }
 
     // Редирект
-    public static function redirect($url)
+    public static function redirect(string $url): void
     {
         header('Location:' . $url);
         die();
@@ -73,5 +73,29 @@ class KovSpace_Function
     public static function format($num): string
     {
         return number_format($num, 0, '', ' ');
+    }
+
+    // Получение пользовательского поля
+    public static function getFieldValue(int $fieldId, int $entityId): mixed
+    {
+        $oField = Core_Entity::factory('Field', $fieldId);
+        $aField_Values = $oField->getValues($entityId);
+        return $aField_Values
+            ? $aField_Values[0]->value
+            : null;
+    }
+
+    // Сохранение пользовательского поля
+    public static function setFieldValue(int $fieldId, int $entityId, mixed $value): void
+    {
+        $oField = Core_Entity::factory('Field', $fieldId);
+        $aField_Values = $oField->getValues($entityId);
+
+        $oField_Value = $aField_Values
+            ? $aField_Values[0]
+            : $oField->createNewValue($entityId);
+
+        $oField_Value->value = $value;
+        $oField_Value->save();
     }
 }
