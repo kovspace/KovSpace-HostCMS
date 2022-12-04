@@ -5,13 +5,14 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_Function
 {
     // Получить значение свойства по ID
-    public static function getItemPropertyValue($oItem, $propertyId)
+    public static function getItemPropertyValue($oItem, $propertyId): mixed
     {
         $aProperties = $oItem->getPropertyValues(false, array($propertyId));
         if ($aProperties) {
             $oProperty = $aProperties[0];
             return $oProperty->value;
         }
+        return null;
     }
 
     // Поменять GET-параметр
@@ -38,14 +39,14 @@ class KovSpace_Function
     }
 
     // Url Param Redirect
-    public static function urlParamRedirect($param, $value)
+    public static function urlParamRedirect($param, $value): void
     {
         $url = self::urlParam($param, $value);
         self::redirect($url);
     }
 
     // Удаление устаревших сессий из базы
-    public static function removeOldSessions()
+    public static function removeOldSessions(): void
     {
         // Empty sessions
         Core_QueryBuilder::delete('sessions')
