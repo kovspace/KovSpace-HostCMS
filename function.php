@@ -4,6 +4,13 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_Function
 {
+    // Получаем защищенное свойство
+    public static function getProtectedProperty($obj, $prop) {
+        $reflection = new ReflectionClass($obj);
+        $property = $reflection->getProperty($prop);
+        return $property->getValue($obj);
+    }
+
     // Получить значение свойства по ID
     public static function getItemPropertyValue($oItem, $propertyId): mixed
     {
