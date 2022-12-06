@@ -36,7 +36,7 @@ class KovSpace_Bootstrap
 
 class Core_Mail_Observer
 {
-    static public function onBeforeSend($object, $args)
+    static public function onBeforeSend($object)
     {
         if (isset($_SERVER['SERVER_NAME'])) {
             $object->from('noreply@'.$_SERVER['SERVER_NAME']);
