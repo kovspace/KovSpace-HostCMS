@@ -36,7 +36,7 @@ class KovSpace_Bootstrap
 
 class Core_Mail_Observer
 {
-    static public function onBeforeSend($object)
+    static public function onBeforeSend($object): void
     {
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
             $now = new DateTime('now');
