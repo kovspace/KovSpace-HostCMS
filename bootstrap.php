@@ -47,7 +47,7 @@ class Core_Mail_Observer
             $object->from('noreply@'.$_SERVER['SERVER_NAME']);
         }
 
-        if (str_starts_with($object->getSubject(), 'Error: YML /cart')) {
+        if (str_contains($object->getSubject(), 'Error: YML /cart')) {
             $clear($object, 'Маркет: Адрес не найден');
             return;
         }
