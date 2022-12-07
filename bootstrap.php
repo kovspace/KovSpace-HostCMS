@@ -52,7 +52,7 @@ class Core_Mail_Observer
             $nowF = $now->format('Y-m-d H:i:s');
             $to = KovSpace_Function::getProtectedProperty($object, '_to');
             $file = CMS_FOLDER . 'hostcmsfiles/logs/emails.json';
-            $emails = json_decode(file_get_contents($file), true) ?? [];
+            $emails = json_decode(@file_get_contents($file), true) ?? [];
 
             if (isset($emails[$nowF])) {
                 $clear($object, 'Дубль времени');
