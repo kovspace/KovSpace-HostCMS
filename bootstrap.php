@@ -36,15 +36,28 @@ class KovSpace_Bootstrap
 
 class Core_Mail_Observer
 {
-    static public function onBeforeSend($object): void
+    static public function onBeforeSend(Core_Mail $object): void
     {
+        $clear = function (Core_Mail $object, string $message) {
+            $object->from('')->to('')->recipientName('');
+            Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
+        };
+
+        if (isset($_SERVER['SERVER_NAME'])) {
+            $object->from('noreply@'.$_SERVER['SERVER_NAME']);
+        }
+
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
             $now = new DateTime('now');
             $nowF = $now->format('Y-m-d H:i:s');
             $to = KovSpace_Function::getProtectedProperty($object, '_to');
             $file = CMS_FOLDER . 'hostcmsfiles/logs/emails.json';
             $emails = json_decode(file_get_contents($file), true) ?? [];
-            isset($emails[$nowF]) && die('Дубль времени');
+
+            if (isset($emails[$nowF])) {
+                $clear($object, 'Дубль времени');
+                return;
+            }
 
             // Оставляем только события в пределах 5 минут
             foreach ($emails as $date => $email) {
@@ -54,14 +67,13 @@ class Core_Mail_Observer
                 }
             }
 
-            in_array($to, $emails) && die('Прошло слишком мало времени');
+            if (in_array($to, $emails)) {
+                $clear($object, 'Прошло слишком мало времени');
+                return;
+            }
 
             $emails = [$nowF => $to] + $emails;
             file_put_contents($file, json_encode($emails, JSON_PRETTY_PRINT));
-        }
-
-        if (isset($_SERVER['SERVER_NAME'])) {
-            $object->from('noreply@'.$_SERVER['SERVER_NAME']);
         }
     }
 }
