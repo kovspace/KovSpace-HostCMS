@@ -47,6 +47,11 @@ class Core_Mail_Observer
             $object->from('noreply@'.$_SERVER['SERVER_NAME']);
         }
 
+        if (str_starts_with($object->getSubject(), 'Error: YML /cart')) {
+            $clear($object, 'Маркет: Адрес не найден');
+            return;
+        }
+
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
             $now = new DateTime('now');
             $nowF = $now->format('Y-m-d H:i:s');
