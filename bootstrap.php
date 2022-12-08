@@ -54,7 +54,6 @@ class Core_Mail_Observer
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
             $now = new DateTime('now');
             $nowF = $now->format('Y-m-d H:i:s');
-            $to = KovSpace_Function::getProtectedProperty($object, '_to');
             $file = CMS_FOLDER . 'hostcmsfiles/logs/emails.json';
             $content = file_exists($file)
                 ? file_get_contents($file)
@@ -73,6 +72,8 @@ class Core_Mail_Observer
                     unset($emails[$date]);
                 }
             }
+
+            $to = KovSpace_Function::getProtectedProperty($object, '_to');
 
             if (in_array($to, $emails)) {
                 $log('Прошло слишком мало времени');
