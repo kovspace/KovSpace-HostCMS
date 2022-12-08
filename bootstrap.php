@@ -43,7 +43,7 @@ class Core_Mail_Observer
         };
 
         if (isset($_SERVER['SERVER_NAME'])) {
-            $object->from('noreply@'.$_SERVER['SERVER_NAME']);
+            $object->from('noreply@' . $_SERVER['SERVER_NAME']);
         }
 
         if (str_contains($object->getSubject(), 'Error: YML /cart')) {
