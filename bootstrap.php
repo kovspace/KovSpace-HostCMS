@@ -40,7 +40,7 @@ class Core_Mail_Observer
     {
         $log = function (string $message) use ($object) {
             Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
-            // Для совместимости со версиями HostCMS (7.0.4 и ниже)
+            // Для совместимости со старыми версиями HostCMS (7.0.4 и ниже)
             $object->from('')->to('')->recipientName('');
         };
 
