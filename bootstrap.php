@@ -36,10 +36,9 @@ class KovSpace_Bootstrap
 
 class Core_Mail_Observer
 {
-    static public function onBeforeSend(Core_Mail $object): void
+    static public function onBeforeSend(Core_Mail $object): ?Core_Mail
     {
-        $clear = function (Core_Mail $object, string $message) {
-            $object->from('')->to('')->recipientName('');
+        $log = function (string $message) {
             Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
         };
 
@@ -48,8 +47,8 @@ class Core_Mail_Observer
         }
 
         if (str_contains($object->getSubject(), 'Error: YML /cart')) {
-            $clear($object, 'Маркет: Адрес не найден');
-            return;
+            $log('Маркет: Адрес не найден');
+            return $object;
         }
 
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
@@ -57,11 +56,14 @@ class Core_Mail_Observer
             $nowF = $now->format('Y-m-d H:i:s');
             $to = KovSpace_Function::getProtectedProperty($object, '_to');
             $file = CMS_FOLDER . 'hostcmsfiles/logs/emails.json';
-            $emails = json_decode(@file_get_contents($file), true) ?? [];
+            $content = file_exists($file)
+                ? file_get_contents($file)
+                : '';
+            $emails = json_decode($content, true) ?? [];
 
             if (isset($emails[$nowF])) {
-                $clear($object, 'Дубль времени');
-                return;
+                $log('Дубль времени');
+                return $object;
             }
 
             // Оставляем только события в пределах 5 минут
@@ -73,12 +75,14 @@ class Core_Mail_Observer
             }
 
             if (in_array($to, $emails)) {
-                $clear($object, 'Прошло слишком мало времени');
-                return;
+                $log('Прошло слишком мало времени');
+                return $object;
             }
 
             $emails = [$nowF => $to] + $emails;
             file_put_contents($file, json_encode($emails, JSON_PRETTY_PRINT));
         }
+
+        return null;
     }
 }
