@@ -14,20 +14,41 @@ class KovSpace_Bootstrap
     public static function serverName(): void
     {
         if (!isset($_SERVER['SERVER_NAME'])) {
-            $oSite_Aliases = Core_Entity::factory('Site_Alias');
-            $oSite_Aliases->queryBuilder()
-                ->where('current', '=', 1)
-                ->where('deleted', '=', 0)
-                ->limit(1);
-            $aSite_Aliases = $oSite_Aliases->findAll();
-            $oSite_Alias = $aSite_Aliases[0] ?? null;
-            if ($oSite_Alias) {
-                $_SERVER['SERVER_NAME'] = $oSite_Alias->name;
+            $aPath = explode('/www/', CMS_FOLDER);
+            if (count($aPath) == 3) {
+                $_SERVER['SERVER_NAME'] = $aPath[1];
+            } else {
+                $oSite_Aliases = Core_Entity::factory('Site_Alias');
+                $oSite_Aliases->queryBuilder()
+                    ->where('current', '=', 1)
+                    ->where('deleted', '=', 0)
+                    ->limit(1);
+                $aSite_Aliases = $oSite_Aliases->findAll();
+                $oSite_Alias = $aSite_Aliases[0] ?? null;
+                if ($oSite_Alias) {
+                    $_SERVER['SERVER_NAME'] = str_replace('*.', '', $oSite_Alias->name);
+                }
             }
         }
     }
 
-    // Mail sender
+    // Получение текущего сайта
+    public static function getCurrentSiteId(): int
+    {
+        $oSite_Alias = Core_Entity::factory('Site_Alias')->findAlias($_SERVER['SERVER_NAME']);
+        $oSite = $oSite_Alias->Site;
+        return $oSite->id;
+    }
+
+    // Определение константы
+    public static function defineCurrentSite(): void
+    {
+        if (!defined('CURRENT_SITE')) {
+            define('CURRENT_SITE', static::getCurrentSiteId());
+        }
+    }
+
+    // Отправка писем
     public static function coreMail(): void
     {
         Core_Event::attach('Core_Mail.onBeforeSend', array('Core_Mail_Observer', 'onBeforeSend'));
