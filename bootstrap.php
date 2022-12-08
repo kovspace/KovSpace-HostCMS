@@ -40,7 +40,7 @@ class Core_Mail_Observer
     {
         $log = function (string $message) use ($object) {
             Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
-            // Для совместимости со старыми версиями HostCMS (7.0.4 и ниже)
+            // Для совместимости с HostCMS 7.0.4 и ниже
             $object->from('')->to('')->recipientName('');
         };
 
@@ -75,7 +75,10 @@ class Core_Mail_Observer
                 }
             }
 
-            $to = KovSpace_Function::getProtectedProperty($object, '_to');
+            // Метод появился в HostCMS 7.0.4
+            $to = method_exists($object, 'getTo')
+                ? $object->getTo()
+                : KovSpace_Function::getProtectedProperty($object, '_to');
 
             if (in_array($to, $emails)) {
                 $log('Прошло слишком мало времени');
