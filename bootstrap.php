@@ -60,7 +60,10 @@ class Core_Mail_Observer
     static public function onBeforeSend(Core_Mail $object): ?Core_Mail
     {
         $log = function (string $message) use ($object) {
-            Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
+            Core_Log::instance()
+                ->clear()
+                ->notify(FALSE)
+                ->write('Core_Mail: ' . $message);
             // Для совместимости с HostCMS 7.0.4 и ниже
             $object->from('')->to('')->recipientName('');
         };
