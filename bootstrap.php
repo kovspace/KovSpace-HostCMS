@@ -38,8 +38,10 @@ class Core_Mail_Observer
 {
     static public function onBeforeSend(Core_Mail $object): ?Core_Mail
     {
-        $log = function (string $message) {
+        $log = function (string $message) use ($object) {
             Core_Log::instance()->clear()->write('Core_Mail: ' . $message);
+            // Для совместимости со старыми версиями HostCMS
+            $object->from('')->to('')->recipientName('');
         };
 
         if (isset($_SERVER['SERVER_NAME'])) {
