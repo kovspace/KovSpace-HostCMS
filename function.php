@@ -11,6 +11,22 @@ class KovSpace_Function
         return $property->getValue($obj);
     }
 
+    // Получить файлы в директории
+    public static function getFilesInDir($dir): array
+    {
+        $files = [];
+        if (file_exists($dir)) {
+            foreach (scandir($dir) as $file) {
+                if ($file === '.' || $file === '..') {
+                    continue;
+                }
+                $filepath = $dir . '/' . $file;
+                $files[] = $filepath;
+            }
+        }
+        return $files;
+    }
+
     // Получить значение свойства по ID
     public static function getItemPropertyValue($oItem, $propertyId): mixed
     {

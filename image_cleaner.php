@@ -515,6 +515,6 @@ foreach ($aFiles as $file) {
             })
         }
     </script>
-</body>
 
+</body>
 </html>

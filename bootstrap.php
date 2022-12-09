@@ -68,15 +68,20 @@ class Core_Mail_Observer
             $object->from('')->to('')->recipientName('');
         };
 
+        // Назначаем отправителя по-умолчанию. Настройка [smtp][from] перезапишет.
         if (isset($_SERVER['SERVER_NAME'])) {
-            $object->from('noreply@' . $_SERVER['SERVER_NAME']);
+            $object
+                ->from('noreply@' . $_SERVER['SERVER_NAME'])
+                ->senderName('noreply@' . $_SERVER['SERVER_NAME']);
         }
 
+        // Не уведомляем о таких ошибках
         if (str_contains($object->getSubject(), 'Error: YML /cart')) {
             $log('Маркет: Адрес не найден');
             return $object;
         }
 
+        // Предотвращаем спам из ошибок
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
             $now = new DateTime('now');
             $nowF = $now->format('Y-m-d H:i:s');
@@ -111,6 +116,19 @@ class Core_Mail_Observer
 
             $emails = [$nowF => $to] + $emails;
             file_put_contents($file, json_encode($emails, JSON_PRETTY_PRINT));
+        }
+
+        // SMTP отправляем по крону, если вызов был через HostCMS frontend (index.php)
+        // KovSpace_Bootstrap::defineCurrentSite(); для эмуляции фронта
+        if (defined('CURRENT_SITE')) {
+            if ($object instanceof Core_Mail_Smtp) {
+                $dir = CMS_FOLDER . 'cron/jobs/mail';
+                $file = $dir . '/' . time() . rand(100, 999);
+                $content = serialize($object);
+                Core_File::mkdir($dir, CHMOD, TRUE);
+                Core_File::write($file, $content);
+                return $object;
+            }
         }
 
         return null;

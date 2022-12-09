@@ -105,4 +105,4 @@ class KovSpace_Form2
      <?php endif ?>
 
     <?php }
-    }
+}
