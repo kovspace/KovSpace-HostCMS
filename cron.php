@@ -16,7 +16,7 @@ function mailJobs(): void
                     ->from($oCore_Mail->getFrom())
                     ->subject($oCore_Mail->getSubject())
                     ->message($oCore_Mail->getMessage())
-                    ->contentType('text/html')
+                    ->contentType(KovSpace_Function::getProtectedProperty($oCore_Mail, '_contentType'))
                     ->send();
             }
         } elseif ($oCore_Mail instanceof Core_Mail) {
