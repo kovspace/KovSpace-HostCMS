@@ -8,19 +8,22 @@ function mailJobs(): void
     $files = KovSpace_Function::getFilesInDir($dir);
     foreach ($files as $file) {
         $content = file_get_contents($file);
+        /** @var Core_Mail $oCore_Mail */
         $oCore_Mail = unserialize($content);
-        if ($oCore_Mail instanceof Core_Mail_Smtp) {
-            if (!$oCore_Mail->send()->getStatus()) {
-                (new Core_Mail_Sendmail)
-                    ->to($oCore_Mail->getTo())
-                    ->from($oCore_Mail->getFrom())
-                    ->subject($oCore_Mail->getSubject())
-                    ->message($oCore_Mail->getMessage())
-                    ->contentType('text/html')
-                    ->send();
+        if ($oCore_Mail->getTo()) {
+            if ($oCore_Mail instanceof Core_Mail_Smtp) {
+                if (!$oCore_Mail->send()->getStatus()) {
+                    (new Core_Mail_Sendmail)
+                        ->to($oCore_Mail->getTo())
+                        ->from($oCore_Mail->getFrom())
+                        ->subject($oCore_Mail->getSubject())
+                        ->message($oCore_Mail->getMessage())
+                        ->contentType('text/html')
+                        ->send();
+                }
+            } else {
+                $oCore_Mail->send();
             }
-        } elseif ($oCore_Mail instanceof Core_Mail) {
-            $oCore_Mail->send();
         }
         unlink($file);
     }
