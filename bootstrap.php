@@ -6,8 +6,10 @@ class KovSpace_Bootstrap
 {
     public static function init(): void
     {
-        self::serverName();
-        self::coreMail();
+        if (!defined('SKIP_KOVSPACE_BOOTSTRAP')) {
+            self::serverName();
+            self::coreMail();
+        }
     }
 
     // Исправление имени сервера
@@ -68,6 +70,16 @@ class Core_Mail_Observer
             $object->from('')->to('')->recipientName('');
         };
 
+        // Метод появился в HostCMS 7.0.4
+        $to = method_exists($object, 'getTo')
+            ? $object->getTo()
+            : KovSpace_Function::getProtectedProperty($object, '_to');
+
+        // Должен быть получатель
+        if (!$to) {
+            return $object;
+        }
+
         // Назначаем отправителя по-умолчанию. Настройка [smtp][from] перезапишет.
         if (isset($_SERVER['SERVER_NAME'])) {
             $object
@@ -103,11 +115,6 @@ class Core_Mail_Observer
                     unset($emails[$date]);
                 }
             }
-
-            // Метод появился в HostCMS 7.0.4
-            $to = method_exists($object, 'getTo')
-                ? $object->getTo()
-                : KovSpace_Function::getProtectedProperty($object, '_to');
 
             if (in_array($to, $emails)) {
                 $log('Прошло слишком мало времени');
