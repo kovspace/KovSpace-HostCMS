@@ -16,6 +16,7 @@ function mailJobs(): void
                     ->from($oCore_Mail->getFrom())
                     ->subject($oCore_Mail->getSubject())
                     ->message($oCore_Mail->getMessage())
+                    ->contentType('text/html')
                     ->send();
             }
         } elseif ($oCore_Mail instanceof Core_Mail) {
