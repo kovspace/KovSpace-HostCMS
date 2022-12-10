@@ -95,6 +95,15 @@ class Core_Mail_Observer
 
         // Предотвращаем спам из ошибок
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
+
+            // Кэш не всегда очищается корректно
+            if (str_contains($object->getSubject(), 'unlink')) {
+                if (str_contains($object->getSubject(), '/hostcmsfiles/cache/')) {
+                    $log('Cache: Не получилось удалить файл');
+                    return $object;
+                }
+            }
+
             $now = new DateTime('now');
             $nowF = $now->format('Y-m-d H:i:s');
             $file = CMS_FOLDER . 'hostcmsfiles/logs/emails.json';
