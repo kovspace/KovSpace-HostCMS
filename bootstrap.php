@@ -130,10 +130,8 @@ class Core_Mail_Observer
         // Получаем параметры для текущего сайта
         $aConfig = KovSpace_Function::getProtectedProperty($object, '_config');
 
-        // С какого адреса
-        $from = method_exists($object, 'getFrom')
-            ? $object->getFrom()
-            : KovSpace_Function::getProtectedProperty($object, '_from,');
+        // С какого адреса. Обнуляем, так как иначе может быть спуфинг.
+        $from = null;
 
         if (!$from && isset($aConfig['from'])) {
             $from = $aConfig['from'];
