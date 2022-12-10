@@ -135,10 +135,19 @@ class Core_Mail_Observer
             ? $object->getFrom()
             : KovSpace_Function::getProtectedProperty($object, '_from,');
 
-        if (!$from) {
-            $from = $aConfig['from'] ?? 'noreply@' . $_SERVER['SERVER_NAME'];
-            $object->from($from);
+        if (!$from && isset($aConfig['from'])) {
+            $from = $aConfig['from'];
         }
+
+        if (!$from && $object instanceof Core_Mail_Smtp && isset($aConfig['username'])) {
+            $from = $aConfig['username'];
+        }
+
+        if (!$from) {
+            $from = 'noreply@' . $_SERVER['SERVER_NAME'];
+        }
+
+        $object->from($from);
 
         // Имя отправителя
         $senderName = KovSpace_Function::getProtectedProperty($object, '_senderName');
