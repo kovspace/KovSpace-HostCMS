@@ -80,11 +80,11 @@ class Core_Mail_Observer
             return $object;
         }
 
-        // Назначаем отправителя по-умолчанию. Настройка [smtp][from] перезапишет.
+        // Назначаем отправителя по-умолчанию
         if (isset($_SERVER['SERVER_NAME'])) {
             $object
-                ->from('noreply@' . $_SERVER['SERVER_NAME'])
-                ->senderName('noreply@' . $_SERVER['SERVER_NAME']);
+                ->from('noreply@' . $_SERVER['SERVER_NAME']) // [smtp][from] перезапишет
+                ->senderName($_SERVER['SERVER_NAME']);
         }
 
         // Не уведомляем о таких ошибках
