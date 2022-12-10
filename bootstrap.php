@@ -80,13 +80,6 @@ class Core_Mail_Observer
             return $object;
         }
 
-        // Назначаем отправителя по-умолчанию
-        if (isset($_SERVER['SERVER_NAME'])) {
-            $object
-                ->from('noreply@' . $_SERVER['SERVER_NAME']) // [smtp][from] перезапишет
-                ->senderName($_SERVER['SERVER_NAME']);
-        }
-
         // Не уведомляем о таких ошибках
         if (str_contains($object->getSubject(), 'Error: YML /cart')) {
             $log('Маркет: Адрес не найден');
@@ -132,6 +125,35 @@ class Core_Mail_Observer
 
             $emails = [$nowF => $to] + $emails;
             file_put_contents($file, json_encode($emails, JSON_PRETTY_PRINT));
+        }
+
+        // Получаем параметры для текущего сайта
+        $aConfig = KovSpace_Function::getProtectedProperty($object, '_config');
+
+        // С какого адреса
+        $from = method_exists($object, 'getFrom')
+            ? $object->getFrom()
+            : KovSpace_Function::getProtectedProperty($object, '_from,');
+
+        if (!$from) {
+            $from = $aConfig['from'] ?? 'noreply@' . $_SERVER['SERVER_NAME'];
+            $object->from($from);
+        }
+
+        // Имя отправителя
+        $senderName = KovSpace_Function::getProtectedProperty($object, '_senderName');
+
+        if (!$senderName) {
+            $senderName = $aConfig['sendername'] ?? $_SERVER['SERVER_NAME'];
+            $object->senderName($senderName);
+        }
+
+        $headers = KovSpace_Function::getProtectedProperty($object, '_headers');
+
+        // Кому отвечаем на письмо
+        if (!isset($headers['Reply-To'])) {
+            $replyTo = $aConfig['reply-to'] ?? $from;
+            $object->header('Reply-To', $replyTo);
         }
 
         // SMTP отправляем по крону, если вызов был через HostCMS frontend (index.php)
