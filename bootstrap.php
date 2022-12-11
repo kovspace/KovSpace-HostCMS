@@ -160,7 +160,7 @@ class Core_Mail_Observer
         // Кому отвечаем на письмо
         if (!isset($headers['Reply-To'])) {
             $replyTo = $aConfig['reply-to'] ?? $from;
-            $object->header('Reply-To', $replyTo);
+            $object->header('Reply-To', '<' . $replyTo . '>');
         }
 
         // SMTP отправляем по крону, если вызов был через HostCMS frontend (index.php)
