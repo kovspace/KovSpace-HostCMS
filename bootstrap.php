@@ -71,7 +71,7 @@ class Core_Mail_Observer
     static public function stop(Core_Mail $object): Core_Mail
     {
         if (KovSpace_Bootstrap::hostcmsUpdateNumber() < 194) {
-            if (!str_contains($_SERVER['REQUEST_URI'], '/admin/update/')) {
+            if (!str_contains($_SERVER['REQUEST_URI'] ?? '', '/admin/update/')) {
                 die();
             }
         }
