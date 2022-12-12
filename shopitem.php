@@ -65,7 +65,6 @@ class KovSpace_ShopItem
         return $array ?? [];
     }
 
-
     // Получем массив свойств из коллекции по тегу
     public static function collectionValuesByTag($aProperties, $tagname)
     {
