@@ -34,6 +34,14 @@ class KovSpace_Bootstrap
         }
     }
 
+    // Версия HostCMS
+    public static function hostcmsUpdateNumber(): int
+    {
+        return defined('HOSTCMS_UPDATE_NUMBER')
+            ? HOSTCMS_UPDATE_NUMBER
+            : Core_Entity::factory('Constant')->getByName('HOSTCMS_UPDATE_NUMBER');
+    }
+
     // Получение текущего сайта
     public static function getCurrentSiteId(): int
     {
@@ -59,31 +67,57 @@ class KovSpace_Bootstrap
 
 class Core_Mail_Observer
 {
+    // Прерываем исполнение
+    static public function stop(Core_Mail $object): Core_Mail
+    {
+        if (KovSpace_Bootstrap::hostcmsUpdateNumber() < 194) {
+            die();
+        }
+        return $object;
+    }
+
+    // Записываем в лог
+    static public function log(string $message): void
+    {
+        Core_Log::instance()
+            ->clear()
+            ->notify(FALSE)
+            ->write('Core_Mail: ' . $message);
+    }
+
+    // Создаем задание для крона
+    static public function job(Core_Mail $object): void
+    {
+        $dir = CMS_FOLDER . 'cron/jobs/mail';
+        $file = $dir . '/' . time() . rand(100, 999);
+        $content = serialize($object);
+        !defined('CHMOD') && define('CHMOD', 0755);
+        !defined('CHMOD_FILE') && define('CHMOD_FILE', 0644);
+        try {
+            Core_File::mkdir($dir, CHMOD, TRUE);
+            Core_File::write($file, $content);
+        } catch (Exception) {
+            static::log('Не удалось создать Mail Job');
+        }
+    }
+
+    // Метод-перехватчик
     static public function onBeforeSend(Core_Mail $object): ?Core_Mail
     {
-        $log = function (string $message) use ($object) {
-            Core_Log::instance()
-                ->clear()
-                ->notify(FALSE)
-                ->write('Core_Mail: ' . $message);
-            // Для совместимости с HostCMS 7.0.4 и ниже
-            $object->from('')->to('')->recipientName('');
-        };
-
-        // Метод появился в HostCMS 7.0.4
+        // Появилось в HostCMS 7.0.4 (194)
         $to = method_exists($object, 'getTo')
             ? $object->getTo()
             : KovSpace_Function::getProtectedProperty($object, '_to');
 
-        // Должен быть получатель
         if (!$to) {
-            return $object;
+            static::log('Должен быть получатель');
+            return static::stop($object);
         }
 
         // Не уведомляем о таких ошибках
         if (str_contains($object->getSubject(), 'Error: YML /cart')) {
-            $log('Маркет: Адрес не найден');
-            return $object;
+            static::log('Маркет: Адрес не найден');
+            return static::stop($object);
         }
 
         // Предотвращаем спам из ошибок
@@ -92,8 +126,8 @@ class Core_Mail_Observer
             // Кэш не всегда очищается корректно
             if (str_contains($object->getSubject(), 'unlink')) {
                 if (str_contains($object->getSubject(), '/hostcmsfiles/cache/')) {
-                    $log('Cache: Не получилось удалить файл');
-                    return $object;
+                    static::log('Cache: Не получилось удалить файл');
+                    return static::stop($object);
                 }
             }
 
@@ -106,21 +140,28 @@ class Core_Mail_Observer
             $emails = json_decode($content, true) ?? [];
 
             if (isset($emails[$nowF])) {
-                $log('Дубль времени');
-                return $object;
+                static::log('Дубль времени');
+                return static::stop($object);
             }
 
             // Оставляем только события в пределах 5 минут
             foreach ($emails as $date => $email) {
-                $prev = new DateTime($date);
+
+                try {
+                    $prev = new DateTime($date);
+                } catch (Exception) {
+                    static::log('Неверное время в ' . $file);
+                    return static::stop($object);
+                }
+
                 if ($now->getTimestamp() - $prev->getTimestamp() > 5 * 60) {
                     unset($emails[$date]);
                 }
             }
 
             if (in_array($to, $emails)) {
-                $log('Прошло слишком мало времени');
-                return $object;
+                static::log('Прошло слишком мало времени');
+                return static::stop($object);
             }
 
             $emails = [$nowF => $to] + $emails;
@@ -167,14 +208,8 @@ class Core_Mail_Observer
         // KovSpace_Bootstrap::defineCurrentSite(); для эмуляции фронта
         if (defined('CURRENT_SITE')) {
             if ($object instanceof Core_Mail_Smtp) {
-                $dir = CMS_FOLDER . 'cron/jobs/mail';
-                $file = $dir . '/' . time() . rand(100, 999);
-                $content = serialize($object);
-                !defined('CHMOD') && define('CHMOD', 0755);
-                !defined('CHMOD_FILE') && define('CHMOD_FILE', 0644);
-                Core_File::mkdir($dir, CHMOD, TRUE);
-                Core_File::write($file, $content);
-                return $object;
+                static::job($object);
+                return static::stop($object);
             }
         }
 
