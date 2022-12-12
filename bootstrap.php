@@ -170,7 +170,7 @@ class Core_Mail_Observer
                 $dir = CMS_FOLDER . 'cron/jobs/mail';
                 $file = $dir . '/' . time() . rand(100, 999);
                 $content = serialize($object);
-                $chmod = defined(CHMOD) ? CHMOD : 755;
+                $chmod = defined('CHMOD') ? CHMOD : 755;
                 Core_File::mkdir($dir, $chmod, TRUE);
                 Core_File::write($file, $content);
                 return $object;
