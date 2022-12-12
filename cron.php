@@ -15,14 +15,20 @@ function mailJobs(): void
                 ? $result->getStatus()
                 : false;
             if (!$status) {
-                $contentType = KovSpace_Function::getProtectedProperty($oCore_Mail, '_contentType');
-                $headers = KovSpace_Function::getProtectedProperty($oCore_Mail, '_headers');
+                $to = method_exists($oCore_Mail, 'getTo')
+                    ? $oCore_Mail->getTo()
+                    : KovSpace_Function::getProtectedProperty($oCore_Mail, '_to');
+                $from = method_exists($oCore_Mail, 'getFrom')
+                    ? $oCore_Mail->getFrom()
+                    : KovSpace_Function::getProtectedProperty($oCore_Mail, '_from');
                 $message = method_exists($oCore_Mail, 'getMessage')
                     ? $oCore_Mail->getMessage()
                     : KovSpace_Function::getProtectedProperty($oCore_Mail, '_message');
+                $contentType = KovSpace_Function::getProtectedProperty($oCore_Mail, '_contentType');
+                $headers = KovSpace_Function::getProtectedProperty($oCore_Mail, '_headers');
                 Core_Mail::instance('sendmail')
-                    ->to($oCore_Mail->getTo())
-                    ->from($oCore_Mail->getFrom())
+                    ->to($to)
+                    ->from($from)
                     ->subject($oCore_Mail->getSubject())
                     ->message($message)
                     ->contentType($contentType)
