@@ -10,14 +10,21 @@ function mailJobs(): void
         $content = file_get_contents($file);
         $oCore_Mail = unserialize($content);
         if ($oCore_Mail instanceof Core_Mail_Smtp) {
-            if (!$oCore_Mail->send()->getStatus()) {
+            $result = $oCore_Mail->send();
+            $status = $result instanceof Core_Mail_Smtp
+                ? $result->getStatus()
+                : false;
+            if (!$status) {
                 $contentType = KovSpace_Function::getProtectedProperty($oCore_Mail, '_contentType');
                 $headers = KovSpace_Function::getProtectedProperty($oCore_Mail, '_headers');
+                $message = method_exists($oCore_Mail, 'getMessage')
+                    ? $oCore_Mail->getMessage()
+                    : KovSpace_Function::getProtectedProperty($oCore_Mail, '_message');
                 Core_Mail::instance('sendmail')
                     ->to($oCore_Mail->getTo())
                     ->from($oCore_Mail->getFrom())
                     ->subject($oCore_Mail->getSubject())
-                    ->message($oCore_Mail->getMessage())
+                    ->message($message)
                     ->contentType($contentType)
                     ->header('Reply-To', $headers['Reply-To'] ?? $oCore_Mail->getFrom())
                     ->send();
