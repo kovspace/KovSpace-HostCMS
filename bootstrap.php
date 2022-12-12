@@ -171,10 +171,10 @@ class Core_Mail_Observer
                 $file = $dir . '/' . time() . rand(100, 999);
                 $content = serialize($object);
                 if (!defined('CHMOD')) {
-                    define('CHMOD', '0755');
+                    define('CHMOD', 0755);
                 }
                 if (!defined('CHMOD_FILE')) {
-                    define('CHMOD_FILE', '0644');
+                    define('CHMOD_FILE', 0644);
                 }
                 Core_File::mkdir($dir, CHMOD, TRUE);
                 Core_File::write($file, $content);
