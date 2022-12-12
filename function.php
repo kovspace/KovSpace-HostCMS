@@ -5,10 +5,19 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_Function
 {
     // Получаем защищенное свойство
-    public static function getProtectedProperty($obj, $prop) {
-        $reflection = new ReflectionClass($obj);
-        $property = $reflection->getProperty($prop);
-        return $property->getValue($obj);
+    public static function getProtectedProperty($obj, $prop): mixed
+    {
+        try {
+            $reflection = new ReflectionClass($obj);
+            $property = $reflection->getProperty($prop);
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $value = $property->getValue($obj);
+        } catch (Exception) {
+            $value = null;
+        }
+        return $value;
     }
 
     // Получить файлы в директории
