@@ -5,7 +5,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_Function
 {
     // Получаем защищенное свойство
-    public static function getProtectedProperty($obj, $prop): mixed
+    public static function getProtectedProperty(object $obj, string $prop): mixed
     {
         try {
             $reflection = new ReflectionClass($obj);
@@ -21,7 +21,7 @@ class KovSpace_Function
     }
 
     // Получить файлы в директории
-    public static function getFilesInDir($dir): array
+    public static function getFilesInDir(string $dir): array
     {
         $files = [];
         if (file_exists($dir)) {
@@ -37,7 +37,7 @@ class KovSpace_Function
     }
 
     // Получить значение свойства по ID
-    public static function getItemPropertyValue($oItem, $propertyId): mixed
+    public static function getItemPropertyValue(object $oItem, int $propertyId): mixed
     {
         $aProperties = $oItem->getPropertyValues(false, array($propertyId));
         if ($aProperties) {
@@ -48,7 +48,7 @@ class KovSpace_Function
     }
 
     // Поменять GET-параметр
-    public static function urlParam($param, $value)
+    public static function urlParam(string $param, string $value)
     {
         $url_parts = parse_url($_SERVER['REQUEST_URI']);
         if (isset($url_parts['query'])) {
@@ -71,7 +71,7 @@ class KovSpace_Function
     }
 
     // Url Param Redirect
-    public static function urlParamRedirect($param, $value): void
+    public static function urlParamRedirect(string $param, string $value): void
     {
         $url = self::urlParam($param, $value);
         self::redirect($url);
@@ -93,7 +93,7 @@ class KovSpace_Function
     }
 
     // Получить отсортированные элементы
-    public static function getSortedItems($object, $sortField = 'sorting', $sortDirection = 'asc'): array
+    public static function getSortedItems(object $object, string $sortField = 'sorting', string $sortDirection = 'asc'): array
     {
         $object->queryBuilder()
             ->where('active', '=', 1)
@@ -103,7 +103,7 @@ class KovSpace_Function
     }
 
     // Форматирование чисел
-    public static function format($num): string
+    public static function format(float|int $num): string
     {
         return number_format($num, 0, '', ' ');
     }
