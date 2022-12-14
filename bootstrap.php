@@ -116,20 +116,20 @@ class Core_Mail_Observer
             return static::stop($object);
         }
 
-        // Не уведомляем о таких ошибках
-        if (str_contains($object->getSubject(), 'Error: YML /cart')) {
-            static::log('Маркет: Адрес не найден');
-            return static::stop($object);
-        }
-
-        // Не уведомляем о таких ошибках
-        if (str_contains($object->getSubject(), 'Неверные данные для аутентификации')) {
-            static::log('Неверный логин/пароль');
-            return static::stop($object);
-        }
-
         // Предотвращаем спам из ошибок
         if (str_starts_with($object->getSubject(), 'HostCMS')) {
+
+            // Не уведомляем о таких ошибках
+            if (str_contains($object->getSubject(), 'Error: YML /cart')) {
+                static::log('Маркет: Адрес не найден');
+                return static::stop($object);
+            }
+
+            // Не уведомляем о таких ошибках
+            if (str_contains($object->getSubject(), 'Неверные данные для аутентификации')) {
+                static::log('Неверный логин/пароль');
+                return static::stop($object);
+            }
 
             // Кэш не всегда очищается корректно
             if (str_contains($object->getSubject(), 'unlink')) {
