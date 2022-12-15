@@ -5,7 +5,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_ShopItem
 {
     // Получение полного имени товара с учетом модификации
-    public static function getFullName($oShop_Item)
+    public static function getFullName(Shop_Item_Model $oShop_Item)
     {
         $sep = ' :: ';
         return $oShop_Item->modification_id

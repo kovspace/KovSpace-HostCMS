@@ -5,7 +5,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_ShopOrder
 {
     // Получение полного имени товара с учетом назания из заказа
-    public static function getFullName($oShop_Order_Item)
+    public static function getFullName(Shop_Order_Item_Model $oShop_Order_Item)
     {
         $sep = ' :: ';
         $oShop_Item = $oShop_Order_Item->Shop_Item;
