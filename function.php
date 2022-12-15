@@ -48,7 +48,7 @@ class KovSpace_Function
     }
 
     // Поменять GET-параметр
-    public static function urlParam(string $param, string $value)
+    public static function urlParam(string $param, ?string $value)
     {
         $url_parts = parse_url($_SERVER['REQUEST_URI']);
         if (isset($url_parts['query'])) {
@@ -71,7 +71,7 @@ class KovSpace_Function
     }
 
     // Url Param Redirect
-    public static function urlParamRedirect(string $param, string $value): void
+    public static function urlParamRedirect(string $param, ?string $value): void
     {
         $url = self::urlParam($param, $value);
         self::redirect($url);
