@@ -11,22 +11,12 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Form
 {
-    public $error;
-    public $success;
+    public string $error;
+    public string $success;
 
     public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = null)
     {
         $ip = Core_Array::get($_SERVER, 'REMOTE_ADDR');
-
-        $config = Core::$config->get('core_mail');
-
-        if (isset($config['smtp'][CURRENT_SITE]['username'])) {
-            $email_from = $config['smtp'][CURRENT_SITE]['username'];
-        } elseif (isset($config['smtp']['username'])) {
-            $email_from = $config['smtp']['username'];
-        } else {
-            $email_from = $email_to;
-        }
 
         if ($subject === null) {
             $subject = Core_Entity::factory('Informationsystem', $informationsystem_id)->name;
@@ -35,13 +25,13 @@ class KovSpace_Form
         if ($subject && Core_Array::getPost('form')) {
             $error = '';
 
-            if (!$error && !Core_Array::getPost('name')) {
+            if (!Core_Array::getPost('name')) {
                 $error = 'Укажите ваше имя';
             }
             if (!$error && !Core_Array::getPost('phone')) {
                 $error = 'Укажите ваш телефон';
             }
-            if (!$error && Core_Array::getPost('phone') && substr(Core_Array::getPost('phone'), 0, 2) != '+7') {
+            if (!$error && Core_Array::getPost('phone') && !str_starts_with(Core_Array::getPost('phone'), '+7')) {
                 $error = 'Неверный телефон';
             }
             if (!$error && !Core_Array::getPost('email')) {
@@ -82,7 +72,7 @@ class KovSpace_Form
                 $message .= '<div>Email: ' . Core_Array::getPost('email') . '</div>';
                 $message .= '<div>Сообщение: ' . Core_Array::getPost('comment') . '</div>';
                 $message .= '<div>---</div>';
-                $message .= '<div>IP: <a href="http://ipgeobase.ru/cgi-bin/Search.cgi?address=' . $ip . '">' . $ip . '</a></div>';
+                $message .= '<div>IP: ' . $ip . '</div>';
                 $message .= '<div>Сайт: ' . Core::$url['host'] . '</div>';
 
                 $oInformationsystem_Item = Core_Entity::factory('Informationsystem_Item');
@@ -91,9 +81,8 @@ class KovSpace_Form
                 $oInformationsystem_Item->text = $message;
                 $oInformationsystem_Item->save();
 
-                $oCore_Mail_Driver = Core_Mail::instance()
+                Core_Mail::instance()
                     ->to($email_to)
-                    ->from($email_from)
                     ->subject($subject)
                     ->message($message)
                     ->senderName(Core_Array::getPost('name'))
