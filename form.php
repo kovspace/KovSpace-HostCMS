@@ -11,8 +11,8 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Form
 {
-    public string $error;
-    public string $success;
+    public string $error = '';
+    public string $success = '';
 
     public function __construct($informationsystem_id, $email_to = EMAIL_TO, $subject = null)
     {
