@@ -112,8 +112,12 @@ class Core_Mail_Observer
             : KovSpace_Function::getProtectedProperty($object, '_to');
 
         if (!$to) {
-            static::log('Должен быть получатель');
-            return static::stop($object);
+            if (defined('EMAIL_TO')) {
+                $to = EMAIL_TO;
+            } else {
+                static::log('Должен быть получатель');
+                return static::stop($object);
+            }
         }
 
         // Предотвращаем спам из ошибок
