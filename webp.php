@@ -27,9 +27,33 @@ function convert(object $object, string $dir, string $property): void
     $dotpos = strrpos($image, '.');
     $name = substr($image, 0, $dotpos);
     $ext = substr($image, $dotpos + 1);
-    $new_image = $name . '.webp';
-    $new_path = $dir . $new_image;
+    $newImage = $name . '.webp';
+    $newPath = $dir . $newImage;
     $im = null;
+
+    $mimes = [
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+    ];
+
+    $mime = mime_content_type($path);
+    $mimeExt = $mimes[$mime] ?? null;
+
+    if (!$mimeExt) {
+        return;
+    }
+
+    if ($mimeExt != $ext) {
+        $imageMime = $name . '.' . $mimeExt;
+        $pathMime = $dir . $imageMime;
+        rename($path, $pathMime);
+        $object->$property = $imageMime;
+        $object->save();
+        $ext = $mimeExt;
+        $path = $pathMime;
+    }
 
     if ($ext == 'png') {
         echo $path . PHP_EOL;
@@ -50,11 +74,11 @@ function convert(object $object, string $dir, string $property): void
     }
 
     if ($im) {
-        imagewebp($im, $new_path);
+        imagewebp($im, $newPath);
         imagedestroy($im);
 
-        if (file_exists($new_path)) {
-            $object->$property = $new_image;
+        if (file_exists($newPath)) {
+            $object->$property = $newImage;
             $object->save();
             unlink($path);
         }
