@@ -51,7 +51,7 @@ function convert(object $object, string $dir, string $property): void
         rename($path, $pathMime);
         $object->$property = $imageMime;
         $object->save();
-        echo 'Changed extension from ' . $ext . ' to ' . $mimeExt;
+        echo 'Changed extension from ' . $ext . ' to ' . $mimeExt . PHP_EOL;
         $ext = $mimeExt;
         $path = $pathMime;
     }
@@ -60,7 +60,7 @@ function convert(object $object, string $dir, string $property): void
         echo $path . PHP_EOL;
         $im = @imagecreatefrompng($path);
         if (!$im) {
-            echo 'Error: incorrect format';
+            echo 'Error: incorrect format' . PHP_EOL;
             // Возможно это JPEG
             $im = @imagecreatefromjpeg($path);
         } else {
