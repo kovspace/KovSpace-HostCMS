@@ -10,8 +10,8 @@ function convert(object $object, string $dir, string $property): void
     if (!$dir) {
         return;
     }
-    $image = $object->$property;
-    if (!$image) {
+
+    if (!$image = $object->$property) {
         return;
     }
 
@@ -25,6 +25,7 @@ function convert(object $object, string $dir, string $property): void
     $ext = substr($image, $dotpos + 1);
     $new_image = $name . '.webp';
     $new_path = $dir . $new_image;
+    $im = null;
 
     if ($ext == 'png') {
         echo $path . PHP_EOL;
@@ -37,7 +38,14 @@ function convert(object $object, string $dir, string $property): void
             // PNG
             imagepalettetotruecolor($im);
         }
+    }
 
+    if (in_array($ext, ['jpg', 'jpeg'])) {
+        echo $path . PHP_EOL;
+        $im = @imagecreatefromjpeg($path);
+    }
+
+    if ($im) {
         imagewebp($im, $new_path);
         imagedestroy($im);
 
