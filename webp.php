@@ -51,6 +51,7 @@ function convert(object $object, string $dir, string $property): void
         rename($path, $pathMime);
         $object->$property = $imageMime;
         $object->save();
+        echo 'Changed extension from ' . $ext . ' to ' . $mimeExt;
         $ext = $mimeExt;
         $path = $pathMime;
     }
