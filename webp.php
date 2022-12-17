@@ -59,17 +59,10 @@ function convert(object $object, string $dir, string $property): void
     if ($ext == 'png') {
         echo $path . PHP_EOL;
         $im = @imagecreatefrompng($path);
-        if (!$im) {
-            echo 'Error: incorrect format' . PHP_EOL;
-            // Возможно это JPEG
-            $im = @imagecreatefromjpeg($path);
-        } else {
-            // PNG
-            imagepalettetotruecolor($im);
-        }
+        imagepalettetotruecolor($im);
     }
 
-    if (in_array($ext, ['jpg', 'jpeg'])) {
+    if ($ext == 'jpg') {
         echo $path . PHP_EOL;
         $im = @imagecreatefromjpeg($path);
     }
