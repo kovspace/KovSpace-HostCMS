@@ -15,6 +15,10 @@ function convert(object $object, string $dir, string $property): void
         return;
     }
 
+    if (str_ends_with($image, '.webp')) {
+        return;
+    }
+
     $path = $dir . $image;
     if (!file_exists($path)) {
         return;
