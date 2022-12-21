@@ -86,9 +86,9 @@ class KovSpace_Function
             ->where('value', '=', '')
             ->execute();
 
-        // Older than 1 year
+        // Older than 6 months
         Core_QueryBuilder::delete('sessions')
-            ->where('time', '<', time() - 31556926)
+            ->where('time', '<', time() - 15768000)
             ->execute();
     }
 
