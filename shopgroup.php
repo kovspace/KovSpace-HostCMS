@@ -14,4 +14,18 @@ class KovSpace_ShopGroup
             ->orderBy('sorting', 'asc');
         return $oShop_Groups->findAll();
     }
+
+    // Получить массив id для подгрупп
+    public static function getSubGroupIds(Shop_Group_Model $oShop_Group, $withParent = false): array
+    {
+        $ids = [];
+        if ($withParent) {
+            $ids[] = $oShop_Group->id;
+        }
+        $aSub_Groups = $oShop_Group->Shop_Groups->getAllByActive(1);
+        foreach ($aSub_Groups as $oSub_Group) {
+            $ids[] = $oSub_Group->id;
+        }
+        return $ids;
+    }
 }
