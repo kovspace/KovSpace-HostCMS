@@ -11,6 +11,7 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Template
 {
+    static protected mixed $_instance;
     public string $title;
     public string $description;
     public string $keywords;
@@ -24,6 +25,15 @@ class KovSpace_Template
     public string $hostcms;
 
     protected array $_aSection;
+
+    static public function instance()
+    {
+        if (!isset(self::$_instance))
+        {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
 
     public function __construct()
     {
