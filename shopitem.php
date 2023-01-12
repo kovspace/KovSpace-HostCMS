@@ -5,13 +5,36 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 class KovSpace_ShopItem
 {
     // Получение полного имени товара с учетом модификации
-    public static function getFullName(Shop_Item_Model $oShop_Item)
+    public static function getFullName(Shop_Item_Model $oShop_Item): string
     {
         $sep = ' :: ';
         return $oShop_Item->modification_id
             ? $oShop_Item->Modification->name . $sep . $oShop_Item->name
             : $oShop_Item->name;
     }
+
+    // Получение всех модификаций
+    public static function getAllModifications(Shop_Item_Model $oShop_Item): array
+    {
+        $oShop_Item_Modifications = $oShop_Item->Modifications;
+        $oShop_Item_Modifications->queryBuilder()
+            ->orderBy('name', 'asc');
+        return $oShop_Item_Modifications->findAll();
+    }
+
+    // Фильтруем модификации без остатков
+    public static function filterRestModifications(array $aShop_Item_Modifications): array
+    {
+        $aRestModifications = [];
+        foreach ($aShop_Item_Modifications as $oShop_Item_Modification) {
+            if ($oShop_Item_Modification->getRest() > 0) {
+                $aRestModifications[] = $oShop_Item_Modification;
+            }
+        }
+        return $aRestModifications;
+    }
+
+
 
     // Получаем коллекцию доп. свойств
     public static function propertyCollection($oShop_Item)

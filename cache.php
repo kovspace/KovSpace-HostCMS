@@ -25,16 +25,17 @@ class KovSpace_Cache
     /* Exclusion rules */
     public static function is_cache_deny()
     {
-        if (Core_Auth::logged()) {
-            return true;
-        }
-        return false;
+        return Core_Auth::logged();
     }
 
     /* Check file exists and start buffering */
-    public static function check($filename, $lifetime = 3600)
+    public static function check(string $filename, int $lifetime = 3600, bool $check = true): bool
     {
         if (self::is_cache_deny() || !$filename) {
+            return true;
+        }
+
+        if (!$check) {
             return true;
         }
 
@@ -55,11 +56,16 @@ class KovSpace_Cache
     }
 
     /* End buffering and save file */
-    public static function save($filename)
+    public static function save(string $filename, bool $save = true)
     {
         if (self::is_cache_deny() || !$filename) {
             return;
         }
+
+        if (!$save) {
+            return;
+        }
+
         $filepath = self::$dir . $filename;
         $content = ob_get_contents();
         ob_end_clean();
