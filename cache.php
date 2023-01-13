@@ -29,7 +29,7 @@ class KovSpace_Cache
     }
 
     /* Check file exists and start buffering */
-    public static function check(string $filename, int $lifetime = 3600, bool $check = true): bool
+    public static function check(?string $filename, int $lifetime = 3600, bool $check = true): bool
     {
         if (self::is_cache_deny() || !$filename) {
             return true;
@@ -56,7 +56,7 @@ class KovSpace_Cache
     }
 
     /* End buffering and save file */
-    public static function save(string $filename, bool $save = true)
+    public static function save(?string $filename, bool $save = true)
     {
         if (self::is_cache_deny() || !$filename) {
             return;
