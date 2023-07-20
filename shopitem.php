@@ -34,15 +34,19 @@ class KovSpace_ShopItem
         return $aRestModifications;
     }
 
-    // Получение актуальных модификаций
-    public static function getModifications(Shop_Item_Model $oShop_Item): array
+    // Получение модификаций с остатками (можно вывести есть вообще модификации)
+    public static function getModifications(Shop_Item_Model $oShop_Item, bool $returnHasModifications = false): array
     {
         $aShop_Item_Modifications = self::getAllModifications($oShop_Item);
-        return self::filterRestModifications($aShop_Item_Modifications);
+        $hasModifications = (bool)count($aShop_Item_Modifications);
+        $aRestModifications = self::filterRestModifications($aShop_Item_Modifications);
+        return $returnHasModifications
+            ? [$aRestModifications, $hasModifications]
+            : $aRestModifications;
     }
 
     // Получаем коллекцию доп. свойств
-    public static function propertyCollection($oShop_Item)
+    public static function propertyCollection($oShop_Item): array
     {
         $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
         $aProperties = $linkedObject->Properties->findAll();
