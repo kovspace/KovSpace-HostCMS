@@ -34,7 +34,12 @@ class KovSpace_ShopItem
         return $aRestModifications;
     }
 
-
+    // Получение актуальных модификаций
+    public static function getModifications(Shop_Item_Model $oShop_Item): array
+    {
+        $aShop_Item_Modifications = self::getAllModifications($oShop_Item);
+        return self::filterRestModifications($aShop_Item_Modifications);
+    }
 
     // Получаем коллекцию доп. свойств
     public static function propertyCollection($oShop_Item)
