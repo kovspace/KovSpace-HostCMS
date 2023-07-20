@@ -198,6 +198,12 @@ class KovSpace_Template
         return $this;
     }
 
+    public function showHtmlClose(): static
+    {
+        echo '</html>';
+        return $this;
+    }
+
     public function showHeadOpen(): static
     {
         echo '<head>' . "\n\t";
