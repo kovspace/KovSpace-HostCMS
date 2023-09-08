@@ -4,7 +4,9 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 
 class KovSpace_ShopItem
 {
-    // Получение полного имени товара с учетом модификации
+    /**
+     * Получение полного имени товара с учетом модификации
+     */
     public static function getFullName(Shop_Item_Model $oShop_Item): string
     {
         $sep = ' :: ';
@@ -13,7 +15,11 @@ class KovSpace_ShopItem
             : $oShop_Item->name;
     }
 
-    // Получение всех модификаций
+    /**
+     * Получение всех модификаций
+     * @param Shop_Item_Model $oShop_Item
+     * @return Shop_Item_Model[]
+     */
     public static function getAllModifications(Shop_Item_Model $oShop_Item): array
     {
         $oShop_Item_Modifications = $oShop_Item->Modifications;
@@ -22,7 +28,10 @@ class KovSpace_ShopItem
         return $oShop_Item_Modifications->findAll();
     }
 
-    // Фильтруем модификации без остатков
+    /**
+     * Фильтруем модификации без остатков
+     * @return Shop_Item_Model[]
+     */
     public static function filterRestModifications(array $aShop_Item_Modifications): array
     {
         $aRestModifications = [];
@@ -34,7 +43,12 @@ class KovSpace_ShopItem
         return $aRestModifications;
     }
 
-    // Получение модификаций с остатками (можно вывести есть вообще модификации)
+    /**
+     * Получение модификаций с остатками (можно вывести есть вообще модификации)
+     * @param Shop_Item_Model $oShop_Item
+     * @param bool $returnHasModifications
+     * @return array|Shop_Item_Model[]
+     */
     public static function getModifications(Shop_Item_Model $oShop_Item, bool $returnHasModifications = false): array
     {
         $aShop_Item_Modifications = self::getAllModifications($oShop_Item);
@@ -45,8 +59,10 @@ class KovSpace_ShopItem
             : $aRestModifications;
     }
 
-    // Получаем коллекцию доп. свойств
-    public static function propertyCollection($oShop_Item): array
+    /**
+     * Получаем коллекцию доп. свойств
+     */
+    public static function propertyCollection(Shop_Item_Model $oShop_Item): array
     {
         $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
         $aProperties = $linkedObject->Properties->findAll();
@@ -69,17 +85,17 @@ class KovSpace_ShopItem
                             continue;
                         }
                         $aValue = [
-                            'value'   => $value,
+                            'value' => $value,
                         ];
                     }
                     $aValues[] = [
-                        'tag_name' => $oProperty->tag_name,
-                        'name'  => $oProperty->name,
-                        'dir_id' => $oProperty->property_dir_id,
-                        'dir_name' => $oProperty->Property_Dir->name,
-                        'type' => $oProperty->type,
-                        'sorting' => $oProperty->sorting
-                    ] + $aValue;
+                            'tag_name' => $oProperty->tag_name,
+                            'name' => $oProperty->name,
+                            'dir_id' => $oProperty->property_dir_id,
+                            'dir_name' => $oProperty->Property_Dir->name,
+                            'type' => $oProperty->type,
+                            'sorting' => $oProperty->sorting
+                        ] + $aValue;
                 }
             }
         }
@@ -87,8 +103,10 @@ class KovSpace_ShopItem
         return $aValues ?? [];
     }
 
-    // Фильтруем коллекцию по полю и значению
-    public static function filterCollection($aProperties, $field, $value): array
+    /**
+     * Фильтруем коллекцию по полю и значению
+     */
+    public static function filterCollection(array $aProperties, string $field, string $value): array
     {
         foreach ($aProperties as $oProperty) {
             if (isset($oProperty[$field]) && $oProperty[$field] == $value) {
@@ -98,8 +116,10 @@ class KovSpace_ShopItem
         return $array ?? [];
     }
 
-    // Получем массив свойств из коллекции по тегу
-    public static function collectionValuesByTag($aProperties, $tagname)
+    /**
+     * Получем массив свойств из коллекции по тегу
+     */
+    public static function collectionValuesByTag(array $aProperties, string $tagname): array
     {
         foreach ($aProperties as $aProperty) {
             if ($aProperty['tag_name'] == $tagname) {
@@ -113,14 +133,18 @@ class KovSpace_ShopItem
         return $aValues ?? [];
     }
 
-    // Получаем значение свойства из коллекции по тегу
-    public static function collectionValueByTag($aProperties, $tagname)
+    /**
+     * Получаем значение свойства из коллекции по тегу
+     */
+    public static function collectionValueByTag(array $aProperties, string $tagname)
     {
         return self::collectionValuesByTag($aProperties, $tagname)[0] ?? null;
     }
 
-    // Получить массив свойств по тегу
-    public static function getPropertiesByTag($oShop_Item, $tagname): array
+    /**
+     * Получить массив свойств по тегу
+     */
+    public static function getPropertiesByTag(Shop_Item_Model $oShop_Item, string $tagname): array
     {
         $linkedObject = Core_Entity::factory('Shop_Item_Property_List', $oShop_Item->Shop->id);
         $oProperties = $linkedObject->Properties;
@@ -129,8 +153,10 @@ class KovSpace_ShopItem
         return $oProperties->findAll();
     }
 
-    // Получить массив значений свойств по тегу
-    public static function propertiesByTag($oShop_Item, $tagname): array
+    /**
+     * Получить массив значений свойств по тегу
+     */
+    public static function propertiesByTag(Shop_Item_Model $oShop_Item, string $tagname): array
     {
         $aProperties = self::getPropertiesByTag($oShop_Item, $tagname);
 
@@ -152,20 +178,27 @@ class KovSpace_ShopItem
         return $aValues ?? [];
     }
 
-    // Получить объект свойства по тегу
-    public static function getPropertyByTag($oShop_Item, $tagname)
+    /**
+     * Получить объект свойства по тегу
+     */
+    public static function getPropertyByTag(Shop_Item_Model $oShop_Item, string $tagname)
     {
         return self::getPropertiesByTag($oShop_Item, $tagname)[0] ?? null;
     }
 
-    // Получить значение свойства по тегу
-    public static function propertyByTag($oShop_Item, $tagname)
+    /**
+     * Получить значение свойства по тегу
+     */
+    public static function propertyByTag(Shop_Item_Model $oShop_Item, string $tagname)
     {
         return self::propertiesByTag($oShop_Item, $tagname)[0] ?? null;
     }
 
-    // Записать значение свойства
-    public static function setPropertyValue($oShop_Item, $oProperty, $value): void
+    /**
+     * Записать значение свойства
+     * @throws Core_Exception
+     */
+    public static function setPropertyValue(Shop_Item_Model $oShop_Item, Property_Model $oProperty, mixed $value): void
     {
         $Property_Controller_Value = Property_Controller_Value::factory($oProperty->type);
         $modelName = $Property_Controller_Value->getModelName();
@@ -193,11 +226,52 @@ class KovSpace_ShopItem
         $oProperty_Value->save();
     }
 
-    // Записать значение свойства по тегу
-    public static function setPropertyValueByTag($oShop_Item, $tagname, $value): void
+    /**
+     * Записать значение свойства по тегу
+     * @throws Core_Exception
+     */
+    public static function setPropertyValueByTag(Shop_Item_Model $oShop_Item, string $tagname, mixed $value): void
     {
         if ($oProperty = self::getPropertyByTag($oShop_Item, $tagname)) {
-            self:self::setPropertyValue($oShop_Item, $oProperty, $value);
+            self:
+            self::setPropertyValue($oShop_Item, $oProperty, $value);
         }
+    }
+
+    /**
+     * Сортировка товаров: "нет в наличии" убираем в конец списка
+     * @param Shop_Item_Model[] $aShop_Items - массив товаров
+     * @param bool $checkRedirect - проверять карточку-редирект
+     * @return Shop_Item_Model[]
+     */
+    public static function sortByRest(array $aShop_Items, bool $checkRedirect = false): array
+    {
+        $aNoRest = [];
+        $aHasRest = [];
+        $aRedirects = [];
+
+        // "Нет в наличии" убираем в конец списка
+        foreach ($aShop_Items as $oShop_Item) {
+
+            // Находим товар по ярлыку
+            if ($oShop_Item->shortcut_id) {
+                $oShop_Item = $oShop_Item->Shop_Item;
+                if (!$oShop_Item->active) {
+                    continue;
+                }
+            }
+
+            if ($checkRedirect && KovSpace_ShopItem::propertyByTag($oShop_Item, 'redirect')) {
+                $oShop_Item->dataHasRest = true;
+                $aRedirects[] = $oShop_Item;
+            } else if (($oShop_Item->price == 0 || $oShop_Item->getRest() == 0)) {
+                $oShop_Item->dataHasRest = false;
+                $aNoRest[] = $oShop_Item;
+            } else {
+                $oShop_Item->dataHasRest = true;
+                $aHasRest[] = $oShop_Item;
+            }
+        }
+        return array_merge($aHasRest, $aNoRest, $aRedirects);
     }
 }
