@@ -45,9 +45,6 @@ class KovSpace_ShopItem
 
     /**
      * Получение модификаций с остатками (можно вывести есть вообще модификации)
-     * @param Shop_Item_Model $oShop_Item
-     * @param bool $returnHasModifications
-     * @return array|Shop_Item_Model[]
      */
     public static function getModifications(Shop_Item_Model $oShop_Item, bool $returnHasModifications = false): array
     {
