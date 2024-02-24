@@ -5,20 +5,21 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
 // Исправляем баг с json_encode
 ini_set('serialize_precision', 10);
 
-/*  Atol Online API v4 */
-// https://online.atol.ru/files/API_FFD_1-0-5.pdf
-
+/**
+ * Atol Online API v4
+ * @link https://atol.online/upload/iblock/dff/4yjidqijkha10vmw9ee1jjqzgr05q8jy/API_atol_online_v4.pdf
+ */
 class KovSpace_Atol
 {
-    public $apiUrl = 'https://online.atol.ru/possystem/v4';
-    public $apiUrlTest = 'https://testonline.atol.ru/possystem/v4';
-    public $login;
-    public $pass;
-    public $group;
-    public $token;
-    public $response;
+    public string $apiUrl = 'https://online.atol.ru/possystem/v4';
+    public string $apiUrlTest = 'https://testonline.atol.ru/possystem/v4';
+    public string $login;
+    public string $pass;
+    public string $group;
+    public ?string $token = null;
+    public object $response;
 
-    public function __construct($login, $pass, $group, $isTest = false)
+    public function __construct(string $login, string $pass, string $group, bool $isTest = false)
     {
         $this->login = $login;
         $this->pass = $pass;
@@ -29,7 +30,7 @@ class KovSpace_Atol
         $this->getToken();
     }
 
-    public function post($url, $fields)
+    public function post($url, $fields): void
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -43,7 +44,7 @@ class KovSpace_Atol
         $this->response = json_decode(curl_exec($ch));
     }
 
-    public function getToken()
+    public function getToken(): void
     {
         $url = $this->apiUrl . '/getToken';
         $fields['login'] = $this->login;
@@ -54,13 +55,24 @@ class KovSpace_Atol
         }
     }
 
-    public function sell($fields)
+    public function sell($fields): void
     {
         $url = $this->apiUrl . '/' . $this->group . '/sell';
         $this->post($url, $fields);
     }
 
-    public function makeReceipt($orderId, $companyEmail, $compnanySno, $compnanyInn, $companyPaymentAddress, $cashier, $roundPrice = false, $expandModificationName = false, $externalId = null)
+    public function makeReceipt(
+        int     $checkType,
+        int     $orderId,
+        string  $companyEmail,
+        string  $compnanySno,
+        string  $compnanyInn,
+        string  $companyPaymentAddress,
+        ?string $cashier = null,
+        bool    $roundPrice = false,
+        bool    $expandModificationName = false,
+        ?string $externalId = null,
+    )
     {
         $total = 0;
         $aItems = [];
@@ -80,7 +92,7 @@ class KovSpace_Atol
 
             $price = $roundPrice
                 ? round($oShop_Order_Item->price)
-                : (float) $oShop_Order_Item->price;
+                : (float)$oShop_Order_Item->price;
 
             $total += $price * $oShop_Order_Item->quantity;
 
@@ -94,9 +106,9 @@ class KovSpace_Atol
 
             $aItem['name'] = $name;
             $aItem['price'] = $price;
-            $aItem['quantity'] = (int) $oShop_Order_Item->quantity;
+            $aItem['quantity'] = (int)$oShop_Order_Item->quantity;
             $aItem['sum'] = $price * $oShop_Order_Item->quantity;
-            $aItem['payment_method'] = 'full_payment';
+            $aItem['payment_method'] = $checkType == 1 ? 'full_prepayment' : 'full_payment';
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
 
             $rate = $oShop_Order_Item->rate;
@@ -125,19 +137,21 @@ class KovSpace_Atol
 
         $aVats = array_values($aVats); // сбрасываем ключи массива
 
-        $fields['external_id'] = $externalId ? $externalId : $oShop_Order->id;
+        $fields['external_id'] = $externalId ?: $oShop_Order->id . '-' . $checkType;
         $fields['receipt']['client']['email'] = $oShop_Order->email;
         $fields['receipt']['company']['email'] = $companyEmail;
         $fields['receipt']['company']['sno'] = $compnanySno;
         $fields['receipt']['company']['inn'] = $compnanyInn;
         $fields['receipt']['company']['payment_address'] = $companyPaymentAddress;
         $fields['receipt']['items'] = $aItems;
-        $fields['receipt']['payments'][0]['type'] = 2; // предварительная оплата (зачет аванса и предыдущих платежей)
+        $fields['receipt']['payments'][0]['type'] = $checkType; // безналичный или предварительная оплата (зачет аванса и предыдущих платежей)
         $fields['receipt']['payments'][0]['sum'] = $total;
         $fields['receipt']['vats'] = $aVats;
         $fields['receipt']['total'] = $total;
-        $fields['receipt']['cashier'] = $cashier;
         $fields['timestamp'] = date('d.m.Y H:i:s');
+        if ($cashier) {
+            $fields['receipt']['cashier'] = $cashier;
+        }
 
         return $fields;
     }
