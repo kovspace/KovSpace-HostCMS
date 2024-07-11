@@ -131,4 +131,15 @@ class KovSpace_Function
         $oField_Value->value = $value;
         $oField_Value->save();
     }
+
+    // Заголовки для отдачи CSV
+    public static function csvHeaders(string $filename): void
+    {
+        header("Pragma: public");
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/force-download");
+        header("Content-Disposition: attachment; filename=" . $filename);
+        header("Content-Transfer-Encoding: binary");
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+    }
 }
