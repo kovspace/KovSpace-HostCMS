@@ -93,11 +93,15 @@ class KovSpace_Function
     }
 
     // Получить отсортированные элементы
-    public static function getSortedItems(object $object, string $sortField = 'sorting', string $sortDirection = 'asc'): array
+    public static function getSortedItems(object $object, string $sortField = 'sorting', string $sortDirection = 'asc', ?int $limit = null): array
     {
         $object->queryBuilder()
             ->where('active', '=', 1)
             ->orderBy($sortField, $sortDirection);
+
+        if ($limit) {
+            $object->queryBuilder()->limit($limit);
+        }
 
         return $object->findAll();
     }
