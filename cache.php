@@ -12,18 +12,18 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  * Cache wrapper
  *
  * @author KovSpace
- * @version 2018-11-27
- * @copyright © 2018 https://kovspace.com/
+ * @version 2024-10-18
+ * @copyright © 2024 https://kovspace.com/
  */
 
 class KovSpace_Cache
 {
-    public static $dir = CMS_FOLDER . 'hostcmsfiles/cache/';
-    public static $clear = CMS_FOLDER . 'hostcmsfiles/cache/.clear';
-    public static $lock = CMS_FOLDER . 'hostcmsfiles/cache/.lock';
+    public static string $dir = CMS_FOLDER . 'hostcmsfiles/cache/';
+    public static string $clear = CMS_FOLDER . 'hostcmsfiles/cache/.clear';
+    public static string $lock = CMS_FOLDER . 'hostcmsfiles/cache/.lock';
 
     /* Exclusion rules */
-    public static function is_cache_deny()
+    public static function is_cache_deny(): ?bool
     {
         return Core_Auth::logged();
     }
@@ -56,7 +56,7 @@ class KovSpace_Cache
     }
 
     /* End buffering and save file */
-    public static function save(?string $filename, bool $save = true)
+    public static function save(?string $filename, bool $save = true): void
     {
         if (self::is_cache_deny() || !$filename) {
             return;
@@ -74,7 +74,7 @@ class KovSpace_Cache
     }
 
     /* Remove all cache files */
-    public static function clear()
+    public static function clear(): void
     {
         $lock = self::$lock;
         if (is_file($lock) && (time() - @filemtime(self::$clear)) > 10000) {
