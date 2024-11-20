@@ -28,8 +28,7 @@ class KovSpace_Template
 
     static public function instance()
     {
-        if (!isset(self::$_instance))
-        {
+        if (!isset(self::$_instance)) {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -138,7 +137,7 @@ class KovSpace_Template
     }
 
     // Image Upload Timestamp
-    public function imageTimestamp()
+    public function imageTimestamp(): static
     {
         Core_Event::attach('shop_item.onBeforeGetXml', array('Image_Upload_Timestamp_Observer', 'onBeforeGetXml'));
         Core_Event::attach('shop_group.onBeforeGetXml', array('Image_Upload_Timestamp_Observer', 'onBeforeGetXml'));
@@ -147,7 +146,7 @@ class KovSpace_Template
         return $this;
     }
 
-    public function imageCDN()
+    public function imageCDN(): static
     {
         Core_Page::instance()->informationsystemCDN = 'https://i0.wp.com/' . Core::$url['host'];
         Core_Page::instance()->shopCDN = 'https://i0.wp.com/' . Core::$url['host'];
@@ -279,9 +278,9 @@ class KovSpace_Template
     public function showOg(): static
     {
         if (is_file(CMS_FOLDER . $this->path . 'img/ogimage.jpg')) {
-            echo '<meta property="og:title" content="'. Core_Page::instance()->title . '"/>' . "\n\t";
-            echo '<meta property="og:description" content="'. Core_Page::instance()->description . '"/>' . "\n\t";
-            echo '<meta property="og:image" content="'. $this->path . 'img/ogimage.jpg' . '"/>' . "\n\t";
+            echo '<meta property="og:title" content="' . Core_Page::instance()->title . '"/>' . "\n\t";
+            echo '<meta property="og:description" content="' . Core_Page::instance()->description . '"/>' . "\n\t";
+            echo '<meta property="og:image" content="' . $this->path . 'img/ogimage.jpg' . '"/>' . "\n\t";
         }
         return $this;
     }
@@ -382,6 +381,8 @@ class KovSpace_Template
             echo '<script>';
         }
 
+        $sPath = $file;
+
         if (Core::moduleIsActive('compression')) {
             $oCompression_Controller = Compression_Controller::instance('js');
             $oCompression_Controller->clear();
@@ -390,7 +391,6 @@ class KovSpace_Template
 
             $js_source_time = filemtime($this->root . $file);
             $js_compress_time = filemtime($this->root . $sPath);
-            ;
 
             if ($js_compress_time < $js_source_time) {
                 Core_File::delete($this->root . $sPath);
@@ -398,17 +398,16 @@ class KovSpace_Template
                 $oCompression_Controller->addJs($file);
                 $sPath = $oCompression_Controller->getPath();
             }
-
-            $js_file = Core_File::read($this->root . $sPath);
-
-            if (substr($js_file, -3) == ';;' . PHP_EOL) {
-                echo substr($js_file, 0, -2) . PHP_EOL;
-            } else {
-                echo $js_file;
-            }
-        } else {
-            echo Core_File::read($this->root . $file);
         }
+
+        $js_file = Core_File::read($this->root . $sPath);
+
+        if (substr($js_file, -3) == ';;' . PHP_EOL) {
+            $js_file = substr($js_file, 0, -2) . PHP_EOL;;
+        }
+
+        $js_file = str_replace('sourceMappingURL=', 'sourceMappingURL=/hostcmsfiles/js/', $js_file);
+        echo $js_file;
         echo '</script>';
     }
 
@@ -422,14 +421,17 @@ class KovSpace_Template
     {
         echo 'Создание сайта ' . $this->kovspace;
     }
+
     public function showHostCMS(): void
     {
         echo 'Работает на ' . $this->hostcms;
     }
+
     public function showPrivacy(): void
     {
         echo '<a href="/privacy/">Политика конфиденциальности</a>';
     }
+
     public function showOffer(): void
     {
         echo '<a href="/offer/">Договор оферты</a>';
