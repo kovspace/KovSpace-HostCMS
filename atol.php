@@ -85,6 +85,13 @@ class KovSpace_Atol
             die('Такого заказа не существует!');
         }
 
+        $config = [];
+        $configFile = CMS_FOLDER . 'config/atol.php';
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+        }
+        $configRate = $config['rate'] ?? null;
+
         $oShop_Orders_Items = $oShop_Order->Shop_Order_Items;
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
         foreach ($aShop_Orders_Items as $oShop_Order_Item) {
@@ -111,14 +118,15 @@ class KovSpace_Atol
             $aItem['payment_method'] = $checkType == 1 ? 'full_prepayment' : 'full_payment';
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
 
-            $rate = $oShop_Order_Item->rate;
-            $vatType = $rate ? 'vat' . $rate : 'none';
+            $rate = $oShop_Order_Item->rate ?? $configRate;
+            $vatType = is_null($rate) ? 'none' : 'vat' . $rate;
+            $vatKey = $rate ?? 'none';
 
-            if (!isset($aVats[$rate])) {
-                $aVats[$rate]['type'] = $vatType;
-                $aVats[$rate]['sum'] = round($price * $rate / 100, 2);
+            if (!isset($aVats[$vatKey])) {
+                $aVats[$vatKey]['type'] = $vatType;
+                $aVats[$vatKey]['sum'] = round($price * $rate / 100, 2);
             } else {
-                $aVats[$rate]['sum'] += round($price * $rate / 100, 2);
+                $aVats[$vatKey]['sum'] += round($price * $rate / 100, 2);
             }
 
             $aItem['vat']['type'] = $vatType;
