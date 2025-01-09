@@ -90,7 +90,7 @@ class KovSpace_Atol
         if (file_exists($configFile)) {
             $config = require $configFile;
         }
-        $configRate = $config['rate'] ?? null;
+        $configRate = $config['rate'] ?? 0;
 
         $oShop_Orders_Items = $oShop_Order->Shop_Order_Items;
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
@@ -119,14 +119,13 @@ class KovSpace_Atol
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
 
             $rate = $oShop_Order_Item->rate ?? $configRate;
-            $vatType = is_null($rate) ? 'none' : 'vat' . $rate;
-            $vatKey = $rate ?? 'none';
+            $vatType = $rate ? 'vat' . $rate : 'none';
 
-            if (!isset($aVats[$vatKey])) {
-                $aVats[$vatKey]['type'] = $vatType;
-                $aVats[$vatKey]['sum'] = round($price * $rate / 100, 2);
+            if (!isset($aVats[$rate])) {
+                $aVats[$rate]['type'] = $vatType;
+                $aVats[$rate]['sum'] = round($price * $rate / 100, 2);
             } else {
-                $aVats[$vatKey]['sum'] += round($price * $rate / 100, 2);
+                $aVats[$rate]['sum'] += round($price * $rate / 100, 2);
             }
 
             $aItem['vat']['type'] = $vatType;
