@@ -91,7 +91,8 @@ class KovSpace_ShopItem
                             'dir_id' => $oProperty->property_dir_id,
                             'dir_name' => $oProperty->Property_Dir->name,
                             'type' => $oProperty->type,
-                            'sorting' => $oProperty->sorting
+                            'sorting' => $oProperty->sorting,
+                            'valueSorting' => $oValue->sorting,
                         ] + $aValue;
                 }
             }
