@@ -16,6 +16,38 @@ class KovSpace_ShopItem
     }
 
     /**
+     * Получение относительной ссылки на товар
+     */
+    public static function getRelativeUrl(Shop_Item_Model $oShop_Item): string
+    {
+        return $oShop_Item->Shop->Structure->getPath() . $oShop_Item->getPath();
+    }
+
+
+    /**
+     * Получение абсолютной ссылки на товар
+     */
+    public static function getAbsoluteUrl(Shop_Item_Model $oShop_Item): string
+    {
+        $href = self::getRelativeUrl($oShop_Item);
+        $oSite = $oShop_Item->Shop->Site;
+        return 'https://' . $oSite->name . $href;
+    }
+
+    /**
+     * Получение превью товара
+     */
+    public static function getImageSmall(Shop_Item_Model $oShop_Item): string
+    {
+        if ($oShop_Item->modification_id) {
+            $oShop_Item = $oShop_Item->Modification;
+        }
+        return $oShop_Item->image_small
+            ? $oShop_Item->getItemHref() . $oShop_Item->image_small
+            : '/upload/blank/100x100.webp';
+    }
+
+    /**
      * Получение всех модификаций
      * @param Shop_Item_Model $oShop_Item
      * @return Shop_Item_Model[]
