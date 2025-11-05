@@ -11,7 +11,26 @@ defined('HOSTCMS') || exit('HostCMS: access denied.');
  */
 class KovSpace_Pagination
 {
-    public static function showPaginationLi($value, $link = '', $class = '')
+    /**
+     * Параметры пагинации
+     */
+    public static function set(int $limit = 10): array
+    {
+        $page = 1;
+        $offset = 0;
+        $limit = Core_Array::getGet('limit') ?? $limit;
+        if (Core_Array::getGet('page')) {
+            $page = Core_Array::getGet('page');
+            if ($page > 1) {
+                $offset = ($page - 1) * $limit;
+            } else {
+                KovSpace_Function::urlParamRedirect('page', NULL);
+            }
+        }
+        return [$page, $offset, $limit];
+    }
+
+    public static function showPaginationLi($value, $link = '', $class = ''): void
     {
         echo '<li class="page-item ' . $class . '">';
         if ($link) {
@@ -22,7 +41,7 @@ class KovSpace_Pagination
         echo '</li>';
     }
 
-    public static function show($total, $page)
+    public static function show($total, $page): void
     {
         if ($total <= 1) {
             return;
@@ -35,7 +54,7 @@ class KovSpace_Pagination
         if ($page == 1) {
             self::showPaginationLi('&lsaquo;', '', 'disabled');
         } else {
-            self::showPaginationLi('&lsaquo;', KovSpace_Function::urlParam('page', $page - 1), '');
+            self::showPaginationLi('&lsaquo;', KovSpace_Function::urlParam('page', $page - 1));
         }
 
         // Less than 10 pages
@@ -53,8 +72,8 @@ class KovSpace_Pagination
 
             // First & second pages
             if ($page > $x) {
-                self::showPaginationLi(1, KovSpace_Function::urlParam('page', 1), '');
-                self::showPaginationLi(2, KovSpace_Function::urlParam('page', 2), '');
+                self::showPaginationLi(1, KovSpace_Function::urlParam('page', 1));
+                self::showPaginationLi(2, KovSpace_Function::urlParam('page', 2));
                 self::showPaginationLi('...', '', 'disabled');
             }
 
@@ -79,8 +98,8 @@ class KovSpace_Pagination
             // 2 last pages
             if ($page < $total + 1 - $x) {
                 self::showPaginationLi('...', '', 'disabled');
-                self::showPaginationLi($total - 1, KovSpace_Function::urlParam('page', $total - 1), '');
-                self::showPaginationLi($total, KovSpace_Function::urlParam('page', $total), '');
+                self::showPaginationLi($total - 1, KovSpace_Function::urlParam('page', $total - 1));
+                self::showPaginationLi($total, KovSpace_Function::urlParam('page', $total));
             }
         }
 
@@ -88,7 +107,7 @@ class KovSpace_Pagination
         if ($total == $page) {
             self::showPaginationLi('&rsaquo;', '', 'disabled');
         } else {
-            self::showPaginationLi('&rsaquo;', KovSpace_Function::urlParam('page', $page + 1), '');
+            self::showPaginationLi('&rsaquo;', KovSpace_Function::urlParam('page', $page + 1));
         }
 
         echo '</ul>';
