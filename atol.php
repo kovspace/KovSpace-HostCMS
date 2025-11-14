@@ -8,6 +8,7 @@ ini_set('serialize_precision', 10);
 /**
  * Atol Online API v4
  * @link https://atol.online/upload/iblock/dff/4yjidqijkha10vmw9ee1jjqzgr05q8jy/API_atol_online_v4.pdf
+ * @link https://static.ofd.ru/ofdru/api/ferma/atol/1_18.pdf?v=768475571
  */
 class KovSpace_Atol
 {
@@ -90,7 +91,7 @@ class KovSpace_Atol
         if (file_exists($configFile)) {
             $config = require $configFile;
         }
-        $configRate = $config['rate'] ?? 0;
+        $rate = $config['rate'] ?? 0;
 
         $oShop_Orders_Items = $oShop_Order->Shop_Order_Items;
         $aShop_Orders_Items = $oShop_Orders_Items->findAll();
@@ -117,8 +118,7 @@ class KovSpace_Atol
             $aItem['sum'] = $price * $oShop_Order_Item->quantity;
             $aItem['payment_method'] = $checkType == 1 ? 'full_prepayment' : 'full_payment';
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
-
-            $rate = $oShop_Order_Item->rate ?? $configRate;
+            
             $vatType = $rate ? 'vat' . $rate : 'none';
 
             if (!isset($aVats[$rate])) {
