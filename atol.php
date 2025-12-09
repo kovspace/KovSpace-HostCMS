@@ -66,8 +66,8 @@ class KovSpace_Atol
         int     $checkType,
         int     $orderId,
         string  $companyEmail,
-        string  $compnanySno,
-        string  $compnanyInn,
+        string  $companySno,
+        string  $companyInn,
         string  $companyPaymentAddress,
         ?string $cashier = null,
         bool    $roundPrice = false,
@@ -102,7 +102,9 @@ class KovSpace_Atol
                 ? round($oShop_Order_Item->price)
                 : (float)$oShop_Order_Item->price;
 
-            $total += $price * $oShop_Order_Item->quantity;
+            // Вычисляем сумму позиции
+            $itemSum = $price * $oShop_Order_Item->quantity;
+            $total += $itemSum;
 
             $name = $oShop_Order_Item->name;
             if ($expandModificationName) {
@@ -115,17 +117,20 @@ class KovSpace_Atol
             $aItem['name'] = $name;
             $aItem['price'] = $price;
             $aItem['quantity'] = (int)$oShop_Order_Item->quantity;
-            $aItem['sum'] = $price * $oShop_Order_Item->quantity;
+            $aItem['sum'] = $itemSum;
             $aItem['payment_method'] = $checkType == 1 ? 'full_prepayment' : 'full_payment';
             $aItem['payment_object'] = $oShop_Order_Item->name == 'Доставка' ? 'service' : 'commodity';
             
             $vatType = $rate ? 'vat' . $rate : 'none';
 
+            // Вычисляем НДС для позиции
+            $itemVatSum = round($itemSum * $rate / (100 + $rate), 2);
+
             if (!isset($aVats[$rate])) {
                 $aVats[$rate]['type'] = $vatType;
-                $aVats[$rate]['sum'] = round($price * $rate / 100, 2);
+                $aVats[$rate]['sum'] = $itemVatSum;
             } else {
-                $aVats[$rate]['sum'] += round($price * $rate / 100, 2);
+                $aVats[$rate]['sum'] += $itemVatSum;
             }
 
             $aItem['vat']['type'] = $vatType;
@@ -147,8 +152,8 @@ class KovSpace_Atol
         $fields['external_id'] = $externalId ?: $oShop_Order->id . '-' . $checkType;
         $fields['receipt']['client']['email'] = $oShop_Order->email;
         $fields['receipt']['company']['email'] = $companyEmail;
-        $fields['receipt']['company']['sno'] = $compnanySno;
-        $fields['receipt']['company']['inn'] = $compnanyInn;
+        $fields['receipt']['company']['sno'] = $companySno;
+        $fields['receipt']['company']['inn'] = $companyInn;
         $fields['receipt']['company']['payment_address'] = $companyPaymentAddress;
         $fields['receipt']['items'] = $aItems;
         $fields['receipt']['payments'][0]['type'] = $checkType; // безналичный или предварительная оплата (зачет аванса и предыдущих платежей)
