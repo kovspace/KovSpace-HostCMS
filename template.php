@@ -266,11 +266,17 @@ class KovSpace_Template
         return $this;
     }
 
-    public function showFavicon(): static
+    public function showFavicon(string $ext = 'png'): static
     {
-        if (is_file(CMS_FOLDER . $this->path . 'img/favicon.png')) {
-            echo '<link rel="icon" type="image/png" href="' . $this->path . 'img/favicon.png">' . "\n\t";
-            echo '<link rel="apple-touch-icon" href="' . $this->path . 'img/favicon.png">' . "\n\t";
+        $type = match ($ext) {
+            'jpg' => 'image/jpeg',
+            'ico' => 'image/x-icon',
+            'svg' => 'image/svg+xml',
+            default => 'image/' . $ext,
+        };
+        if (is_file(CMS_FOLDER . $this->path . 'img/favicon.' . $ext)) {
+            echo '<link rel="icon" type="' . $type . '" href="' . $this->path . 'img/favicon.' . $ext . '">' . "\n\t";
+            echo '<link rel="apple-touch-icon" href="' . $this->path . 'img/favicon.' . $ext . '">' . "\n\t";
         }
         return $this;
     }
