@@ -37,16 +37,14 @@ class KovSpace_Template
     public function __construct()
     {
         // URL fixer
-        $badUrl = explode('amp;', $_SERVER['REQUEST_URI']);
-        if (count($badUrl) > 1) {
-            $newUrl = str_replace('amp;', '', $_SERVER['REQUEST_URI']);
-            header('Location: ' . $newUrl);
-            exit();
-        }
-
-        $badUrl = explode('%255B%255D', $_SERVER['REQUEST_URI']);
-        if (count($badUrl) > 1) {
-            $newUrl = str_replace('%255B%255D', '[]', $_SERVER['REQUEST_URI']);
+        $url = $_SERVER['REQUEST_URI'];
+        $replacements = [
+            'amp;' => '',
+            'amp%3B' => '',
+            '%255B%255D' => '[]'
+        ];
+        $newUrl = str_replace(array_keys($replacements), array_values($replacements), $url);
+        if ($newUrl != $url) {
             header('Location: ' . $newUrl);
             exit();
         }
