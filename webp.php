@@ -15,7 +15,7 @@ function convert(object $object, string $dir, string $property): void
         return;
     }
 
-    if (str_ends_with($image, '.webp')) {
+    if (str_ends_with(strtolower($image), '.webp')) {
         return;
     }
 
@@ -24,12 +24,20 @@ function convert(object $object, string $dir, string $property): void
         return;
     }
 
-    $dotpos = strrpos($image, '.');
-    $name = substr($image, 0, $dotpos);
-    $ext = substr($image, $dotpos + 1);
+    $ext = strtolower(Core_File::getExtension($image));
+    if (!$ext) {
+        $dotpos = strrpos($image, '.');
+        if ($dotpos === false) {
+            return;
+        }
+        $ext = strtolower(substr($image, $dotpos + 1));
+    }
+
+    $name = $ext
+        ? substr($image, 0, -(strlen($ext) + 1))
+        : $image;
     $newImage = $name . '.webp';
     $newPath = $dir . $newImage;
-    $im = null;
 
     $mimes = [
         'image/gif' => 'gif',
@@ -54,18 +62,12 @@ function convert(object $object, string $dir, string $property): void
         echo 'Changed extension from ' . $ext . ' to ' . $mimeExt . PHP_EOL;
         $ext = $mimeExt;
         $path = $pathMime;
+        $image = $imageMime;
     }
 
-    if ($ext == 'png') {
-        echo $path . PHP_EOL;
-        $im = @imagecreatefrompng($path);
-        imagepalettetotruecolor($im);
-    }
+    echo $path . PHP_EOL;
 
-    if ($ext == 'jpg') {
-        echo $path . PHP_EOL;
-        $im = @imagecreatefromjpeg($path);
-    }
+    $im = KovSpace_Imgorientation::loadImage($path, $ext);
 
     if ($im) {
         imagewebp($im, $newPath);
@@ -74,6 +76,13 @@ function convert(object $object, string $dir, string $property): void
         if (file_exists($newPath)) {
             $object->$property = $newImage;
             $object->save();
+
+            if ($property === 'image_large' && method_exists($object, 'setLargeImageSizes')) {
+                $object->setLargeImageSizes();
+            } elseif ($property === 'image_small' && method_exists($object, 'setSmallImageSizes')) {
+                $object->setSmallImageSizes();
+            }
+
             unlink($path);
         }
     }
