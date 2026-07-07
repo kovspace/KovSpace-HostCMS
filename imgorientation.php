@@ -61,7 +61,7 @@ class KovSpace_Imgorientation
             return null;
         }
 
-        if ($ext === 'png') {
+        if (function_exists('imagepalettetotruecolor') && !imageistruecolor($resource)) {
             imagepalettetotruecolor($resource);
         }
 

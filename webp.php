@@ -70,7 +70,14 @@ function convert(object $object, string $dir, string $property): void
     $im = KovSpace_Imgorientation::loadImage($path, $ext);
 
     if ($im) {
-        imagewebp($im, $newPath);
+        if (function_exists('imagepalettetotruecolor') && !imageistruecolor($im)) {
+            imagepalettetotruecolor($im);
+        }
+
+        if (!imagewebp($im, $newPath)) {
+            imagedestroy($im);
+            return;
+        }
         imagedestroy($im);
 
         if (file_exists($newPath)) {
