@@ -16,6 +16,35 @@ class KovSpace_ShopItem
     }
 
     /**
+     * Верхняя (корневая) группа каталога для товара
+     */
+    public static function topGroup(Shop_Item_Model $oShop_Item): ?Shop_Group_Model
+    {
+        if ($oShop_Item->shortcut_id) {
+            $oShop_Item = $oShop_Item->Shop_Item;
+        }
+        if ($oShop_Item->modification_id) {
+            $oShop_Item = $oShop_Item->Modification;
+        }
+
+        $oGroup = $oShop_Item->Shop_Group;
+        if (is_null($oGroup->id)) {
+            return null;
+        }
+
+        $guard = 0;
+        while ($oGroup->parent_id && $guard++ < 20) {
+            $oParent = $oGroup->getParent();
+            if (!$oParent || is_null($oParent->id)) {
+                break;
+            }
+            $oGroup = $oParent;
+        }
+
+        return $oGroup;
+    }
+
+    /**
      * Получение относительной ссылки на товар
      */
     public static function getRelativeUrl(Shop_Item_Model $oShop_Item): string
