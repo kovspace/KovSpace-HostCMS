@@ -269,6 +269,96 @@ class KovSpace_ShopItem
     }
 
     /**
+     * Карта индивидуальных цен товара: siteuser_id => price
+     * Свойство siteuser_price, значения вида 905-9680
+     */
+    public static function getSiteuserPriceMap(Shop_Item_Model $oShop_Item): array
+    {
+        static $maps = [];
+
+        if (isset($maps[$oShop_Item->id])) {
+            return $maps[$oShop_Item->id];
+        }
+
+        $map = [];
+        foreach (self::propertiesByTag($oShop_Item, 'siteuser_price') as $value) {
+            if (is_array($value)) {
+                continue;
+            }
+
+            $value = trim((string)$value);
+            if (!preg_match('/^(\d+)\s*-\s*([0-9]+(?:[.,][0-9]+)?)$/', $value, $m)) {
+                continue;
+            }
+
+            $map[(int)$m[1]] = (float)str_replace(',', '.', $m[2]);
+        }
+
+        return $maps[$oShop_Item->id] = $map;
+    }
+
+    /**
+     * Индивидуальная цена товара для клиента.
+     * Если у модификации нет своей цены, берётся цена родительского товара.
+     */
+    public static function getSiteuserPrice(Shop_Item_Model $oShop_Item, int $siteuserId): ?float
+    {
+        static $cache = [];
+
+        $key = $oShop_Item->id . ':' . $siteuserId;
+        if (array_key_exists($key, $cache)) {
+            return $cache[$key];
+        }
+
+        $map = self::getSiteuserPriceMap($oShop_Item);
+        $price = $map[$siteuserId] ?? null;
+
+        if ($price === null && $oShop_Item->modification_id) {
+            $oParent = $oShop_Item->Modification;
+            if ($oParent && $oParent->id) {
+                $parentMap = self::getSiteuserPriceMap($oParent);
+                $price = $parentMap[$siteuserId] ?? null;
+            }
+        }
+
+        return $cache[$key] = $price;
+    }
+
+    /**
+     * Подмена базовой цены на индивидуальную до скидок и налогов
+     */
+    public static function onBeforeCalculatePrice(Shop_Item_Controller $object, array $args): void
+    {
+        $oShop_Item = $args[0] ?? null;
+        if (!$oShop_Item instanceof Shop_Item_Model) {
+            return;
+        }
+
+        if (!Core::moduleIsActive('siteuser')) {
+            return;
+        }
+
+        $oSiteuser = $object->siteuser;
+        if (!$oSiteuser) {
+            $oSiteuser = Core_Entity::factory('Siteuser')->getCurrent();
+        }
+        if (!$oSiteuser) {
+            return;
+        }
+
+        $price = self::getSiteuserPrice($oShop_Item, (int)$oSiteuser->id);
+        if ($price === null) {
+            return;
+        }
+
+        $aPrice = $object->getAPrice();
+        $aPrice['price'] = $price;
+        $aPrice['price_discount'] = $price;
+        $aPrice['price_tax'] = $price;
+        $object->setAPrice($aPrice);
+    }
+
+    /**
      * Сортировка товаров: "нет в наличии" убираем в конец списка
      * @param Shop_Item_Model[] $aShop_Items - массив товаров
      * @param bool $checkRedirect - проверять карточку-редирект
