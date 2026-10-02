@@ -75,10 +75,8 @@ function convert(object $object, string $dir, string $property): void
         }
 
         if (!imagewebp($im, $newPath)) {
-            imagedestroy($im);
             return;
         }
-        imagedestroy($im);
 
         if (file_exists($newPath)) {
             $object->$property = $newImage;
